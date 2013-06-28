@@ -6,7 +6,8 @@
 
 var fs = require( 'fs' );
 var util = require( './lib/util' );
-var path = util.path;
+var path = require( './lib/util/path' );
+var pathSatisfy = require( './lib/util/path-satisfy' );
 var ProcessContext = require( './lib/process-context' );
 var FileInfo = require( './lib/file-info' );
 
@@ -33,7 +34,7 @@ function traverseDir( dir, processContext ) {
         var relativePath = path.relative( processContext.baseDir, file );
         var isExclude = false;
         processContext.exclude.forEach( function ( excludeFile ) {
-            if ( util.pathSatisfy( relativePath, excludeFile, stat ) ) {
+            if ( pathSatisfy( relativePath, excludeFile, stat ) ) {
                 isExclude = true;
             }
         });
