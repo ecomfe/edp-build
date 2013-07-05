@@ -5,7 +5,6 @@
  */
 
 var fs = require( 'fs' );
-var util = require( './lib/util' );
 var path = require( './lib/util/path' );
 var pathSatisfy = require( './lib/util/path-satisfy' );
 var ProcessContext = require( './lib/process-context' );
