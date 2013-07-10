@@ -1,7 +1,7 @@
 {
     "name": "edp-build",
     "description": "Package for edp build",
-    "version": "0.4.2",
+    "version": "0.4.4",
     "contributors": [
         { "name": "errorrik", "email": "errorrik@gmail.com" },
         { "name": "firede", "email": "firede@firede.us" }
