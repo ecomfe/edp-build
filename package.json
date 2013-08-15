@@ -12,7 +12,8 @@
         "esprima": "~1.0.2",
         "escodegen": "~0.0.22",
         "estraverse": "~1.1.1",
-        "uglify-js": "~1"
+        "uglify-js": "~2.3.6",
+        "clean-css": "~1.0.12"
     },
     "main": "index.js",
     "repository": "git://github.com/ecomfe/edp-build"
