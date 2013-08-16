@@ -93,6 +93,7 @@ function injectProcessor( conf ) {
         conf.injectProcessor( {
             AbstractProcessor : require( './lib/processor/abstract' ),
             JsCompressor      : require( './lib/processor/js-compressor' ),
+            CssCompressor     : require( './lib/processor/css-compressor' ),
             LessCompiler      : require( './lib/processor/less-compiler' ),
             CssImporter       : require( './lib/processor/css-importer' ),
             PathMapper        : require( './lib/processor/path-mapper' ),
