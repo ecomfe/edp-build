@@ -105,8 +105,11 @@ function injectProcessor( conf ) {
  * 处理构建入口
  * 
  * @param {Object} conf 构建功能配置模块
+ * @param {Function=} callback 构建完成的回调函数
  */
-function process( conf ) {
+function process( conf, callback ) {
+    callback = callback || new Function();
+
     // 构建过程：
     // 1. 输入：自动遍历读取所有构建目录下文件，区分（文本/二进制）
     // 2. 使用conf.getProcessors获取processors
@@ -190,6 +193,8 @@ function process( conf ) {
                 }
             }
         } );
+
+        callback();
     }
 }
 
