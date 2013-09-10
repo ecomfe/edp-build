@@ -45,12 +45,22 @@ function traverseDir( dir, processContext ) {
             traverseDir( file, processContext );
         }
         else {
+            var fileEncodings = processContext.fileEncodings;
+            var fileEncoding = null;
+            for ( var encodingPath in fileEncodings ) {
+                if ( pathSatisfy( relativePath, encodingPath ) ) {
+                    fileEncoding = fileEncodings[ encodingPath ];
+                    break;
+                }
+            }
+
             var fileData = new FileInfo( {
-                data        : fs.readFileSync( file ),
-                extname     : path.extname( file ).slice( 1 ),
-                path        : relativePath,
-                fullPath    : file,
-                stat        : stat
+                data         : fs.readFileSync( file ),
+                extname      : path.extname( file ).slice( 1 ),
+                path         : relativePath,
+                fullPath     : file,
+                stat         : stat,
+                fileEncoding : fileEncoding
             } );
             processContext.addFile( fileData );
         }
@@ -91,12 +101,13 @@ function getProcessors( processorOptions ) {
 function injectProcessor( conf ) {
     if ( conf && conf.injectProcessor ) {
         conf.injectProcessor( {
-            AbstractProcessor : require( './lib/processor/abstract' ),
-            JsCompressor      : require( './lib/processor/js-compressor' ),
-            CssCompressor     : require( './lib/processor/css-compressor' ),
-            LessCompiler      : require( './lib/processor/less-compiler' ),
-            PathMapper        : require( './lib/processor/path-mapper' ),
-            ModuleCompiler    : require( './lib/processor/module-compiler' )
+            AbstractProcessor   : require( './lib/processor/abstract' ),
+            JsCompressor        : require( './lib/processor/js-compressor' ),
+            CssCompressor       : require( './lib/processor/css-compressor' ),
+            LessCompiler        : require( './lib/processor/less-compiler' ),
+            PathMapper          : require( './lib/processor/path-mapper' ),
+            ModuleCompiler      : require( './lib/processor/module-compiler' ),
+            VariableSubstitution: require( './lib/processor/variable-substitution' )
         } );
     }
 }
@@ -118,13 +129,15 @@ function process( conf, callback ) {
     var exclude = conf.exclude || [];
     var baseDir = conf.input;
     var outputDir = conf.output;
+    var fileEncodings = conf.fileEncodings || {};
 
     injectProcessor( conf );
     var processors = conf.getProcessors();
     var processContext = new ProcessContext( {
         baseDir: baseDir,
         exclude: exclude,
-        outputDir: outputDir
+        outputDir: outputDir,
+        fileEncodings: fileEncodings
     } );
 
 
@@ -186,7 +199,18 @@ function process( conf, callback ) {
                 var data = file.data;
                 mkdirp.sync( path.dirname( outputFile ) );
                 if ( typeof data === 'string' ) {
-                    fs.writeFileSync( outputFile, data, 'UTF-8' );
+                    if ( /^utf-?8$/i.test( this.fileEncoding ) ) {
+                        fs.writeFileSync( outputFile, data, file.fileEncoding );
+                    }
+                    else {
+                        fs.writeFileSync( 
+                            outputFile, 
+                            require( 'iconv-lite' ).encode(
+                                data, 
+                                file.fileEncoding
+                            ) 
+                        );
+                    }
                 }
                 else {
                     fs.writeFileSync( outputFile, data );
