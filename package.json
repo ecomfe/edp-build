@@ -13,7 +13,8 @@
         "escodegen": "~0.0.22",
         "estraverse": "~1.1.1",
         "uglify-js": "~2.3.6",
-        "clean-css": "~1.0.12"
+        "clean-css": "~1.1.0",
+        "iconv-lite": "~0.2.11"
     },
     "main": "index.js",
     "repository": "git://github.com/ecomfe/edp-build"
