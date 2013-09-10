@@ -164,27 +164,32 @@ function process( conf, callback ) {
             }
 
             var file = files[ fileIndex++ ];
-            console.log( '[edp build] process ' + file.path 
-                + ', use ' + processor.name );
-
+            
+            // processor处理需要保证异步性，否则可能因为深层次的层级调用产生不期望的结果
+            // 比如错误被n次调用前的try捕获到
             function processFinished() { 
                 setTimeout( nextFile, 1 );
             }
 
             // processor处理文件
-            // 此处需要保证异步性，否则可能因为深层次的层级调用产生不期望的结果
-            // 比如错误被n次调用前的try捕获到
-            if ( typeof processor.isExclude !== 'function' 
-                 || !processor.isExclude( file ) 
+            // 如果一个文件属于exclude，并且不属于include，则跳过处理
+            if ( typeof processor.isExclude === 'function' 
+                 && processor.isExclude( file ) 
+                 && ( typeof processor.isInclude !== 'function' 
+                      || !processor.isInclude( file )
+                    )
             ) {
+                processFinished();
+            }
+            else {
+                console.log( '[edp build] process ' + file.path 
+                    + ', use ' + processor.name );
+
                 processor.process( 
                     file, 
                     processContext, 
                     processFinished
                 );
-            }
-            else {
-                processFinished();
             }
         }
     }
