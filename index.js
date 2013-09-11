@@ -102,6 +102,7 @@ function injectProcessor( conf ) {
     if ( conf && conf.injectProcessor ) {
         conf.injectProcessor( {
             AbstractProcessor   : require( './lib/processor/abstract' ),
+            MD5Renamer          : require( './lib/processor/md5-renamer' ),
             JsCompressor        : require( './lib/processor/js-compressor' ),
             CssCompressor       : require( './lib/processor/css-compressor' ),
             LessCompiler        : require( './lib/processor/less-compiler' ),
@@ -201,25 +202,8 @@ function process( conf, callback ) {
         files.forEach( function ( file ) {
             if ( file.outputPath ) {
                 var outputFile = path.resolve( outputDir, file.outputPath );
-                var data = file.data;
                 mkdirp.sync( path.dirname( outputFile ) );
-                if ( typeof data === 'string' ) {
-                    if ( /^utf-?8$/i.test( this.fileEncoding ) ) {
-                        fs.writeFileSync( outputFile, data, file.fileEncoding );
-                    }
-                    else {
-                        fs.writeFileSync( 
-                            outputFile, 
-                            require( 'iconv-lite' ).encode(
-                                data, 
-                                file.fileEncoding
-                            ) 
-                        );
-                    }
-                }
-                else {
-                    fs.writeFileSync( outputFile, data );
-                }
+                fs.writeFileSync( outputFile, file.getDataBuffer() );
             }
         } );
 
