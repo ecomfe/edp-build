@@ -201,9 +201,14 @@ function process( conf, callback ) {
         var mkdirp = require( 'mkdirp' );
         files.forEach( function ( file ) {
             if ( file.outputPath ) {
-                var outputFile = path.resolve( outputDir, file.outputPath );
-                mkdirp.sync( path.dirname( outputFile ) );
-                fs.writeFileSync( outputFile, file.getDataBuffer() );
+                var fileBuffer = file.getDataBuffer();
+
+                file.outputPaths.push( file.outputPath );
+                file.outputPaths.forEach( function ( outputPath ) {
+                    var outputFile = path.resolve( outputDir, outputPath );
+                    mkdirp.sync( path.dirname( outputFile ) );
+                    fs.writeFileSync( outputFile, fileBuffer );
+                } );
             }
         } );
 
