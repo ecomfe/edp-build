@@ -150,7 +150,7 @@ function main( conf, callback ) {
     } );
 
 
-    traverseDir( [baseDir].concat( conf.deps || [] ), processContext );
+    traverseDir( [baseDir].concat( conf.inputs || [] ), processContext );
 
     var files = processContext.getFiles();
     var fileCount = files.length;
@@ -214,10 +214,6 @@ function main( conf, callback ) {
 
                 file.outputPaths.push( file.outputPath );
                 file.outputPaths.forEach( function ( outputPath ) {
-                    // outputPath可能在baseDir之外
-                    if ( /^\.\./.test(outputPath) ) {
-                        outputPath = path.resolve('/', outputPath).substring(1);
-                    }
                     var outputFile = path.resolve( outputDir, outputPath );
                     mkdirp.sync( path.dirname( outputFile ) );
                     fs.writeFileSync( outputFile, fileBuffer );

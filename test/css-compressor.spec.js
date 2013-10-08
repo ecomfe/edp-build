@@ -25,7 +25,10 @@ describe('css-compressor', function() {
         var filePath = path.join('data', 'css-compressor', 'default.css');
         var fileData = base.getFileInfo(filePath);
         processor.process(fileData, {baseDir:__dirname}, function() {
-            expect(fileData.data).toBe('div{color:red;background:url(/foo.png)}a{text-decoration:none;background:url(/data/css-compressor/bar.png)}span{background:url(//www.baidu.com/img/logo.png)}');
+            expect(fileData.data).toBe(
+                'div{color:red;background:url(/foo.png)}' +
+                'a{text-decoration:none;background:url(/data/css-compressor/bar.png)}' +
+                'span{background:url(//www.baidu.com/img/logo.png)}');
         });
     });
 
@@ -38,7 +41,10 @@ describe('css-compressor', function() {
         var filePath = path.join('data', 'css-compressor', 'default.css');
         var fileData = base.getFileInfo(filePath);
         processor.process(fileData, {baseDir: __dirname}, function() {
-            expect(fileData.data).toBe('div{color:red;background:url(/foo.png)}a{text-decoration:none;background:url(/bar.png)}span{background:url(//www.baidu.com/img/logo.png)}');
+            expect(fileData.data).toBe(
+                'div{color:red;background:url(/foo.png)}' +
+                'a{text-decoration:none;background:url(/bar.png)}' +
+                'span{background:url(//www.baidu.com/img/logo.png)}');
         });
     });
 
