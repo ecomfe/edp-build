@@ -152,8 +152,6 @@ function main( conf, callback ) {
 
     traverseDir( [baseDir].concat( conf.inputs || [] ), processContext );
 
-    var files = processContext.getFiles();
-    var fileCount = files.length;
     var processorIndex = 0;
     var processorCount = processors.length;
 
@@ -164,7 +162,10 @@ function main( conf, callback ) {
         }
 
         var processor = processors[ processorIndex++ ];
+        var files = processContext.getFiles();
         var fileIndex = 0;
+        var fileCount = files.length;
+
         nextFile();
 
         function nextFile() {
@@ -208,7 +209,8 @@ function main( conf, callback ) {
 
     function outputFiles() {
         var mkdirp = require( 'mkdirp' );
-        files.forEach( function ( file ) {
+        processContext.getFiles().forEach( function ( file ) {
+            console.log(file.outputPath)
             if ( file.outputPath ) {
                 var fileBuffer = file.getDataBuffer();
 
