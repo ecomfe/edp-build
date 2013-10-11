@@ -1,0 +1,2 @@
+all:
+	jasmine-node .

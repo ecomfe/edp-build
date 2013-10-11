@@ -15,14 +15,21 @@ var FileInfo = require( './lib/file-info' );
  * 遍历目录
  * 
  * @inner
- * @param {string} dir 目录路径
+ * @param {string|Array.<string>} dir 目录路径
  * @param {ProcessContext} processContext 构建环境对象
  */
 function traverseDir( dir, processContext ) {
+    if ( Array.isArray(dir) ) {
+        dir.forEach( function (item) {
+            traverseDir( item, processContext );
+        });
+        return;
+    }
+
     var files = fs.readdirSync( dir );
 
     files.forEach( function ( file ) {
-        if ( file === '.svn' ) {
+        if ( file === '.svn' || file === '.git' ) {
             return;
         }
 
@@ -32,9 +39,10 @@ function traverseDir( dir, processContext ) {
         // if exclude, do nothing
         var relativePath = path.relative( processContext.baseDir, file );
         var isExclude = false;
-        processContext.exclude.forEach( function ( excludeFile ) {
+        processContext.exclude.some( function ( excludeFile ) {
             if ( pathSatisfy( relativePath, excludeFile, stat ) ) {
                 isExclude = true;
+                return true;
             }
         });
         if ( isExclude ) {
@@ -119,7 +127,7 @@ function injectProcessor( conf ) {
  * @param {Object} conf 构建功能配置模块
  * @param {Function=} callback 构建完成的回调函数
  */
-function process( conf, callback ) {
+function main( conf, callback ) {
     callback = callback || new Function();
 
     // 构建过程：
@@ -142,9 +150,8 @@ function process( conf, callback ) {
     } );
 
 
-    traverseDir( baseDir, processContext );
-    var files = processContext.getFiles();
-    var fileCount = files.length;
+    traverseDir( [baseDir].concat( conf.inputs || [] ), processContext );
+
     var processorIndex = 0;
     var processorCount = processors.length;
 
@@ -155,7 +162,10 @@ function process( conf, callback ) {
         }
 
         var processor = processors[ processorIndex++ ];
+        var files = processContext.getFiles();
         var fileIndex = 0;
+        var fileCount = files.length;
+
         nextFile();
 
         function nextFile() {
@@ -199,7 +209,8 @@ function process( conf, callback ) {
 
     function outputFiles() {
         var mkdirp = require( 'mkdirp' );
-        files.forEach( function ( file ) {
+        processContext.getFiles().forEach( function ( file ) {
+            console.log(file.outputPath)
             if ( file.outputPath ) {
                 var fileBuffer = file.getDataBuffer();
 
@@ -216,7 +227,7 @@ function process( conf, callback ) {
     }
 }
 
-module.exports = exports = process;
+module.exports = exports = main;
 
 exports.getDefaultConfig = function () {
     return require( './lib/config' );
