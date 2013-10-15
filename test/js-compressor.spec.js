@@ -61,6 +61,8 @@ describe('js-compressor', function() {
         processor.process(fileData, processContext, function() {
             expect(fileData.data).toBe('function main(){function n(){}var require=0,exports=1,module=2,r=3;return n(require+exports+module+r)}\n//# sourceMappingURL=5.sourcemap');
         });
+        expect(processContext.getFileByPath(path.join('data', 'js-compressor', '5.sourcemap'))).not.toBe(null);
+        expect(processContext.getFileByPath(path.join('data', 'js-compressor', '5.org.js'))).not.toBe(null);
     });
 });
 
