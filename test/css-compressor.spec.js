@@ -1,18 +1,18 @@
 /***************************************************************************
- * 
+ *
  * Copyright (c) 2013 Baidu.com, Inc. All Rights Reserved
- * $Id$ 
- * 
+ * $Id$
+ *
  **************************************************************************/
- 
- 
- 
+
+
+
 /**
  * css-compressor.spec.js ~ 2013/09/28 20:39:52
  * @author leeight(liyubei@baidu.com)
- * @version $Revision$ 
- * @description 
- *  
+ * @version $Revision$
+ * @description
+ *
  **/
 var path = require('path');
 
@@ -27,7 +27,7 @@ describe('css-compressor', function() {
         processor.process(fileData, {baseDir:__dirname}, function() {
             expect(fileData.data).toBe(
                 'div{color:red;background:url(/foo.png)}' +
-                'a{text-decoration:none;background:url(/data/css-compressor/bar.png)}' +
+                'a{text-decoration:none;background:url(bar.png)}' +
                 'span{background:url(//www.baidu.com/img/logo.png)}');
         });
     });
@@ -43,7 +43,7 @@ describe('css-compressor', function() {
         processor.process(fileData, {baseDir: __dirname}, function() {
             expect(fileData.data).toBe(
                 'div{color:red;background:url(/foo.png)}' +
-                'a{text-decoration:none;background:url(/bar.png)}' +
+                'a{text-decoration:none;background:url(bar.png)}' +
                 'span{background:url(//www.baidu.com/img/logo.png)}');
         });
     });

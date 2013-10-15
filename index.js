@@ -210,7 +210,6 @@ function main( conf, callback ) {
     function outputFiles() {
         var mkdirp = require( 'mkdirp' );
         processContext.getFiles().forEach( function ( file ) {
-            console.log(file.outputPath)
             if ( file.outputPath ) {
                 var fileBuffer = file.getDataBuffer();
 
