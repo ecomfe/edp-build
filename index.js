@@ -13,7 +13,7 @@ var FileInfo = require( './lib/file-info' );
 
 /**
  * 遍历目录
- * 
+ *
  * @inner
  * @param {string|Array.<string>} dir 目录路径
  * @param {ProcessContext} processContext 构建环境对象
@@ -77,7 +77,7 @@ function traverseDir( dir, processContext ) {
 
 /**
  * 获取构建过程的处理器
- * 
+ *
  * @inner
  * @param {Array} processorOptions 处理器选项
  * @return {Array}
@@ -102,7 +102,7 @@ function getProcessors( processorOptions ) {
 
 /**
  * 向配置模块里注入构建处理器
- * 
+ *
  * @inner
  * @param {Object} conf 配置模块
  */
@@ -111,6 +111,7 @@ function injectProcessor( conf ) {
         conf.injectProcessor( {
             AbstractProcessor   : require( './lib/processor/abstract' ),
             MD5Renamer          : require( './lib/processor/md5-renamer' ),
+            Html2JsCompiler     : require( './lib/processor/html2js-compiler' ),
             JsCompressor        : require( './lib/processor/js-compressor' ),
             CssCompressor       : require( './lib/processor/css-compressor' ),
             LessCompiler        : require( './lib/processor/less-compiler' ),
@@ -123,7 +124,7 @@ function injectProcessor( conf ) {
 
 /**
  * 处理构建入口
- * 
+ *
  * @param {Object} conf 构建功能配置模块
  * @param {Function=} callback 构建完成的回调函数
  */
@@ -175,30 +176,30 @@ function main( conf, callback ) {
             }
 
             var file = files[ fileIndex++ ];
-            
+
             // processor处理需要保证异步性，否则可能因为深层次的层级调用产生不期望的结果
             // 比如错误被n次调用前的try捕获到
-            function processFinished() { 
+            function processFinished() {
                 setTimeout( nextFile, 1 );
             }
 
             // processor处理文件
             // 如果一个文件属于exclude，并且不属于include，则跳过处理
-            if ( typeof processor.isExclude === 'function' 
-                 && processor.isExclude( file ) 
-                 && ( typeof processor.isInclude !== 'function' 
+            if ( typeof processor.isExclude === 'function'
+                 && processor.isExclude( file )
+                 && ( typeof processor.isInclude !== 'function'
                       || !processor.isInclude( file )
                     )
             ) {
                 processFinished();
             }
             else {
-                console.log( '[edp build] process ' + file.path 
+                console.log( '[edp build] process ' + file.path
                     + ', use ' + processor.name );
 
-                processor.process( 
-                    file, 
-                    processContext, 
+                processor.process(
+                    file,
+                    processContext,
                     processFinished
                 );
             }
