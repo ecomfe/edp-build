@@ -111,6 +111,7 @@ function injectProcessor( conf ) {
         conf.injectProcessor( {
             AbstractProcessor   : require( './lib/processor/abstract' ),
             MD5Renamer          : require( './lib/processor/md5-renamer' ),
+            Html2JsCompiler     : require( './lib/processor/html2js-compiler' ),
             JsCompressor        : require( './lib/processor/js-compressor' ),
             CssCompressor       : require( './lib/processor/css-compressor' ),
             LessCompiler        : require( './lib/processor/less-compiler' ),
