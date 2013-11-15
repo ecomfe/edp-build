@@ -5,7 +5,8 @@
     "contributors": [
         { "name": "errorrik", "email": "errorrik@gmail.com" },
         { "name": "firede", "email": "firede@firede.us" },
-        { "name": "leeight", "email": "leeight@gmail.com" }
+        { "name": "leeight", "email": "leeight@gmail.com" },
+        { "name": "junmer", "email": "junmer@foxmail.com" }
     ],
     "dependencies": {
         "mkdirp": "~0.3.3",
@@ -16,7 +17,8 @@
         "uglify-js": "~2.3.6",
         "clean-css": "~1.1.0",
         "iconv-lite": "~0.2.11",
-        "html2js": "~0.0.2"
+        "html2js": "~0.0.2",
+        "stylus": "~0.38.0"
     },
     "main": "index.js",
     "repository": "git://github.com/ecomfe/edp-build"
