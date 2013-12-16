@@ -15,7 +15,7 @@
         "escodegen": "~0.0.22",
         "estraverse": "~1.1.1",
         "uglify-js": "~2.3.6",
-        "clean-css": "~1.1.0",
+        "clean-css": "~2.0.2",
         "iconv-lite": "~0.2.11",
         "html2js": "~0.0.2",
         "stylus": "~0.38.0"
