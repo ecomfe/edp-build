@@ -118,7 +118,8 @@ function injectProcessor( conf ) {
             LessCompiler        : require( './lib/processor/less-compiler' ),
             PathMapper          : require( './lib/processor/path-mapper' ),
             ModuleCompiler      : require( './lib/processor/module-compiler' ),
-            VariableSubstitution: require( './lib/processor/variable-substitution' )
+            VariableSubstitution: require( './lib/processor/variable-substitution' ),
+            ManifestCompiler    : require( './lib/processor/manifest-compiler' )
         } );
     }
 }
