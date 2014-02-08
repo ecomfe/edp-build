@@ -168,17 +168,21 @@ function main( conf, callback ) {
         var files = processContext.getFiles();
         var fileIndex = 0;
         var fileCount = files.length;
+        var clearScreen = false;
+        console.log('Running ' + processor.name);
 
         nextFile();
 
         function nextFile() {
             if ( fileIndex >= fileCount ) {
+                // 结束了，输出一个换行
+                console.log();
                 nextProcess();
                 return;
             }
 
             var file = files[ fileIndex++ ];
-            
+
             // processor处理需要保证异步性，否则可能因为深层次的层级调用产生不期望的结果
             // 比如错误被n次调用前的try捕获到
             function processFinished() { 
@@ -196,8 +200,15 @@ function main( conf, callback ) {
                 processFinished();
             }
             else {
-                console.log( '[edp build] process ' + file.path 
-                    + ', use ' + processor.name );
+                if (clearScreen) {
+                    process.stdout.clearLine();
+                    process.stdout.cursorTo(0);
+                }
+                var msg = require('util').format('  [%s/%s]: %s',
+                    fileIndex, fileCount, file.path);
+                process.stdout.write(msg);
+                // 第一次不需要clearScreen，之后就需要了
+                clearScreen = true;
 
                 processor.process( 
                     file, 
