@@ -75,30 +75,6 @@ function traverseDir( dir, processContext ) {
     });
 }
 
-/**
- * 获取构建过程的处理器
- * 
- * @inner
- * @param {Array} processorOptions 处理器选项
- * @return {Array}
- */
-function getProcessors( processorOptions ) {
-    processorOptions = processorOptions || [];
-    var processors = [];
-
-    processorOptions.forEach( function ( option ) {
-        if ( !option.name ) {
-            return;
-        }
-
-        var Constructor = require( './processor/' + option.name );
-        var processor = new Constructor( option );
-        processor._name_ = option.name;
-        processors.push( processor );
-    } );
-
-    return processors;
-}
 
 /**
  * 向配置模块里注入构建处理器
@@ -125,6 +101,27 @@ function injectProcessor( conf ) {
 }
 
 /**
+ * 如果是普通的对象，那么转化为AbstractProcessor类型
+ * @param {AbstractProcessor} processor 要检查的processor类型.
+ */
+function patchProcessor(processor) {
+    var AbstractProcessor = require( './lib/processor/abstract' );
+    if (processor instanceof AbstractProcessor) {
+        return processor;
+    }
+    else {
+        // 普通的对象(Plain Object)
+        var propertiesObject = {};
+        for (var key in processor) {
+            propertiesObject[key] = {
+                value: processor[key]
+            }
+        }
+        return Object.create(AbstractProcessor.prototype, propertiesObject);
+    }
+}
+
+/**
  * 处理构建入口
  * 
  * @param {Object} conf 构建功能配置模块
@@ -144,7 +141,7 @@ function main( conf, callback ) {
     var fileEncodings = conf.fileEncodings || {};
 
     injectProcessor( conf );
-    var processors = conf.getProcessors();
+    var processors = conf.getProcessors().map(patchProcessor);
     var processContext = new ProcessContext( {
         baseDir: baseDir,
         exclude: exclude,
