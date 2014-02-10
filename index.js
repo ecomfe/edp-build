@@ -9,6 +9,7 @@ var path = require( './lib/util/path' );
 var pathSatisfy = require( './lib/util/path-satisfy' );
 var ProcessContext = require( './lib/process-context' );
 var FileInfo = require( './lib/file-info' );
+var edp = require( 'edp-core' );
 
 
 /**
@@ -157,23 +158,35 @@ function main( conf, callback ) {
 
     function nextProcess() {
         if ( processorIndex >= processorCount ) {
+            console.log();
             outputFiles();
             return;
         }
 
         var processor = processors[ processorIndex++ ];
-        var files = processContext.getFiles();
+        var files = processContext.getFiles().filter(function(file){
+            // processor处理文件
+            // 如果一个文件属于exclude，并且不属于include，则跳过处理
+            if ( typeof processor.isExclude === 'function' 
+                 && processor.isExclude( file ) 
+                 && ( typeof processor.isInclude !== 'function' 
+                      || !processor.isInclude( file )
+                    )
+            ) {
+                return false;
+            }
+
+            return true;
+        });
+
         var fileIndex = 0;
         var fileCount = files.length;
-        var clearScreen = false;
-        console.log('Running ' + processor.name);
+        edp.log.info('Running ' + processor.name);
 
         nextFile();
 
         function nextFile() {
             if ( fileIndex >= fileCount ) {
-                // 结束了，输出一个换行
-                console.log();
                 nextProcess();
                 return;
             }
@@ -186,33 +199,13 @@ function main( conf, callback ) {
                 setTimeout( nextFile, 1 );
             }
 
-            // processor处理文件
-            // 如果一个文件属于exclude，并且不属于include，则跳过处理
-            if ( typeof processor.isExclude === 'function' 
-                 && processor.isExclude( file ) 
-                 && ( typeof processor.isInclude !== 'function' 
-                      || !processor.isInclude( file )
-                    )
-            ) {
-                processFinished();
-            }
-            else {
-                if (clearScreen) {
-                    process.stdout.clearLine();
-                    process.stdout.cursorTo(0);
-                }
-                var msg = require('util').format('  [%s/%s]: %s',
-                    fileIndex, fileCount, file.path);
-                process.stdout.write(msg);
-                // 第一次不需要clearScreen，之后就需要了
-                clearScreen = true;
+            edp.log.write('  [%s/%s]: %s', fileIndex, fileCount, file.path);
 
-                processor.process( 
-                    file, 
-                    processContext, 
-                    processFinished
-                );
-            }
+            processor.process(
+                file, 
+                processContext, 
+                processFinished
+            );
         }
     }
 
