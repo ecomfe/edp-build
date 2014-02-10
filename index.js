@@ -118,6 +118,7 @@ function patchProcessor(processor) {
                 value: processor[key]
             }
         }
+        propertiesObject.log = { value: edp.log };
         return Object.create(AbstractProcessor.prototype, propertiesObject);
     }
 }
