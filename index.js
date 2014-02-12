@@ -96,7 +96,8 @@ function injectProcessor( conf ) {
             PathMapper          : require( './lib/processor/path-mapper' ),
             ModuleCompiler      : require( './lib/processor/module-compiler' ),
             VariableSubstitution: require( './lib/processor/variable-substitution' ),
-            ManifestCompiler    : require( './lib/processor/manifest-compiler' )
+            ManifestCompiler    : require( './lib/processor/manifest-compiler' ),
+            AddCopyright        : require( './lib/processor/add-copyright' )
         } );
     }
 }
