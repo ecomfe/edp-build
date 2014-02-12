@@ -8,7 +8,7 @@
 
 
 /**
- * add-copyright.spec.js ~ 2014/02/12 11:22:11
+ * replace-debug.spec.js ~ 2014/02/12 11:22:11
  * @author leeight(liyubei@baidu.com)
  * @version $Revision$
  * @description
@@ -18,7 +18,7 @@ var fs = require('fs');
 var path = require('path');
 
 var base = require('./base');
-var AddCopyright = require('../lib/processor/add-copyright.js');
+var ReplaceDebug = require('../lib/processor/replace-debug.js');
 
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
 var ConfigFile = path.resolve(Project, 'module.conf');
@@ -27,15 +27,15 @@ var moduleEntries = 'html,htm,phtml,tpl,vm,js';
 var pageEntries = 'html,htm,phtml,tpl,vm';
 
 
-describe('add-copyright', function(){
+describe('replace-debug', function(){
     it('default', function(){
-        var processor = new AddCopyright();
-        var filePath = path.join(Project, 'src', 'foo.js');
+        var processor = new ReplaceDebug();
+        var filePath = path.join(Project, 'index.html');
         var fileData = base.getFileInfo(filePath);
 
         var processContext = { baseDir: Project }
         processor.process(fileData, processContext, function(){
-            expect(fileData.data.indexOf('there is only copyleft left.\n')).toBe(0);
+            expect(fileData.data.indexOf('window.DEBUG=false;')).not.toBe(-1);
         });
     });
 });
