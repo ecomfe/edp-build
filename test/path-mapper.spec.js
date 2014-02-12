@@ -36,7 +36,7 @@ function list2Map(packages) {
     return map;
 }
 
-describe('css-compressor', function() {
+describe('path-mapper', function() {
     it('module-config', function(){
         var processor = new PathMapper({
             replacements: [
