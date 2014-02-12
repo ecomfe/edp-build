@@ -55,10 +55,9 @@ describe('module-compiler', function(){
             exclude: [],
             configFile: 'module.conf',
             entryExtnames: moduleEntries,
-            getCombineConfig: function() {
-                return {
-                    'foo': 1
-                }
+            getCombineConfig: function(combineModules) {
+                combineModules.foo = 1;
+                return combineModules;
             }
         });
         var filePath = path.join(Project, 'src', 'foo.js');
