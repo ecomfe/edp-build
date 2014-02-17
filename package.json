@@ -1,7 +1,7 @@
 {
   "name": "edp-build",
   "description": "Package for edp build",
-  "version": "0.5.21",
+  "version": "0.5.22",
   "contributors": [
     {
       "name": "errorrik",
@@ -23,7 +23,7 @@
   "dependencies": {
     "edp-core": "~0.0.1",
     "mkdirp": "~0.3.3",
-    "less": "~1.5.1",
+    "less": "~1.6.3",
     "esprima": "~1.0.2",
     "escodegen": "~0.0.22",
     "estraverse": "~1.1.1",
