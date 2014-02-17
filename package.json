@@ -1,26 +1,45 @@
 {
-    "name": "edp-build",
-    "description": "Package for edp build",
-    "version": "0.5.19",
-    "contributors": [
-        { "name": "errorrik", "email": "errorrik@gmail.com" },
-        { "name": "firede", "email": "firede@firede.us" },
-        { "name": "leeight", "email": "leeight@gmail.com" },
-        { "name": "junmer", "email": "junmer@foxmail.com" }
-    ],
-    "dependencies": {
-        "edp-core": "~0.0.1",
-        "mkdirp": "~0.3.3",
-        "less": "~1.4.2",
-        "esprima": "~1.0.2",
-        "escodegen": "~0.0.22",
-        "estraverse": "~1.1.1",
-        "uglify-js": "~2.3.6",
-        "clean-css": "~2.0.2",
-        "iconv-lite": "~0.2.11",
-        "html2js": "~0.0.2",
-        "stylus": "~0.38.0"
+  "name": "edp-build",
+  "description": "Package for edp build",
+  "version": "0.5.19",
+  "contributors": [
+    {
+      "name": "errorrik",
+      "email": "errorrik@gmail.com"
     },
-    "main": "index.js",
-    "repository": "git://github.com/ecomfe/edp-build"
+    {
+      "name": "firede",
+      "email": "firede@firede.us"
+    },
+    {
+      "name": "leeight",
+      "email": "leeight@gmail.com"
+    },
+    {
+      "name": "junmer",
+      "email": "junmer@foxmail.com"
+    }
+  ],
+  "dependencies": {
+    "edp-core": "~0.0.1",
+    "mkdirp": "~0.3.3",
+    "less": "~1.5.1",
+    "esprima": "~1.0.2",
+    "escodegen": "~0.0.22",
+    "estraverse": "~1.1.1",
+    "uglify-js": "~2.3.6",
+    "clean-css": "~2.1.0",
+    "iconv-lite": "~0.2.11",
+    "html2js": "~0.0.2",
+    "stylus": "~0.38.0"
+  },
+  "main": "index.js",
+  "repository": "git://github.com/ecomfe/edp-build",
+  "devDependencies": {
+    "estraverse": "~1.1.2-1",
+    "stylus": "~0.38.0",
+    "escodegen": "0.0.28",
+    "uglify-js": "~2.3.6",
+    "less": "~1.5.1"
+  }
 }
