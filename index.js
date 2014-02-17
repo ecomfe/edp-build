@@ -5,8 +5,6 @@
  */
 
 var fs = require( 'fs' );
-var path = require( './lib/util/path' );
-var pathSatisfy = require( './lib/util/path-satisfy' );
 var ProcessContext = require( './lib/process-context' );
 var FileInfo = require( './lib/file-info' );
 var edp = require( 'edp-core' );
@@ -34,14 +32,14 @@ function traverseDir( dir, processContext ) {
             return;
         }
 
-        file = path.resolve( dir, file );
+        file = edp.path.resolve( dir, file );
         var stat = fs.statSync( file );
 
         // if exclude, do nothing
-        var relativePath = path.relative( processContext.baseDir, file );
+        var relativePath = edp.path.relative( processContext.baseDir, file );
         var isExclude = false;
         processContext.exclude.some( function ( excludeFile ) {
-            if ( pathSatisfy( relativePath, excludeFile, stat ) ) {
+            if ( edp.path.satisfy( relativePath, excludeFile, stat ) ) {
                 isExclude = true;
                 return true;
             }
@@ -57,7 +55,7 @@ function traverseDir( dir, processContext ) {
             var fileEncodings = processContext.fileEncodings;
             var fileEncoding = null;
             for ( var encodingPath in fileEncodings ) {
-                if ( pathSatisfy( relativePath, encodingPath ) ) {
+                if ( edp.path.satisfy( relativePath, encodingPath ) ) {
                     fileEncoding = fileEncodings[ encodingPath ];
                     break;
                 }
@@ -65,7 +63,7 @@ function traverseDir( dir, processContext ) {
 
             var fileData = new FileInfo( {
                 data         : fs.readFileSync( file ),
-                extname      : path.extname( file ).slice( 1 ),
+                extname      : edp.path.extname( file ).slice( 1 ),
                 path         : relativePath,
                 fullPath     : file,
                 stat         : stat,
@@ -222,8 +220,8 @@ function main( conf, callback ) {
 
                 file.outputPaths.push( file.outputPath );
                 file.outputPaths.forEach( function ( outputPath ) {
-                    var outputFile = path.resolve( outputDir, outputPath );
-                    mkdirp.sync( path.dirname( outputFile ) );
+                    var outputFile = edp.path.resolve( outputDir, outputPath );
+                    mkdirp.sync( edp.path.dirname( outputFile ) );
                     fs.writeFileSync( outputFile, fileBuffer );
                 } );
             }

@@ -91,6 +91,51 @@ describe('compile-module', function() {
         expect(moduleCode).toEqual(expectedCode);
     });
 
+    it('exclude module', function() {
+        var moduleCode = CompileModule(
+            fs.readFileSync(path.resolve(Project, 'dep', 'er', '3.0.2', 'src', 'main.js'), 'utf-8'),
+            'er',
+            ConfigFile,
+            {
+                exclude: ['er/*'],
+                include: ['er/View']
+            }
+        );
+
+        var expectedCode =
+        "define('net/Http', function (require) {\n" +
+        "    return 'net/Http';\n" +
+        "});\n\n" +
+        "define('er/View', function (require) {\n" +
+        "    return require('net/Http') + ';' + 'er/View';\n" +
+        "});\n\n" +
+        "define('er/main', function (require) {\n" +
+        "    var view = require('./View');\n" +
+        "    return 'er';\n" +
+        "});\n\n" +
+        "define('er', ['er/main'], function ( main ) { return main; });";
+        expect(moduleCode).toEqual(expectedCode);
+    });
+
+    it('exclude module 2', function() {
+        var moduleCode = CompileModule(
+            fs.readFileSync(path.resolve(Project, 'dep', 'er', '3.0.2', 'src', 'main.js'), 'utf-8'),
+            'er',
+            ConfigFile,
+            {
+                exclude: ['er/*']
+            }
+        );
+
+        var expectedCode =
+        "define('er/main', function (require) {\n" +
+        "    var view = require('./View');\n" +
+        "    return 'er';\n" +
+        "});\n\n" +
+        "define('er', ['er/main'], function ( main ) { return main; });";
+        expect(moduleCode).toEqual(expectedCode);
+    });
+
     it('default `combine` is true', function() {
         var moduleCode = CompileModule(
             fs.readFileSync(path.resolve(Project, 'src', 'foo.js'), 'utf-8'),
