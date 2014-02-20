@@ -25,22 +25,17 @@
     "mkdirp": "~0.3.3",
     "less": "~1.6.3",
     "esprima": "~1.0.2",
-    "escodegen": "~0.0.22",
-    "estraverse": "~1.1.1",
-    "uglify-js": "~2.3.6",
+    "escodegen": "~1.2.0",
+    "estraverse": "~1.5.0",
+    "uglify-js": "~2.4.12",
     "clean-css": "~2.1.0",
     "iconv-lite": "~0.2.11",
     "html2js": "~0.0.2",
-    "stylus": "~0.38.0"
+    "stylus": "~0.42.2"
   },
   "main": "index.js",
   "repository": "git://github.com/ecomfe/edp-build",
   "devDependencies": {
-    "estraverse": "~1.1.2-1",
-    "stylus": "~0.38.0",
-    "escodegen": "0.0.28",
-    "uglify-js": "~2.3.6",
-    "less": "~1.5.1"
   },
   "scripts": {
     "test": "make -C test"

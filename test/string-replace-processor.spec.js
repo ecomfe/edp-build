@@ -45,9 +45,9 @@ describe('string-replace-processor', function(){
             var js = new JsCompressor();
             js.process(fileData, processContext, function(){
                 expect(fileData.data).toBe('define(function(require){' +
-                    'return require("io/File2"),' +
+                    'require("io/File2"),' +
                     'require("net/Http2"),' +
-                    'require("er/View2"),"foo"});');
+                    'require("er/View2");return"foo"});');
             });
         });
     });
@@ -66,9 +66,9 @@ describe('string-replace-processor', function(){
             var js = new JsCompressor();
             js.process(fileData, processContext, function(){
                 expect(fileData.data).toBe('define(function(require){' +
-                    'return require("hello world"),' +
                     'require("hello world"),' +
-                    'require("hello world"),"hello world"});');
+                    'require("hello world"),' +
+                    'require("hello world");return"hello world"});');
             });
         });
     });
@@ -88,9 +88,9 @@ describe('string-replace-processor', function(){
             var js = new JsCompressor();
             js.process(fileData, processContext, function(){
                 expect(fileData.data).toBe('define(function(require){' +
-                    'return require("zio/File"),' +
+                    'require("zio/File"),' +
                     'require("znet/Http2"),' +
-                    'require("zer/View"),"zfoo"});');
+                    'require("zer/View");return"zfoo"});');
             });
         });
     });
