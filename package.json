@@ -1,7 +1,7 @@
 {
   "name": "edp-build",
   "description": "Package for edp build",
-  "version": "0.5.22",
+  "version": "0.5.23",
   "contributors": [
     {
       "name": "errorrik",
