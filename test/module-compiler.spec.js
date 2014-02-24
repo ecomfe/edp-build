@@ -70,9 +70,9 @@ describe('module-compiler', function(){
             var moduleInfo = analyseModule(ast);
             expect(moduleInfo).not.toBe(null);
             expect(moduleInfo.length).toBe(4);
-            expect(moduleInfo[0].id).toBe('er/View');
+            expect(moduleInfo[0].id).toBe('io/File');
             expect(moduleInfo[1].id).toBe('net/Http');
-            expect(moduleInfo[2].id).toBe('io/File');
+            expect(moduleInfo[2].id).toBe('er/View');
             expect(moduleInfo[3].id).toBe('foo');
         });
     });

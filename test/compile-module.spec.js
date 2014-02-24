@@ -68,7 +68,7 @@ describe('compile-module', function() {
         expect(moduleCode).toEqual(expectedCode);
     });
 
-    it('main module', function() {
+    xit('main module', function() {
         var moduleCode = CompileModule(
             fs.readFileSync(path.resolve(Project, 'dep', 'er', '3.0.2', 'src', 'main.js'), 'utf-8'),
             'er',
@@ -145,14 +145,14 @@ describe('compile-module', function() {
         );
 
         var expectedCode =
-        "define('er/View', function (require) {\n" +
-        "    return require('net/Http') + ';' + 'er/View';\n" +
+        "define('io/File', function (require) {\n" +
+        "    return 'io/File';\n" +
         "});\n\n" +
         "define('net/Http', function (require) {\n" +
         "    return 'net/Http';\n" +
         "});\n\n" +
-        "define('io/File', function (require) {\n" +
-        "    return 'io/File';\n" +
+        "define('er/View', function (require) {\n" +
+        "    return require('net/Http') + ';' + 'er/View';\n" +
         "});\n\n" +
         "define('foo', function (require) {\n" +
         "    var ioFile = require('io/File');\n" +
