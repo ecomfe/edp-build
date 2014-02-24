@@ -38,6 +38,7 @@
   "devDependencies": {
   },
   "scripts": {
-    "test": "make -C test"
+    "test": "make -C test",
+    "prepare": "npm ln edp-core"
   }
 }
