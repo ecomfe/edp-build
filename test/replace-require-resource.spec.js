@@ -35,6 +35,7 @@ describe('replace-require-resource', function(){
         "], function (foo, require, exports, module) {\n" +
         "    require('[tpl!./tpl/list.tpl.html]');\n" +
         "    require('no-such-plugin!./tpl/list.tpl.html');\n" +
+        "    require('[tpl!er/tpl/hello.tpl.html]');\n" +
         "    var z = require('jquery');\n" +
         "    return 'case1';\n" +
         "});";
@@ -55,6 +56,7 @@ describe('replace-require-resource', function(){
         "], function (foo, require, exports, module) {\n" +
         "    require('[tpl!./tpl/list.tpl.html]');\n" +
         "    require('[no-such-plugin!./tpl/list.tpl.html]');\n" +
+        "    require('[tpl!er/tpl/hello.tpl.html]');\n" +
         "    var z = require('jquery');\n" +
         "    return 'case1';\n" +
         "});";

@@ -40,9 +40,8 @@ describe('tpl-merge', function() {
         var filePath = path.join( Project, 'src', 'case1.js' );
         var fileData = base.getFileInfo( filePath );
 
-        var processContext = { baseDir: Project }
         var processContext = new ProcessContext( {
-            baseDir: __dirname,
+            baseDir: Project,
             exclude: [],
             outputDir: 'output',
             fileEncodings: {}
@@ -54,8 +53,9 @@ describe('tpl-merge', function() {
                 "    'foo',\n" +
                 "    'tpl!./tpl/123.html'\n" +
                 "], function (foo, require, exports, module) {\n" +
-                "    require('tpl!../../../8e1a46c0.tpl.html');\n" +
-                "    require('no-such-plugin!../../../8e1a46c0.tpl.html');\n" +
+                "    require('tpl!../d0d179ca.tpl.html');\n" +
+                "    require('no-such-plugin!../d0d179ca.tpl.html');\n" +
+                "    require('tpl!../d0d179ca.tpl.html');\n" +
                 "    var z = require('jquery');\n" +
                 "    return 'case1';\n" +
                 "});"

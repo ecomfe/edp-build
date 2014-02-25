@@ -17,6 +17,7 @@
 define('case1', ['foo', 'tpl!./tpl/123.html'], function(foo, require, exports, module){
     require('tpl!./tpl/list.tpl.html');
     require('no-such-plugin!./tpl/list.tpl.html');
+    require('tpl!er/tpl/hello.tpl.html');
     var z = require('jquery');
     return 'case1';
 });
