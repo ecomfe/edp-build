@@ -96,7 +96,8 @@ function injectProcessor( conf ) {
             VariableSubstitution: require( './lib/processor/variable-substitution' ),
             ManifestCompiler    : require( './lib/processor/manifest-compiler' ),
             AddCopyright        : require( './lib/processor/add-copyright' ),
-            ReplaceDebug        : require( './lib/processor/replace-debug' )
+            ReplaceDebug        : require( './lib/processor/replace-debug' ),
+            TplMerge            : require( './lib/processor/tpl-merge' )
         } );
     }
 }
@@ -188,6 +189,10 @@ function main( conf, callback ) {
 
         function nextFile() {
             if ( fileIndex >= fileCount ) {
+                if ( typeof processor.done === 'function' ) {
+                    processor.done(processContext);
+                }
+
                 nextProcess();
                 return;
             }

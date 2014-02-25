@@ -14,7 +14,7 @@
  * @description 
  *  
  **/
-var IsRelativePath = require('../lib/util/is-relative-path.js');
+var IsRelativePath = require('../node_modules/edp-core').path.isRelativePath;
 
 describe('is-relative-path', function() {
     it('default', function() {

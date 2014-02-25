@@ -36,10 +36,19 @@ describe('analyse-module', function() {
         expect(moduleInfo != null).toEqual(true);
     })
 
+    it('src/common/main.js should pass', function(){
+        var moduleInfo = getModuleInfo('common/main.js');
+        expect( moduleInfo ).not.toBe( null );
+    });
+
     it('case1 should pass', function(){
         var moduleInfo = getModuleInfo('case1.js');
         expect(moduleInfo.id).toEqual('case1');
-        expect(moduleInfo.dependencies).toEqual(['foo']);
+        expect(moduleInfo.dependencies).toEqual(['foo', 'tpl!./tpl/123.html']);
+        expect( moduleInfo.actualDependencies ).not.toBe( null );
+        expect( moduleInfo.actualDependencies[0] ).toBe( 'foo' );
+        expect( moduleInfo.actualDependencies[1] ).toBe( 'tpl!./tpl/123.html' );
+        expect( moduleInfo.actualDependencies[2] ).toBe( 'tpl!./tpl/list.tpl.html' );
     });
 
     it('etpl should pass', function(){
