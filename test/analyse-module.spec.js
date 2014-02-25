@@ -17,43 +17,108 @@
 var fs = require('fs');
 var path = require('path');
 
-var base = require('./base');
-var Project = path.resolve(__dirname, 'data', 'dummy-project');
-var AnalyseModyle = require('../lib/util/analyse-module.js');
+var baseDir = path.resolve(__dirname, 'data', 'analyse-module');
+var analyseModule= require('../lib/util/analyse-module.js');
 
 function getModuleInfo(name) {
-    var code = fs.readFileSync(path.resolve(Project, 'src', name), 'utf-8');
+    var code = fs.readFileSync(path.resolve(baseDir, name), 'utf-8');
     var ast = require('esprima').parse(code);
-    var moduleInfo = AnalyseModyle(ast);
+    var moduleInfo = analyseModule(ast);
 
     return moduleInfo;
 }
 
 describe('analyse-module', function() {
-    it('foo should pass', function(){
-        var moduleInfo = getModuleInfo('foo.js');
-        expect(moduleInfo.id).toEqual(undefined);
-        expect(moduleInfo != null).toEqual(true);
-    })
+    it('not amd module should return null', function () {
+        var moduleInfo = getModuleInfo('notModule.js');
 
-    it('src/common/main.js should pass', function(){
-        var moduleInfo = getModuleInfo('common/main.js');
-        expect( moduleInfo ).not.toBe( null );
+        expect(moduleInfo).toBeNull();
     });
 
-    it('case1 should pass', function(){
-        var moduleInfo = getModuleInfo('case1.js');
-        expect(moduleInfo.id).toEqual('case1');
-        expect(moduleInfo.dependencies).toEqual(['foo', 'tpl!./tpl/123.html']);
-        expect( moduleInfo.actualDependencies ).not.toBe( null );
-        expect( moduleInfo.actualDependencies[0] ).toBe( 'foo' );
-        expect( moduleInfo.actualDependencies[1] ).toBe( 'tpl!./tpl/123.html' );
-        expect( moduleInfo.actualDependencies[2] ).toBe( 'tpl!./tpl/list.tpl.html' );
+    it('anonymous defined should pass', function () {
+        var moduleInfo = getModuleInfo('anonymous.js');
+
+        expect(moduleInfo).not.toBeNull();
+        expect(moduleInfo.id).toBeUndefined();
+        expect(moduleInfo.dependencies).toBeUndefined();
+        expect(moduleInfo.actualDependencies)
+            .toEqual([
+                'require',
+                'exports', 
+                'module',
+                'io/File',
+                'net/Http',
+                'er/View'
+            ]);
     });
 
-    it('etpl should pass', function(){
+    it('defined with moduleId should pass', function () {
+        var moduleInfo = getModuleInfo('hasId.js');
+
+        expect(moduleInfo).not.toBeNull();
+        expect(moduleInfo.id).toEqual('foo');
+        expect(moduleInfo.dependencies).toBeUndefined();
+        expect(moduleInfo.actualDependencies)
+            .toEqual([
+                'require',
+                'exports',
+                'module',
+                'er'
+            ]);
+    });
+
+    it('defined with dependenciess should pass', function () {
+        var moduleInfo = getModuleInfo('hasDeps.js');
+
+        expect(moduleInfo).not.toBeNull();
+        expect(moduleInfo.id).toBeUndefined();
+        expect(moduleInfo.dependencies).toEqual(['foo', 'bar']);
+        expect(moduleInfo.actualDependencies)
+            .toEqual([
+                'foo',
+                'bar',
+                'base'
+            ]);
+    });
+
+    it('defined with all arguments should pass', function () {
+        var moduleInfo = getModuleInfo('hasAll.js');
+
+        expect(moduleInfo).not.toBeNull();
+        expect(moduleInfo.id).toBe('foo');
+        expect(moduleInfo.dependencies).toEqual(['bar', 'base']);
+        expect(moduleInfo.actualDependencies)
+            .toEqual([
+                'bar',
+                'base',
+                'more'
+            ]);
+    });
+
+    it('defined with wrapper should pass', function () {
         var moduleInfo = getModuleInfo('etpl-2.0.8.js');
-        expect(moduleInfo).toEqual(null);
+
+        expect(moduleInfo).not.toBeNull();
+        expect(moduleInfo.id).toBeUndefined();
+        expect(moduleInfo.dependencies).toBeUndefined();
+        expect(moduleInfo.actualDependencies)
+            .toEqual([
+                'require',
+                'exports',
+                'module'
+            ]);
+        expect(moduleInfo.factoryAst.name).toBe('etpl');
+    });
+
+    it('multi defined should return array', function () {
+        var moduleInfo = getModuleInfo('multi.js');
+
+        expect(moduleInfo).not.toBeNull();
+        expect(moduleInfo instanceof Array).toBeTruthy();
+        expect(moduleInfo.length).toBe(2);
+
+        expect(moduleInfo[0].id).toBe('foo');
+        expect(moduleInfo[1].id).toBe('bar');
     });
 });
 
