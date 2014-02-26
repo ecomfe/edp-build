@@ -1,0 +1,3 @@
+define('single', function () {
+    return {};
+});
