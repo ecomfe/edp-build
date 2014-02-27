@@ -53,9 +53,9 @@ describe('tpl-merge', function() {
                 "    'foo',\n" +
                 "    'tpl!./tpl/123.html'\n" +
                 "], function (foo, require, exports, module) {\n" +
-                "    require('tpl!../d0d179ca.tpl.html');\n" +
-                "    require('no-such-plugin!../d0d179ca.tpl.html');\n" +
-                "    require('tpl!../d0d179ca.tpl.html');\n" +
+                "    require('tpl!d0d179ca.tpl.html');\n" +
+                "    require('no-such-plugin!d0d179ca.tpl.html');\n" +
+                "    require('tpl!d0d179ca.tpl.html');\n" +
                 "    var z = require('jquery');\n" +
                 "    return 'case1';\n" +
                 "});"
