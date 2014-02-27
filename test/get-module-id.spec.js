@@ -17,7 +17,7 @@
 var path = require( 'path' );
 var edp = require( 'edp-core' );
 
-var GetModuleId = require('../lib/util/get-module-id.js');
+var GetModuleId = edp.esl.getModuleId;
 var GetModuleFile = edp.esl.getModuleFile;
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
 var ConfigFile = path.resolve(Project, 'module.conf');
