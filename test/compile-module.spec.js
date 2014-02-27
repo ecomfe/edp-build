@@ -68,7 +68,7 @@ describe('compile-module', function() {
         expect(moduleCode).toEqual(expectedCode);
     });
 
-    xit('main module', function() {
+    it('main module', function() {
         var moduleCode = CompileModule(
             fs.readFileSync(path.resolve(Project, 'dep', 'er', '3.0.2', 'src', 'main.js'), 'utf-8'),
             'er',
