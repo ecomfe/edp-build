@@ -162,6 +162,19 @@ describe('compile-module', function() {
         "});";
         expect(moduleCode).toEqual(expectedCode);
     });
+
+    it('combine shuould ignore wrong module', function () {
+        var moduleCode = CompileModule(
+            fs.readFileSync(path.resolve(Project, 'src', 'case138.js'), 'utf-8'),
+            'case138',
+            ConfigFile,
+            true
+        );
+        var ast = require('esprima').parse(moduleCode);
+            // 期待进行合并操作后只有一个define调用语句
+            // 即没有合并解析失败的模块
+        expect(ast.body.length).toBe(1);
+    });
 });
 
 
