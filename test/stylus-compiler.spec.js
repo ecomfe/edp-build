@@ -37,8 +37,8 @@ describe('stylus-compiler', function(){
         };
         processor.process(fileData, processContext, function() {
             var expected =
-                "body{font:12px Helvetica,Arial,sans-serif}\n" +
-                "a.button{-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px}\n";
+                "body{font:12px Helvetica,Arial,sans-serif}" +
+                "a.button{-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px}";
 
             expect( fileData.data ).toBe( expected );
         });
@@ -61,8 +61,8 @@ describe('stylus-compiler', function(){
         };
         processor.process(fileData, processContext, function() {
             var expected =
-                "body{font:12px Helvetica,Arial,sans-serif}\n" +
-                "a.button{-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px}\n";
+                "body{font:12px Helvetica,Arial,sans-serif}" +
+                "a.button{-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px}";
 
             expect( fileData.data ).toBe( expected );
         });
