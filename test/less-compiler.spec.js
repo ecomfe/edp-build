@@ -59,6 +59,26 @@ describe('less-compiler', function(){
             expect( fileData.data ).toBe( ".m1{background:url('../../img/logo.gif')}" );
         });
     });
+
+    it('edp-issue-166', function(){
+        var processor = new LessCompiler({
+            less: require( '../node_modules/less' ),
+            entryExtnames: pageEntries,
+            compileOptions: {
+                compress: true
+            }
+        });
+
+        var filePath = path.join('data', 'css-compressor', 'edp-issue-166.less');
+        var fileData = base.getFileInfo(filePath);
+        var processContext = {
+            baseDir: __dirname,
+            addFileLink: function(){}
+        };
+        processor.process(fileData, processContext, function() {
+            expect( fileData.data ).toBe( ".banner{font-weight:bold;line-height:40px;margin:0 auto}body{color:#444;background:url(\"../img/white-sand.png\")}" );
+        });
+    });
 });
 
 
