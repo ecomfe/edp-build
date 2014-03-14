@@ -63,6 +63,13 @@ function loadConf( confFile, baseDir ) {
 var cli = {};
 
 /**
+ * 命令描述信息
+ *
+ * @type {string}
+ */
+cli.description = '构建目录或项目';
+
+/**
  * 命令选项信息
  *
  * @type {Array}
