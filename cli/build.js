@@ -9,6 +9,7 @@ var fs = require( 'fs' );
 
 var log = edp.log;
 var path = edp.path;
+var util = edp.util;
 
 /**
  * 默认构建配置文件
@@ -112,7 +113,7 @@ cli.main = function ( args, opts ) {
     // 2. 如果设置了force参数，强制删除当前存在的目录
     if ( fs.existsSync( outputDir ) ) {
         if ( opts.force ) {
-            require( './util' ).rmdir( outputDir );
+            util.rmdir( outputDir );
         }
         else {
             log.error( outputDir + ' directory already exists!' );
