@@ -23,6 +23,7 @@ var Project = path.resolve(__dirname, 'data', 'dummy-project');
 var TplMerge = require( '../lib/processor/tpl-merge' );
 var ProcessContext = require( '../lib/process-context' );
 var ModuleCompiler = require('../lib/processor/module-compiler.js');
+var JsCompressor = require('../lib/processor/js-compressor.js');
 
 var moduleEntries = 'html,htm,phtml,tpl,vm,js';
 var pageEntries = 'html,htm,phtml,tpl,vm';
@@ -67,7 +68,7 @@ describe('tpl-merge', function() {
         });
     });
 
-    it('issue#31', function(){
+    it('ecomfe/edp/issues/139', function(){
         // 同样的tpl在多个js中出现，这些js都应该被处理
         // 以前的判断逻辑导致只处理第一次出现的那个js文件
         var p1 = new ModuleCompiler({
@@ -79,7 +80,11 @@ describe('tpl-merge', function() {
                 return combineModules;
             }
         });
-        var p2 = new TplMerge();
+        var p2 = new TplMerge({
+            outputPluginId: 'jstpl',
+            outputType: 'js'
+        });
+        var p3 = new JsCompressor();
 
         var processContext = new ProcessContext( {
             baseDir: Project,
@@ -94,24 +99,67 @@ describe('tpl-merge', function() {
         processContext.addFile( f2 );
 
         var processors = [
-            p1, p2
+            p1, p2, p3
         ];
+        var done = false;
+        waitsFor(function(){ return done });
         base.launchProcessors(processors, processContext, function(){
-            var f2Expected = 
-                "define('require-tpl-31', function () {\n" +
-                "    require('er/tpl!8a339213.tpl.html');\n" +
-                "});\n" +
-                "define('issue31', function () {\n" +
-                "    require('./require-tpl-31');\n" +
-                "    return 'issue31';\n" +
-                "});"
-            var f1Expected = 
-                "define('require-tpl-31', function () {\n" +
-                "    require('er/tpl!8a339213.tpl.html');\n" +
-                "});";
+            done = true;
+            var f2Expected = 'define("require-tpl-31",function(){require("jstpl!06088bcb.tpl")}),define("issue31",function(){return require("./require-tpl-31"),"issue31"});';
+            var f1Expected = 'define("require-tpl-31",function(){require("jstpl!06088bcb.tpl")});';
 
-            expect( f2.data ).toBe( f2Expected );
-            expect( f1.data ).toBe( f1Expected );
+            runs(function(){
+                expect( f2.data ).toBe( f2Expected );
+                expect( f1.data ).toBe( f1Expected );
+                expect( processContext.getFileByPath( 'src/06088bcb.tpl.js' ) ).not.toBe( null );
+            });
+        });
+
+    });
+
+    it('issue#31', function(){
+        // 同样的tpl在多个js中出现，这些js都应该被处理
+        // 以前的判断逻辑导致只处理第一次出现的那个js文件
+        var p1 = new ModuleCompiler({
+            exclude: [],
+            configFile: 'module.conf',
+            entryExtnames: moduleEntries,
+            getCombineConfig: function( combineModules ) {
+                combineModules.issue31 = 1;
+                return combineModules;
+            }
+        });
+        var p2 = new TplMerge();
+        var p3 = new JsCompressor();
+
+        var processContext = new ProcessContext( {
+            baseDir: Project,
+            exclude: [],
+            outputDir: 'output',
+            fileEncodings: {}
+        });
+
+        var f1 = base.getFileInfo( path.join( Project, 'src', 'require-tpl-31.js' ) );
+        var f2 = base.getFileInfo( path.join( Project, 'src', 'issue31.js' ) );
+        processContext.addFile( f1 );
+        processContext.addFile( f2 );
+
+        var processors = [
+            p1, p2, p3
+        ];
+
+        var done = false;
+        waitsFor(function(){ return done });
+        base.launchProcessors(processors, processContext, function(){
+            done = true;
+            var f2Expected = 'define("require-tpl-31",function(){require("er/tpl!8a339213.tpl.html")}),define("issue31",function(){return require("./require-tpl-31"),"issue31"});';
+            var f1Expected = 'define("require-tpl-31",function(){require("er/tpl!8a339213.tpl.html")});';
+
+            runs(function(){
+                expect( f2.data ).toBe( f2Expected );
+                expect( f1.data ).toBe( f1Expected );
+                expect( processContext.getFileByPath( 'src/8a339213.tpl.html' ) ).not.toBe( null );
+            });
         });
     })
 });
