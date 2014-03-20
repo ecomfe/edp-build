@@ -64,6 +64,31 @@ describe('js-compressor', function() {
         expect(processContext.getFileByPath(path.join('data', 'js-compressor', '5.sourcemap'))).not.toBe(null);
         expect(processContext.getFileByPath(path.join('data', 'js-compressor', '5.org.js'))).not.toBe(null);
     });
+
+    // FIXME(user) uglify-js有个bug，导致暂时无法通过
+    xit('测试global defines', function(){
+        var processor = new JsCompressor({
+            compressOptions: {
+                global_defs: {
+                    FLAGS_boolean: 123,
+                    DEBUG: false,
+                    kURL: 'http://www.baidu.com'
+                }
+            }
+        });
+
+        var filePath = path.join('data', 'js-compressor', '6.js');
+        var fileData = base.getFileInfo(filePath);
+        var processContext = new ProcessContext( {
+            baseDir: 'src',
+            exclude: [],
+            outputDir: 'output',
+            fileEncodings: {}
+        } );
+        processor.process(fileData, processContext, function() {
+            expect(fileData.data).toBe('123');
+        });
+    });
 });
 
 
