@@ -98,7 +98,7 @@ describe('compile-module', function() {
             ConfigFile,
             {
                 exclude: ['er/*'],
-                include: ['er/View']
+                include: [ [ [ [ 'er/View' ] ] ] ]
             }
         );
 
@@ -124,6 +124,25 @@ describe('compile-module', function() {
             ConfigFile,
             {
                 exclude: ['er/*']
+            }
+        );
+
+        var expectedCode =
+        "define('er/main', function (require) {\n" +
+        "    var view = require('./View');\n" +
+        "    return 'er';\n" +
+        "});\n\n" +
+        "define('er', ['er/main'], function ( main ) { return main; });";
+        expect(moduleCode).toEqual(expectedCode);
+    });
+
+    it('exclude module 3', function() {
+        var moduleCode = CompileModule(
+            fs.readFileSync(path.resolve(Project, 'dep', 'er', '3.0.2', 'src', 'main.js'), 'utf-8'),
+            'er',
+            ConfigFile,
+            {
+                exclude: [ [ [ 'er/*' ] ] ]
             }
         );
 
