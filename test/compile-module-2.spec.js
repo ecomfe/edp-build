@@ -22,25 +22,45 @@ var base = require('./base');
 var CompileModule = require('../lib/util/compile-module.js');
 
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
-var Project = '/Users/leeight/public_html/case/baike';
 var ConfigFile = path.resolve(Project, 'module.conf');
 
 describe('compile-module-2', function() {
-    xit('default', function(){
+    it('default', function(){
         // include和exclude都使用pattern
         var moduleCode = CompileModule(
-            fs.readFileSync(path.resolve(Project, 'src', 'common', 'main.js'), 'utf-8'),
-            'common/main',
+            fs.readFileSync(path.resolve(Project, 'src', 'common', 'dummy.js'), 'utf-8'),
+            'common/dummy',
             ConfigFile,
             {
-                exclude: [ '*' ], // , 'er/*', 'validation/*', 'underscore/*', 'moment/*', 'esui/*', 'esui/**/*', 'urijs/*', 'mini-event/*', 'ecma/*', 'ecma/**/*', 'etpl/*' ],
-                include: [ [ [ [ 'er/*' ] ] ] ]
+                exclude: [ ],
+                include: [ [ [ [ 'er', 'er/main' ] ] ] ]
             }
         );
+
         var ast = edp.esl.getAst( moduleCode );
         var moduleInfo = edp.esl.analyseModule( ast );
         var moduleIds = moduleInfo.map(function( info ){ return info.id || '<anonymous>' });
-        console.log( moduleIds );
+        moduleIds.sort();
+        expect( moduleIds ).toEqual( [ 'common/dummy', 'er', 'er/View', 'er/main', 'net/Http' ] );
+    });
+
+    it('default 2', function(){
+         // include和exclude都使用pattern
+        var moduleCode = CompileModule(
+            fs.readFileSync(path.resolve(Project, 'src', 'common', 'dummy.js'), 'utf-8'),
+            'common/dummy',
+            ConfigFile,
+            {
+                exclude: [ '*' ],
+                include: [ [ [ [ 'er', 'er/*' ] ] ] ]
+            }
+        );
+
+        var ast = edp.esl.getAst( moduleCode );
+        var moduleInfo = edp.esl.analyseModule( ast );
+        var moduleIds = moduleInfo.map(function( info ){ return info.id || '<anonymous>' });
+        moduleIds.sort();
+        expect( moduleIds ).toEqual( [ 'common/dummy', 'er', 'er/View', 'er/main' ] );
     });
 });
 

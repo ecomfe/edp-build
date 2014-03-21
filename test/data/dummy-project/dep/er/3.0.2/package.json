@@ -1,0 +1,11 @@
+{
+    "name": "er",
+    "version": "3.0.2",
+    "contributors": [
+        { "name": "erik", "email": "errorrik@gmail.com" },
+        { "name": "otakustay", "email": "otakustay@gmail.com" }
+    ],
+    "main": "main",
+    "homepage": "http://ecomfe.github.io/er/",
+    "repository": "git://github.com/ecomfe/er"
+}
