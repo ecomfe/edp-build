@@ -97,18 +97,13 @@ describe('compile-module', function() {
             'er',
             ConfigFile,
             {
-                exclude: ['er/*'],
+                exclude: [ 'er/*' ],
                 include: [ [ [ [ 'er/View' ] ] ] ]
             }
         );
 
+        // XXX(user) 没办法exclude自己.
         var expectedCode =
-        "define('net/Http', function (require) {\n" +
-        "    return 'net/Http';\n" +
-        "});\n\n" +
-        "define('er/View', function (require) {\n" +
-        "    return require('net/Http') + ';' + 'er/View';\n" +
-        "});\n\n" +
         "define('er/main', function (require) {\n" +
         "    var view = require('./View');\n" +
         "    return 'er';\n" +

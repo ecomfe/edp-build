@@ -50,7 +50,6 @@ describe('module-compiler', function(){
     });
 
     it('getCombineConfig', function(){
-
         var processor = new ModuleCompiler({
             exclude: [],
             configFile: 'module.conf',
@@ -65,6 +64,60 @@ describe('module-compiler', function(){
 
         var processContext = { baseDir: Project }
         processor.process(fileData, processContext, function(){
+            var ast = require('esprima').parse(fileData.data);
+            var analyseModule = require('../lib/util/analyse-module.js');
+            var moduleInfo = analyseModule(ast);
+            expect(moduleInfo).not.toBe(null);
+            expect(moduleInfo.length).toBe(4);
+            expect(moduleInfo[0].id).toBe('io/File');
+            expect(moduleInfo[1].id).toBe('net/Http');
+            expect(moduleInfo[2].id).toBe('er/View');
+            expect(moduleInfo[3].id).toBe('foo');
+        });
+    });
+
+    it('case-xtpl', function(){
+        var processor = new ModuleCompiler({
+            exclude: [],
+            configFile: 'module.conf',
+            entryExtnames: moduleEntries,
+            getCombineConfig: function() {
+                return {
+                    'case-xtpl': true
+                }
+            }
+        });
+
+        var filePath = path.join(Project, 'src', 'case-xtpl.js');
+        var fileData = base.getFileInfo(filePath);
+
+        var processContext = { baseDir: Project }
+        processor.process(fileData, processContext, function(){
+            var expected =
+                "define('xtpl', function (require) {\n" +
+                "    return 'xtpl';\n" +
+                "});\n" +
+                "\n\n" +
+                "/** d e f i n e */\n" +
+                "define(\"xtpl2\", function(require){ return require(\"xtpl\"); });\n" +
+                "\n" +
+                "\n" +
+                "/** d e f i n e */\n" +
+                "define(\"xtpl3\", function(require){ return require(\"xtpl\"); });\n" +
+                "\n" +
+                "\n" +
+                "/** d e f i n e */\n" +
+                "define(\"common/xtpl\", function(require){ return require(\"xtpl\"); });\n" +
+                "\n" +
+                "define('case-xtpl', function (require) {\n" +
+                "    var xtpl = require('xtpl');\n" +
+                "    var ztpl = require('common/xtpl');\n" +
+                "    console.log(xtpl);\n" +
+                "    console.log(ztpl);\n" +
+                "});";
+            expect( fileData.data ).toBe( expected );
+
+            return;
             var ast = require('esprima').parse(fileData.data);
             var analyseModule = require('../lib/util/analyse-module.js');
             var moduleInfo = analyseModule(ast);
