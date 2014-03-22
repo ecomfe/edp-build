@@ -58,10 +58,77 @@ describe('compile-module-2', function() {
 
         var ast = edp.esl.getAst( moduleCode );
         var moduleInfo = edp.esl.analyseModule( ast );
-        var moduleIds = moduleInfo.map(function( info ){ return info.id || '<anonymous>' });
-        moduleIds.sort();
-        expect( moduleIds ).toEqual( [ 'common/dummy', 'er', 'er/View', 'er/main' ] );
+
+        if ( moduleInfo && !Array.isArray( moduleInfo ) ) {
+            moduleInfo = [ moduleInfo ];
+        }
+
+        if ( moduleInfo ) {
+            var moduleIds = moduleInfo.map(function( info ){ return info.id || '<anonymous>' });
+            moduleIds.sort();
+            expect( moduleIds ).toEqual( [ 'common/dummy' ] );
+        }
+        else {
+            expect( moduleCode ).toEqual( 'define(\'common/dummy\', {});' );
+        }
     });
+
+    it('default 3', function(){
+         // include和exclude都使用pattern
+        var moduleCode = CompileModule(
+            fs.readFileSync(path.resolve(Project, 'src', 'common', 'dummy.js'), 'utf-8'),
+            'common/dummy',
+            ConfigFile,
+            {
+                fileset: [ 'er', '!*', 'er/*' ]
+            }
+        );
+
+        var ast = edp.esl.getAst( moduleCode );
+        var moduleInfo = edp.esl.analyseModule( ast );
+
+        if ( moduleInfo && !Array.isArray( moduleInfo ) ) {
+            moduleInfo = [ moduleInfo ];
+        }
+
+        if ( moduleInfo ) {
+            var moduleIds = moduleInfo.map(function( info ){ return info.id || '<anonymous>' });
+            moduleIds.sort();
+            expect( moduleIds ).toEqual( [ 'common/dummy' ] );
+        }
+        else {
+            expect( moduleCode ).toEqual( 'define(\'common/dummy\', {});' );
+        }
+    });
+
+    it('default 4', function(){
+         // include和exclude都使用pattern
+        var moduleCode = CompileModule(
+            fs.readFileSync(path.resolve(Project, 'src', 'common', 'dummy.js'), 'utf-8'),
+            'common/dummy',
+            ConfigFile,
+            {
+                fileset: [ '!*', 'er/*', 'er' ]
+            }
+        );
+
+        var ast = edp.esl.getAst( moduleCode );
+        var moduleInfo = edp.esl.analyseModule( ast );
+
+        if ( moduleInfo && !Array.isArray( moduleInfo ) ) {
+            moduleInfo = [ moduleInfo ];
+        }
+
+        if ( moduleInfo ) {
+            var moduleIds = moduleInfo.map(function( info ){ return info.id || '<anonymous>' });
+            moduleIds.sort();
+            expect( moduleIds ).toEqual( [ 'common/dummy' ] );
+        }
+        else {
+            expect( moduleCode ).toEqual( 'define(\'common/dummy\', {});' );
+        }
+    });
+
 });
 
 
