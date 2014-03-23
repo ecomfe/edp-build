@@ -63,6 +63,16 @@ describe('replace-require-resource', function(){
 
         expect( z ).toBe( expected );
     });
+
+    it('issue-186', function(){
+        // var file = '/Users/leeight/public_html/case/baike/output/asset/common/main.js';
+        var file = path.join( __dirname, 'data', 'issue-186.data.js' );
+        var code = fs.readFileSync( file, 'utf-8' );
+        var z = ReplaceRequireResource( code, [ 'tpl' ], function( resourceId ){
+            return '[' + resourceId + ']';
+        });
+        // expect( z ).toBe( null );
+    });
 });
 
 
