@@ -21,7 +21,7 @@ var base = require('./base');
 
 describe('css-compressor', function() {
     it('default', function() {
-        var processor = new CssCompressor();
+        var processor = new CssCompressor({ compressOptions: { keepBreaks: false } });
         var filePath = path.join('data', 'css-compressor', 'default.css');
         var fileData = base.getFileInfo(filePath);
         processor.process(fileData, {baseDir:__dirname}, function() {
@@ -35,7 +35,8 @@ describe('css-compressor', function() {
     it('set `relativeTo`', function() {
         var processor = new CssCompressor({
             compressOptions: {
-                relativeTo: __dirname
+                relativeTo: __dirname,
+                keepBreaks: false
             }
         });
         var filePath = path.join('data', 'css-compressor', 'default.css');

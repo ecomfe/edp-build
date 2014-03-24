@@ -14,6 +14,7 @@
  * @description 
  *  
  **/
+var edp = require( 'edp-core' );
 
 var fs = require('fs');
 var path = require('path');
@@ -30,7 +31,7 @@ var pageEntries = 'html,htm,phtml,tpl,vm';
 
 function getModuleInfo(name) {
     var code = fs.readFileSync(path.resolve(Project, 'src', name), 'utf-8');
-    var ast = require('esprima').parse(code);
+    var ast = edp.esl.getAst( code );
     var moduleInfo = AnalyseModyle(ast);
 
     return moduleInfo;

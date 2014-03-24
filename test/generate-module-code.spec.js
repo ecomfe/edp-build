@@ -5,7 +5,7 @@
 
 var fs = require('fs');
 var path = require('path');
-var esprima = require('esprima');
+var edp = require( 'edp-core' );
 var generateModuleCode = require('../lib/util/generate-module-code');
 var baseDir = path.resolve(__dirname, 'data', 'generate-module-code');
 
@@ -18,7 +18,7 @@ function normalCode(str) {
 }
 
 var standardFile = getFile('std.js');
-var factoryAst = esprima.parse(standardFile);
+var factoryAst = edp.esl.getAst( standardFile );
 factoryAst = factoryAst.body[0].expression.arguments[0];
 
 
@@ -99,7 +99,7 @@ describe('generate-module-code', function () {
             ];
 
         var wrapperFile = getFile('wrapper.js');
-        var ast = esprima.parse(wrapperFile);
+        var ast = edp.esl.getAst( wrapperFile );
 
         var code = generateModuleCode(moduleInfo, ast);
         expect(normalCode(code)).toBe(normalCode(getFile('wrapper-compiled.js')));

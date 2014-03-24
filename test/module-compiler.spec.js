@@ -14,6 +14,8 @@
  * @description
  * 测试一下ModuleCompiler的功能是否正常
  **/
+var edp = require( 'edp-core' );
+
 var fs = require('fs');
 var path = require('path');
 
@@ -64,7 +66,7 @@ describe('module-compiler', function(){
 
         var processContext = { baseDir: Project }
         processor.process(fileData, processContext, function(){
-            var ast = require('esprima').parse(fileData.data);
+            var ast = edp.esl.getAst( fileData.data );
             var analyseModule = require('../lib/util/analyse-module.js');
             var moduleInfo = analyseModule(ast);
             expect(moduleInfo).not.toBe(null);
@@ -118,7 +120,7 @@ describe('module-compiler', function(){
             expect( fileData.data ).toBe( expected );
 
             return;
-            var ast = require('esprima').parse(fileData.data);
+            var ast = edp.esl.getAst( fileData.data );
             var analyseModule = require('../lib/util/analyse-module.js');
             var moduleInfo = analyseModule(ast);
             expect(moduleInfo).not.toBe(null);

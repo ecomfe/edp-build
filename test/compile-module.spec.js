@@ -14,6 +14,8 @@
  * @description 
  *  
  **/
+var edp = require( 'edp-core' );
+
 var fs = require('fs');
 var path = require('path');
 
@@ -184,9 +186,10 @@ describe('compile-module', function() {
             ConfigFile,
             true
         );
-        var ast = require('esprima').parse(moduleCode);
-            // 期待进行合并操作后只有一个define调用语句
-            // 即没有合并解析失败的模块
+
+        var ast = edp.esl.getAst( moduleCode );
+        // 期待进行合并操作后只有一个define调用语句
+        // 即没有合并解析失败的模块
         expect(ast.body.length).toBe(1);
     });
 });
