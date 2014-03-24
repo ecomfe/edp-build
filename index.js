@@ -184,20 +184,29 @@ function main( conf, callback ) {
         }
 
         var processor = processors[ processorIndex++ ];
-        var files = processContext.getFiles().filter(function(file){
-            // processor处理文件
-            // 如果一个文件属于exclude，并且不属于include，则跳过处理
-            if ( typeof processor.isExclude === 'function' 
-                 && processor.isExclude( file ) 
-                 && ( typeof processor.isInclude !== 'function' 
-                      || !processor.isInclude( file )
-                    )
-            ) {
-                return false;
-            }
+        var files = processContext.getFiles();
 
-            return true;
-        });
+        if ( Array.isArray( processor.fileset ) ) {
+            files = edp.glob.filter( processor.fileset, files, function( pattern, item ){
+                return edp.path.satisfy( item.path, pattern );
+            } );
+        }
+        else {
+            files = files.filter(function(file){
+                // processor处理文件
+                // 如果一个文件属于exclude，并且不属于include，则跳过处理
+                if ( typeof processor.isExclude === 'function' 
+                    && processor.isExclude( file ) 
+                    && ( typeof processor.isInclude !== 'function' 
+                          || !processor.isInclude( file )
+                        )
+                ) {
+                    return false;
+                }
+
+                return true;
+            });
+        }
 
         var fileIndex = 0;
         var fileCount = files.length;
