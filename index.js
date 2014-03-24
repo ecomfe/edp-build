@@ -145,7 +145,24 @@ function main( conf, callback ) {
     var fileEncodings = conf.fileEncodings || {};
 
     injectProcessor( conf );
-    var processors = conf.getProcessors().map(patchProcessor);
+
+    var processors = conf.getProcessors();
+    if ( Array.isArray( processors ) ) {
+        // 返回的是数组的情况，默认值
+        processors = processors.map(patchProcessor);
+    }
+    else if ( conf.stage in processors ) {
+        // 返回的是对象，key应该是stage的值
+        processors = processors[ conf.stage ];
+        processors = processors.map( patchProcessor );
+    }
+    else {
+        edp.log.error( 'Invalid stage value, candidates are = %s',
+            JSON.stringify( Object.keys( processors ) ) );
+        callback();
+        return;
+    }
+
     var processContext = new ProcessContext( {
         baseDir: baseDir,
         exclude: exclude,

@@ -78,7 +78,14 @@ cli.description = '构建目录或项目';
 cli.options = [
     'output:',
     'exclude:',
+
+    // 自定义的edp-build-config.js文件
     'config:',
+
+    // edp build --stage=dev 用来选择getProcessors()中dev指定的Processors的组合
+    'stage:',
+
+    // 删除output目录
     'force'
 ];
 
@@ -120,7 +127,7 @@ cli.main = function ( args, opts ) {
             return;
         }
     }
-    
+
     // 解析exclude参数
     var exclude = conf.exclude || [];
     if ( opts.exclude ) {
@@ -134,6 +141,9 @@ cli.main = function ( args, opts ) {
     if ( !/^\.\./.test( outputRelative ) ) {
         exclude.push( outputRelative );
     }
+
+    // Processors的组合
+    conf.stage = opts.stage || 'default';
 
     require( '../index' )( conf );
 };
