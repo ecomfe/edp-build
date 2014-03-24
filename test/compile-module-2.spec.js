@@ -94,7 +94,7 @@ describe('compile-module-2', function() {
         if ( moduleInfo ) {
             var moduleIds = moduleInfo.map(function( info ){ return info.id || '<anonymous>' });
             moduleIds.sort();
-            expect( moduleIds ).toEqual( [ 'common/dummy' ] );
+            expect( moduleIds ).toEqual( [ 'common/dummy', 'er', 'er/View', 'er/main', 'net/Http' ] );
         }
         else {
             expect( moduleCode ).toEqual( 'define(\'common/dummy\', {});' );
@@ -108,7 +108,7 @@ describe('compile-module-2', function() {
             'common/dummy',
             ConfigFile,
             {
-                fileset: [ '!*', 'er/*', 'er' ]
+                fileset: [ '!*', 'er/*' ]
             }
         );
 
@@ -122,7 +122,7 @@ describe('compile-module-2', function() {
         if ( moduleInfo ) {
             var moduleIds = moduleInfo.map(function( info ){ return info.id || '<anonymous>' });
             moduleIds.sort();
-            expect( moduleIds ).toEqual( [ 'common/dummy' ] );
+            expect( moduleIds ).toEqual( [ 'common/dummy', 'er', 'er/View', 'er/main', 'net/Http' ] );
         }
         else {
             expect( moduleCode ).toEqual( 'define(\'common/dummy\', {});' );
