@@ -79,8 +79,7 @@ describe('get-module-id', function() {
         var moduleFile = path.resolve(Project, 'src', 'common', 'ecma', 'tpl.js');
         var moduleConfig = path.resolve(Project, 'issue-30-module.conf');
         var moduleIds = GetModuleId( moduleFile, moduleConfig );
-        console.log(moduleFile);
-        console.log(moduleConfig);
+
         // 如果你好奇为啥多了一个'ecma/tpl'，其实我也很好奇，但是就是多了一个
         // 当然要多一个啊，哥，两个paths都指那去了
         expect( moduleIds ).toEqual( [ 'tpl', 'ecma/tpl', 'common/ecma/tpl' ] );
