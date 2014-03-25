@@ -39,7 +39,7 @@ describe('get-module-id', function() {
 
         var mainModuleFile = path.resolve(Project, 'dep', 'er', '3.0.2', 'src', 'main.js');
         var mainModuleId = GetModuleId(mainModuleFile, ConfigFile);
-        expect(mainModuleId).toEqual(['er']);
+        expect(mainModuleId).toEqual(['er', 'er/main']);
         expect(GetModuleFile('er', ConfigFile)).toEqual(mainModuleFile);
     });
 
@@ -59,7 +59,7 @@ describe('get-module-id', function() {
 
         var netMainModuleFile = path.resolve(Project, '..', 'base', 'net', '1.2.0', 'src', 'main.js');
         var netMainModuleId = GetModuleId(netMainModuleFile, ConfigFile);
-        expect(netMainModuleId).toEqual(['net']);
+        expect(netMainModuleId).toEqual(['net', 'net/main']);
         expect(GetModuleFile('net', ConfigFile)).toEqual(netMainModuleFile);
     });
 
