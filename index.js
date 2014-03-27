@@ -186,8 +186,8 @@ function main( conf, callback ) {
         var processor = processors[ processorIndex++ ];
         var files = processContext.getFiles();
 
-        if ( Array.isArray( processor.fileset ) ) {
-            files = edp.glob.filter( processor.fileset, files, function( pattern, item ){
+        if ( Array.isArray( processor.files  ) ) {
+            files = edp.glob.filter( processor.files, files, function( pattern, item ){
                 return edp.path.satisfy( item.path, pattern );
             } );
         }

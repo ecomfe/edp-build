@@ -80,7 +80,7 @@ describe('compile-module-2', function() {
             'common/dummy',
             ConfigFile,
             {
-                fileset: [ 'er', '!*', 'er', 'er/*' ]
+                files: [ 'er', '!*', 'er', 'er/*' ]
             }
         );
 
@@ -108,7 +108,7 @@ describe('compile-module-2', function() {
             'common/dummy',
             ConfigFile,
             {
-                fileset: [ '!*', 'er/*', 'er' ]
+                files: [ '!*', 'er/*', 'er' ]
             }
         );
 
