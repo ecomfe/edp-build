@@ -1,18 +1,18 @@
 /***************************************************************************
- * 
+ *
  * Copyright (c) 2014 Baidu.com, Inc. All Rights Reserved
- * $Id$ 
- * 
+ * $Id$
+ *
  **************************************************************************/
- 
- 
- 
+
+
+
 /**
  * less-compiler.spec.js ~ 2014/02/24 21:13:56
  * @author leeight(liyubei@baidu.com)
- * @version $Revision$ 
- * @description 
- *  
+ * @version $Revision$
+ * @description
+ *
  **/
 var path = require('path');
 
@@ -36,7 +36,7 @@ describe('less-compiler', function(){
             addFileLink: function(){}
         };
         processor.process(fileData, processContext, function() {
-            expect( fileData.data ).toBe( ".m1{background:url('../../img/logo.gif')}" );
+            expect( fileData.data ).toBe( '.m1{background:url(\'../../img/logo.gif\')}' );
         });
     });
 
@@ -56,7 +56,7 @@ describe('less-compiler', function(){
             addFileLink: function(){}
         };
         processor.process(fileData, processContext, function() {
-            expect( fileData.data ).toBe( ".m1{background:url('../../img/logo.gif')}" );
+            expect( fileData.data ).toBe( '.m1{background:url(\'../../img/logo.gif\')}' );
         });
     });
 
@@ -76,7 +76,8 @@ describe('less-compiler', function(){
             addFileLink: function(){}
         };
         processor.process(fileData, processContext, function() {
-            expect( fileData.data ).toBe( ".banner{font-weight:bold;line-height:40px;margin:0 auto}body{color:#444;background:url(\"../img/white-sand.png\")}" );
+            expect( fileData.data ).toBe( '.banner{font-weight:bold;line-height:40px;' +
+                'margin:0 auto}body{color:#444;background:url("../img/white-sand.png")}' );
         });
     });
 });

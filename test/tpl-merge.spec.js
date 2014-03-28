@@ -1,22 +1,22 @@
 /***************************************************************************
- * 
+ *
  * Copyright (c) 2014 Baidu.com, Inc. All Rights Reserved
- * $Id$ 
- * 
+ * $Id$
+ *
  **************************************************************************/
- 
- 
- 
+
+
+
 /**
  * tpl-merge.spec.js ~ 2014/02/24 22:23:50
  * @author leeight(liyubei@baidu.com)
- * @version $Revision$ 
- * @description 
- *  
+ * @version $Revision$
+ * @description
+ *
  **/
-var edp = require( 'edp-core' );
+// var edp = require( 'edp-core' );
 
-var fs = require('fs');
+// var fs = require('fs');
 var path = require('path');
 
 var base = require('./base');
@@ -27,15 +27,15 @@ var ModuleCompiler = require('../lib/processor/module-compiler.js');
 var JsCompressor = require('../lib/processor/js-compressor.js');
 
 var moduleEntries = 'html,htm,phtml,tpl,vm,js';
-var pageEntries = 'html,htm,phtml,tpl,vm';
+// var pageEntries = 'html,htm,phtml,tpl,vm';
 
-function getModuleInfo(name) {
-    var code = fs.readFileSync(path.resolve(Project, 'src', name), 'utf-8');
-    var ast = edp.esl.getAst( code );
-    var moduleInfo = AnalyseModyle(ast);
+// function getModuleInfo(name) {
+//     var code = fs.readFileSync(path.resolve(Project, 'src', name), 'utf-8');
+//     var ast = edp.esl.getAst( code );
+//     var moduleInfo = analyseModyle(ast);
 
-    return moduleInfo;
-}
+//     return moduleInfo;
+// }
 
 describe('tpl-merge', function() {
     it('case1 should pass', function(){
@@ -54,17 +54,17 @@ describe('tpl-merge', function() {
         });
         processor.process( fileData, processContext, function() {
             processor.done( processContext );
-            var expected = 
-                "define('case1', [\n" +
-                "    'foo',\n" +
-                "    'tpl!./tpl/123.html'\n" +
-                "], function (foo, require, exports, module) {\n" +
-                "    require('tpl!d0d179ca.tpl.html');\n" +
-                "    require('no-such-plugin!d0d179ca.tpl.html');\n" +
-                "    require('tpl!d0d179ca.tpl.html');\n" +
-                "    var z = require('jquery');\n" +
-                "    return 'case1';\n" +
-                "});"
+            var expected =
+                'define(\'case1\', [\n' +
+                '    \'foo\',\n' +
+                '    \'tpl!./tpl/123.html\'\n' +
+                '], function (foo, require, exports, module) {\n' +
+                '    require(\'tpl!d0d179ca.tpl.html\');\n' +
+                '    require(\'no-such-plugin!d0d179ca.tpl.html\');\n' +
+                '    require(\'tpl!d0d179ca.tpl.html\');\n' +
+                '    var z = require(\'jquery\');\n' +
+                '    return \'case1\';\n' +
+                '});';
             expect( fileData.data ).toBe( expected );
         });
     });
@@ -103,10 +103,11 @@ describe('tpl-merge', function() {
             p1, p2, p3
         ];
         var done = false;
-        waitsFor(function(){ return done });
+        waitsFor(function(){ return done; });
         base.launchProcessors(processors, processContext, function(){
             done = true;
-            var f2Expected = 'define("require-tpl-31",function(){require("jstpl!06088bcb.tpl")}),define("issue31",function(){return require("./require-tpl-31"),"issue31"});';
+            var f2Expected = 'define("require-tpl-31",function(){require("jstpl!06088bcb.tpl")}),' +
+                'define("issue31",function(){return require("./require-tpl-31"),"issue31"});';
             var f1Expected = 'define("require-tpl-31",function(){require("jstpl!06088bcb.tpl")});';
 
             runs(function(){
@@ -150,10 +151,11 @@ describe('tpl-merge', function() {
         ];
 
         var done = false;
-        waitsFor(function(){ return done });
+        waitsFor(function(){ return done; });
         base.launchProcessors(processors, processContext, function(){
             done = true;
-            var f2Expected = 'define("require-tpl-31",function(){require("er/tpl!8a339213.tpl.html")}),define("issue31",function(){return require("./require-tpl-31"),"issue31"});';
+            var f2Expected = 'define("require-tpl-31",function(){require("er/tpl!8a339213.tpl.html")}),' +
+                'define("issue31",function(){return require("./require-tpl-31"),"issue31"});';
             var f1Expected = 'define("require-tpl-31",function(){require("er/tpl!8a339213.tpl.html")});';
 
             runs(function(){
@@ -162,7 +164,7 @@ describe('tpl-merge', function() {
                 expect( processContext.getFileByPath( 'src/8a339213.tpl.html' ) ).not.toBe( null );
             });
         });
-    })
+    });
 });
 
 

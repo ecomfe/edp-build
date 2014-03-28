@@ -19,7 +19,7 @@ function normalCode(str) {
 
 var standardFile = getFile('std.js');
 var factoryAst = edp.esl.getAst( standardFile );
-factoryAst = factoryAst.body[0].expression.arguments[0];
+factoryAst = factoryAst.body[0].expression['arguments'][0];
 
 
 describe('generate-module-code', function () {
@@ -89,12 +89,12 @@ describe('generate-module-code', function () {
         var moduleInfo = [
                 {
                     id: 'walker',
-                    factoryAst: { type: 'Identifier', name: 'Walker' } 
+                    factoryAst: { type: 'Identifier', name: 'Walker' }
                 },
                 {
                     id: 'module',
                     dependencies: ['foo', 'bar'],
-                    factoryAst: factoryAst 
+                    factoryAst: factoryAst
                 }
             ];
 

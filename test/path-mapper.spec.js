@@ -1,20 +1,19 @@
 /***************************************************************************
- * 
+ *
  * Copyright (c) 2014 Baidu.com, Inc. All Rights Reserved
- * $Id$ 
- * 
+ * $Id$
+ *
  **************************************************************************/
- 
- 
- 
+
+
+
 /**
  * path-mapper.spec.js ~ 2014/02/11 21:36:36
  * @author leeight(liyubei@baidu.com)
- * @version $Revision$ 
- * @description 
+ * @version $Revision$
+ * @description
  * 测试一下PathMapper的功能是否正常
  **/
-var fs = require('fs');
 var path = require('path');
 
 var base = require('./base');
@@ -22,10 +21,10 @@ var CssCompressor = require('../lib/processor/css-compressor.js');
 var PathMapper = require('../lib/processor/path-mapper.js');
 
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
-var ConfigFile = path.resolve(Project, 'module.conf');
+// var ConfigFile = path.resolve(Project, 'module.conf');
 
 var moduleEntries = 'html,htm,phtml,tpl,vm,js';
-var pageEntries = 'html,htm,phtml,tpl,vm';
+// var pageEntries = 'html,htm,phtml,tpl,vm';
 
 function list2Map(packages) {
     var map = {};
