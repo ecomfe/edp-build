@@ -1,25 +1,24 @@
 /***************************************************************************
- * 
+ *
  * Copyright (c) 2014 Baidu.com, Inc. All Rights Reserved
- * $Id$ 
- * 
+ * $Id$
+ *
  **************************************************************************/
- 
- 
- 
+
+
+
 /**
  * compile-module-2.spec.js ~ 2014/03/20 16:56:49
  * @author leeight(liyubei@baidu.com)
- * @version $Revision$ 
- * @description 
- *  
+ * @version $Revision$
+ * @description
+ *
  **/
 var edp = require( 'edp-core' );
 var fs = require('fs');
 var path = require('path');
 
-var base = require('./base');
-var CompileModule = require('../lib/util/compile-module.js');
+var compileModule = require('../lib/util/compile-module.js');
 
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
 var ConfigFile = path.resolve(Project, 'module.conf');
@@ -27,7 +26,7 @@ var ConfigFile = path.resolve(Project, 'module.conf');
 describe('compile-module-2', function() {
     it('default', function(){
         // include和exclude都使用pattern
-        var moduleCode = CompileModule(
+        var moduleCode = compileModule(
             fs.readFileSync(path.resolve(Project, 'src', 'common', 'dummy.js'), 'utf-8'),
             'common/dummy',
             ConfigFile,
@@ -39,14 +38,14 @@ describe('compile-module-2', function() {
 
         var ast = edp.esl.getAst( moduleCode );
         var moduleInfo = edp.esl.analyseModule( ast );
-        var moduleIds = moduleInfo.map(function( info ){ return info.id || '<anonymous>' });
+        var moduleIds = moduleInfo.map(function( info ){ return info.id || '<anonymous>'; });
         moduleIds.sort();
         expect( moduleIds ).toEqual( [ 'common/dummy', 'er', 'er/View', 'er/main', 'net/Http' ] );
     });
 
     it('default 2', function(){
          // include和exclude都使用pattern
-        var moduleCode = CompileModule(
+        var moduleCode = compileModule(
             fs.readFileSync(path.resolve(Project, 'src', 'common', 'dummy.js'), 'utf-8'),
             'common/dummy',
             ConfigFile,
@@ -64,7 +63,7 @@ describe('compile-module-2', function() {
         }
 
         if ( moduleInfo ) {
-            var moduleIds = moduleInfo.map(function( info ){ return info.id || '<anonymous>' });
+            var moduleIds = moduleInfo.map(function( info ){ return info.id || '<anonymous>'; });
             moduleIds.sort();
             expect( moduleIds ).toEqual( [ 'common/dummy' ] );
         }
@@ -75,7 +74,7 @@ describe('compile-module-2', function() {
 
     it('default 3', function(){
          // include和exclude都使用pattern
-        var moduleCode = CompileModule(
+        var moduleCode = compileModule(
             fs.readFileSync(path.resolve(Project, 'src', 'common', 'dummy.js'), 'utf-8'),
             'common/dummy',
             ConfigFile,
@@ -92,7 +91,7 @@ describe('compile-module-2', function() {
         }
 
         if ( moduleInfo ) {
-            var moduleIds = moduleInfo.map(function( info ){ return info.id || '<anonymous>' });
+            var moduleIds = moduleInfo.map(function( info ){ return info.id || '<anonymous>'; });
             moduleIds.sort();
             expect( moduleIds ).toEqual( [ 'common/dummy', 'er', 'er/View', 'er/main', 'net/Http' ] );
         }
@@ -103,7 +102,7 @@ describe('compile-module-2', function() {
 
     it('default 4', function(){
          // include和exclude都使用pattern
-        var moduleCode = CompileModule(
+        var moduleCode = compileModule(
             fs.readFileSync(path.resolve(Project, 'src', 'common', 'dummy.js'), 'utf-8'),
             'common/dummy',
             ConfigFile,
@@ -120,7 +119,7 @@ describe('compile-module-2', function() {
         }
 
         if ( moduleInfo ) {
-            var moduleIds = moduleInfo.map(function( info ){ return info.id || '<anonymous>' });
+            var moduleIds = moduleInfo.map(function( info ){ return info.id || '<anonymous>'; });
             moduleIds.sort();
             expect( moduleIds ).toEqual( [ 'common/dummy', 'er', 'er/View', 'er/main', 'net/Http' ] );
         }

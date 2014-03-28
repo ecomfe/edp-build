@@ -1,29 +1,29 @@
 /***************************************************************************
- * 
+ *
  * Copyright (c) 2013 Baidu.com, Inc. All Rights Reserved
- * $Id$ 
- * 
+ * $Id$
+ *
  **************************************************************************/
- 
- 
- 
+
+
+
 /**
  * is-relative-path.spec.js ~ 2013/09/28 21:30:19
  * @author leeight(liyubei@baidu.com)
- * @version $Revision$ 
- * @description 
- *  
+ * @version $Revision$
+ * @description
+ *
  **/
-var IsRelativePath = require('../node_modules/edp-core').path.isRelativePath;
+var isRelativePath = require('../node_modules/edp-core').path.isRelativePath;
 
 describe('is-relative-path', function() {
     it('default', function() {
-        expect(IsRelativePath('a.jpg')).toBe(true);
-        expect(IsRelativePath('./a.jpg')).toBe(true);
-        expect(IsRelativePath('../a.jpg')).toBe(true);
-        expect(IsRelativePath('//www.google.com/a.jpg')).toBe(false);
-        expect(IsRelativePath('http://www.google.com/a.jpg')).toBe(false);
-        expect(IsRelativePath('https://www.google.com/a.jpg')).toBe(false);
+        expect(isRelativePath('a.jpg')).toBe(true);
+        expect(isRelativePath('./a.jpg')).toBe(true);
+        expect(isRelativePath('../a.jpg')).toBe(true);
+        expect(isRelativePath('//www.google.com/a.jpg')).toBe(false);
+        expect(isRelativePath('http://www.google.com/a.jpg')).toBe(false);
+        expect(isRelativePath('https://www.google.com/a.jpg')).toBe(false);
     });
 });
 

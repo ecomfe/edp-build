@@ -14,17 +14,16 @@
  * @description
  * 测试一下ModuleCompiler的功能是否正常
  **/
-var fs = require('fs');
 var path = require('path');
 
 var base = require('./base');
 var ReplaceDebug = require('../lib/processor/replace-debug.js');
 
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
-var ConfigFile = path.resolve(Project, 'module.conf');
+// var ConfigFile = path.resolve(Project, 'module.conf');
 
-var moduleEntries = 'html,htm,phtml,tpl,vm,js';
-var pageEntries = 'html,htm,phtml,tpl,vm';
+// var moduleEntries = 'html,htm,phtml,tpl,vm,js';
+// var pageEntries = 'html,htm,phtml,tpl,vm';
 
 
 describe('replace-debug', function(){
@@ -33,7 +32,7 @@ describe('replace-debug', function(){
         var filePath = path.join(Project, 'index.html');
         var fileData = base.getFileInfo(filePath);
 
-        var processContext = { baseDir: Project }
+        var processContext = { baseDir: Project };
         processor.process(fileData, processContext, function(){
             expect(fileData.data.indexOf('window.DEBUG=false;')).not.toBe(-1);
         });

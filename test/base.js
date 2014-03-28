@@ -1,18 +1,18 @@
 /***************************************************************************
- * 
+ *
  * Copyright (c) 2013 Baidu.com, Inc. All Rights Reserved
- * $Id$ 
- * 
+ * $Id$
+ *
  **************************************************************************/
- 
- 
- 
+
+
+
 /**
  * base.js ~ 2013/09/28 20:40:16
  * @author leeight(liyubei@baidu.com)
- * @version $Revision$ 
- * @description 
- *  
+ * @version $Revision$
+ * @description
+ *
  **/
 var path = require('path');
 var fs = require('fs');
@@ -31,7 +31,7 @@ exports.getFileInfo = function(filePath) {
         fileEncoding: 'utf-8'
     });
     return fileData;
-}
+};
 
 exports.compressJavascript = function(data) {
     var processor = new JsCompressor();
@@ -46,7 +46,7 @@ exports.compressJavascript = function(data) {
     processor.process(fileData, null, function() {});
 
     return compressedData;
-}
+};
 
 /**
  * 模拟调用相关的处理器，执行完毕之后掉用done回掉函数.
@@ -69,9 +69,9 @@ exports.launchProcessors = function( processors, processContext, done ) {
         var files = processContext.getFiles().filter(function(file){
             // processor处理文件
             // 如果一个文件属于exclude，并且不属于include，则跳过处理
-            if ( typeof processor.isExclude === 'function' 
-                 && processor.isExclude( file ) 
-                 && ( typeof processor.isInclude !== 'function' 
+            if ( typeof processor.isExclude === 'function'
+                 && processor.isExclude( file )
+                 && ( typeof processor.isInclude !== 'function'
                       || !processor.isInclude( file )
                     )
             ) {
@@ -100,20 +100,20 @@ exports.launchProcessors = function( processors, processContext, done ) {
 
             // processor处理需要保证异步性，否则可能因为深层次的层级调用产生不期望的结果
             // 比如错误被n次调用前的try捕获到
-            function processFinished() { 
+            function processFinished() {
                 setTimeout( nextFile, 1 );
             }
 
             processor.process(
-                file, 
-                processContext, 
+                file,
+                processContext,
                 processFinished
             );
         }
     }
 
     nextProcess();
-}
+};
 
 
 

@@ -1,18 +1,18 @@
 /***************************************************************************
- * 
+ *
  * Copyright (c) 2014 Baidu.com, Inc. All Rights Reserved
- * $Id$ 
- * 
+ * $Id$
+ *
  **************************************************************************/
- 
- 
- 
+
+
+
 /**
  * stylus-compiler.spec.js ~ 2014/02/24 21:13:56
  * @author leeight(liyubei@baidu.com)
- * @version $Revision$ 
- * @description 
- *  
+ * @version $Revision$
+ * @description
+ *
  **/
 var path = require('path');
 
@@ -42,8 +42,8 @@ describe('stylus-compiler', function(){
         };
         processor.process(fileData, processContext, function() {
             var expected =
-                "body{font:12px Helvetica,Arial,sans-serif}" +
-                "a.button{-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px}";
+                'body{font:12px Helvetica,Arial,sans-serif}' +
+                'a.button{-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px}';
 
             expect( compact( fileData.data ) ).toBe( expected );
         });
@@ -66,8 +66,8 @@ describe('stylus-compiler', function(){
         };
         processor.process(fileData, processContext, function() {
             var expected =
-                "body{font:12px Helvetica,Arial,sans-serif}" +
-                "a.button{-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px}";
+                'body{font:12px Helvetica,Arial,sans-serif}' +
+                'a.button{-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px}';
 
             expect( compact( fileData.data ) ).toBe( expected );
         });

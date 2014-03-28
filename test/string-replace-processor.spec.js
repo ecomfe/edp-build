@@ -14,7 +14,6 @@
  * @description
  * 测试一下ModuleCompiler的功能是否正常
  **/
-var fs = require('fs');
 var path = require('path');
 
 var base = require('./base');
@@ -22,10 +21,10 @@ var StringReplaceProcessor = require('../lib/processor/string-replace-processor.
 var JsCompressor = require('../lib/processor/js-compressor.js');
 
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
-var ConfigFile = path.resolve(Project, 'module.conf');
+// var ConfigFile = path.resolve(Project, 'module.conf');
 
-var moduleEntries = 'html,htm,phtml,tpl,vm,js';
-var pageEntries = 'html,htm,phtml,tpl,vm';
+// var moduleEntries = 'html,htm,phtml,tpl,vm,js';
+// var pageEntries = 'html,htm,phtml,tpl,vm';
 
 
 describe('string-replace-processor', function(){
@@ -40,7 +39,7 @@ describe('string-replace-processor', function(){
         var filePath = path.join(Project, 'src', 'foo.js');
         var fileData = base.getFileInfo(filePath);
 
-        var processContext = { baseDir: Project }
+        var processContext = { baseDir: Project };
         processor.process(fileData, processContext, function(){
             var js = new JsCompressor();
             js.process(fileData, processContext, function(){
@@ -61,7 +60,7 @@ describe('string-replace-processor', function(){
         var filePath = path.join(Project, 'src', 'foo.js');
         var fileData = base.getFileInfo(filePath);
 
-        var processContext = { baseDir: Project }
+        var processContext = { baseDir: Project };
         processor.process(fileData, processContext, function(){
             var js = new JsCompressor();
             js.process(fileData, processContext, function(){
@@ -76,14 +75,14 @@ describe('string-replace-processor', function(){
     it('regexp and callback', function(){
         var processor = new StringReplaceProcessor({
             replacements: [
-                { 'from': /(['"])([^'"]+)\1/g, 'to': function(match, $1, $2){ return $1 + 'z' + $2 + $1} },
-                { 'from': 'net/Http', 'to': 'net/Http2' },
+                { 'from': /(['"])([^'"]+)\1/g, 'to': function(match, $1, $2){ return $1 + 'z' + $2 + $1; } },
+                { 'from': 'net/Http', 'to': 'net/Http2' }
             ]
         });
         var filePath = path.join(Project, 'src', 'foo.js');
         var fileData = base.getFileInfo(filePath);
 
-        var processContext = { baseDir: Project }
+        var processContext = { baseDir: Project };
         processor.process(fileData, processContext, function(){
             var js = new JsCompressor();
             js.process(fileData, processContext, function(){
