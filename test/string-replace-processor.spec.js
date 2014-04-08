@@ -17,7 +17,7 @@
 var path = require('path');
 
 var base = require('./base');
-var StringReplaceProcessor = require('../lib/processor/string-replace-processor.js');
+var StringReplace = require('../lib/processor/string-replace.js');
 var JsCompressor = require('../lib/processor/js-compressor.js');
 
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
@@ -29,7 +29,7 @@ var Project = path.resolve(__dirname, 'data', 'dummy-project');
 
 describe('string-replace-processor', function(){
     it('default', function(){
-        var processor = new StringReplaceProcessor({
+        var processor = new StringReplace({
             replacements: [
                 { 'from': 'io/File', 'to': 'io/File2' },
                 { 'from': 'net/Http', 'to': 'net/Http2' },
@@ -52,7 +52,7 @@ describe('string-replace-processor', function(){
     });
 
     it('regexp', function(){
-        var processor = new StringReplaceProcessor({
+        var processor = new StringReplace({
             replacements: [
                 { 'from': /(['"])([^'"]+)\1/g, 'to': '\'hello world\'' }
             ]
@@ -73,7 +73,7 @@ describe('string-replace-processor', function(){
     });
 
     it('regexp and callback', function(){
-        var processor = new StringReplaceProcessor({
+        var processor = new StringReplace({
             replacements: [
                 { 'from': /(['"])([^'"]+)\1/g, 'to': function(match, $1, $2){ return $1 + 'z' + $2 + $1; } },
                 { 'from': 'net/Http', 'to': 'net/Http2' }
