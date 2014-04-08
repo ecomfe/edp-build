@@ -80,7 +80,7 @@ builder会通过`injectProcessor`方法将内建处理器的类注入配置模�
 + AddCopyright - 添加copyright。
 + Html2JsCompiler - 将HTML转化为JS。
 + MD5Renamer - 对静态文件进行MD5重命名。
-+ StringReplaceProcessor - 文件字符替换。
++ StringReplace - 文件字符替换。
 + TplMerge - 模版文件合并。
 
 #### 默认build配置

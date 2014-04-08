@@ -98,7 +98,7 @@ function injectProcessor( conf ) {
             AddCopyright        : require( './lib/processor/add-copyright' ),
             ReplaceDebug        : require( './lib/processor/replace-debug' ),
             TplMerge            : require( './lib/processor/tpl-merge' ),
-            StringReplaceProcessor : require( './lib/processor/string-replace-processor' ),
+            StringReplace       : require( './lib/processor/string-replace' ),
             OutputCleaner       : require( './lib/processor/output-cleaner' )
         } );
     }
