@@ -98,7 +98,8 @@ function injectProcessor( conf ) {
             AddCopyright        : require( './lib/processor/add-copyright' ),
             ReplaceDebug        : require( './lib/processor/replace-debug' ),
             TplMerge            : require( './lib/processor/tpl-merge' ),
-            StringReplaceProcessor : require( './lib/processor/string-replace-processor' )
+            StringReplaceProcessor : require( './lib/processor/string-replace-processor' ),
+            OutputCleaner       : require( './lib/processor/output-cleaner' )
         } );
     }
 }
@@ -171,7 +172,9 @@ function main( conf, callback ) {
     } );
 
 
+    var start = Date.now();
     traverseDir( [baseDir].concat( conf.inputs || [] ), processContext );
+    edp.log.info( 'Scan project directory (%sms)', Date.now() - start );
 
     var processorIndex = 0;
     var processorCount = processors.length;
@@ -187,7 +190,8 @@ function main( conf, callback ) {
         var files = processContext.getFiles();
 
         if ( Array.isArray( processor.files  ) ) {
-            files = edp.glob.filter( processor.files, files, function( pattern, item ){
+            var patterns = require( './lib/util/array' ).expand( processor.files );
+            files = edp.glob.filter( patterns, files, function( pattern, item ){
                 return edp.path.satisfy( item.path, pattern );
             } );
         }
@@ -225,14 +229,16 @@ function main( conf, callback ) {
             }
 
             var file = files[ fileIndex++ ];
+            var start = Date.now();
 
             // processor处理需要保证异步性，否则可能因为深层次的层级调用产生不期望的结果
             // 比如错误被n次调用前的try捕获到
             function processFinished() { 
+                var end = Date.now();
+                edp.log.write('  [%s/%s]: %s (%sms)', fileIndex, fileCount, file.path,
+                    end - start );
                 setTimeout( nextFile, 1 );
             }
-
-            edp.log.write('  [%s/%s]: %s', fileIndex, fileCount, file.path);
 
             processor.process(
                 file, 

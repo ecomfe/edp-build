@@ -31,25 +31,6 @@ describe('array', function(){
         expect( ArrayBase.expand( c ) ).toEqual( [ 1, 2, 3, 4, 5, 6, 7, 8 ] );
     });
 
-    it('filterModuleIdsByPattern', function(){
-        var allModules = [ 'er', 'er/main', 'er/controller' ];
-        var patterns = [ 'er/*', 'esui/**', 'zk' ];
-        expect( ArrayBase.filterModuleIdsByPattern(
-            allModules, patterns ) ).toEqual( [
-            'er', 'esui',
-            'zk', 'er/main',
-            'er/controller' ] );
-    });
-
-    it('filterModuleIdsByPattern - 2', function(){
-        var allModules = [ 'er', 'er/main', 'er/controller' ];
-        var patterns = [ /^er\/?/ ];
-        expect( ArrayBase.filterModuleIdsByPattern(
-            allModules, patterns ) ).toEqual( [
-                'er', 'er/main', 'er/controller' ] );
-    });
-
-
     it('getAllModules', function(){
         var moduleConfig = './data/dummy-project/module.conf';
         var allModules = edp.esl.getAllModules( moduleConfig );
