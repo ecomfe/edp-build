@@ -39,7 +39,7 @@ function loadConf( confFile, baseDir ) {
 
         return null;
     }
-    
+
     var dir;
     var parentDir = baseDir || cwd;
     do {
@@ -145,7 +145,14 @@ cli.main = function ( args, opts ) {
     // Processors的组合
     conf.stage = opts.stage || 'default';
 
-    require( '../index' )( conf );
+    if ( typeof conf.init === 'function' ) {
+        conf.init( conf, function( config ){
+            require( '../index' )( config || conf );
+        });
+    }
+    else {
+        require( '../index' )( conf );
+    }
 };
 
 // 导出命令
