@@ -39,6 +39,8 @@ describe('array', function(){
         expect( allModules.indexOf( 'etpl' ) ).not.toBe( -1 );
         expect( allModules.indexOf( 'etpl/main' ) ).not.toBe( -1 );
         expect( allModules.indexOf( 'etpl/tpl' ) ).not.toBe( -1 );
+        expect( allModules.indexOf( 'net/Http' ) ).not.toBe( -1 );
+        expect( allModules.indexOf( 'io/File' ) ).not.toBe( -1 );
     });
 });
 
