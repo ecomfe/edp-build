@@ -24,7 +24,7 @@ var Project = path.resolve(__dirname, 'data', 'dummy-project');
 var ConfigFile = path.resolve(Project, 'module.conf');
 
 describe('compile-module-2', function() {
-    it('default', function(){
+    xit('default', function(){
         // include和exclude都使用pattern
         var moduleCode = compileModule(
             fs.readFileSync(path.resolve(Project, 'src', 'common', 'dummy.js'), 'utf-8'),
@@ -43,7 +43,7 @@ describe('compile-module-2', function() {
         expect( moduleIds ).toEqual( [ 'common/dummy', 'er', 'er/View', 'er/main', 'net/Http' ] );
     });
 
-    it('default 2', function(){
+    xit('default 2', function(){
          // include和exclude都使用pattern
         var moduleCode = compileModule(
             fs.readFileSync(path.resolve(Project, 'src', 'common', 'dummy.js'), 'utf-8'),
@@ -72,7 +72,7 @@ describe('compile-module-2', function() {
         }
     });
 
-    it('default 3', function(){
+    xit('default 3', function(){
          // include和exclude都使用pattern
         var moduleCode = compileModule(
             fs.readFileSync(path.resolve(Project, 'src', 'common', 'dummy.js'), 'utf-8'),
@@ -100,7 +100,7 @@ describe('compile-module-2', function() {
         }
     });
 
-    it('default 4', function(){
+    xit('default 4', function(){
          // include和exclude都使用pattern
         var moduleCode = compileModule(
             fs.readFileSync(path.resolve(Project, 'src', 'common', 'dummy.js'), 'utf-8'),
@@ -126,6 +126,28 @@ describe('compile-module-2', function() {
         else {
             expect( moduleCode ).toEqual( 'define(\'common/dummy\', {});' );
         }
+    });
+
+    it('default 5', function(){
+        var moduleCode = compileModule(
+            fs.readFileSync(path.resolve(Project, 'src', 'common', 'dummy.js'), 'utf-8'),
+            'common/dummy',
+            ConfigFile,
+            {
+                files: [ '~er', '!~er', '~net' ],
+            }
+        );
+
+        var ast = edp.esl.getAst( moduleCode );
+        var moduleInfo = edp.esl.analyseModule( ast );
+        if ( !Array.isArray( moduleInfo ) ) {
+            moduleInfo = [ moduleInfo ];
+        }
+        var moduleIds = moduleInfo.map(function( info ){ return info.id || '<anonymous>'; });
+        moduleIds.sort();
+
+        // 忽略了所有er的模块之后，就不存在net了，但是我们手工指定了
+        expect( moduleIds ).toEqual( [ 'common/dummy', 'net/Http' ] );
     });
 
 });
