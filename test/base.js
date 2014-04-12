@@ -20,16 +20,17 @@ var fs = require('fs');
 var FileInfo = require('../lib/file-info.js');
 var JsCompressor = require('../lib/processor/js-compressor.js');
 
-exports.getFileInfo = function(filePath) {
-    var file = path.resolve(__dirname, filePath);
+exports.getFileInfo = function (filePath, buildRoot) {
+    var fullPath = path.resolve(buildRoot, filePath);
     var fileData = new FileInfo({
-        data: fs.readFileSync(file),
-        extname: path.extname(file).slice(1),
+        data: fs.readFileSync(fullPath),
+        extname: path.extname(fullPath).slice(1),
         path: filePath,
-        fullPath: file,
-        stat: fs.statSync(file),
+        fullPath: fullPath,
+        stat: fs.statSync(fullPath),
         fileEncoding: 'utf-8'
     });
+    
     return fileData;
 };
 

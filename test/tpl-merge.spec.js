@@ -43,8 +43,7 @@ describe('tpl-merge', function() {
             pluginIds: [ 'tpl', 'er/tpl', 'no-such-plugin' ]
         });
 
-        var filePath = path.join( Project, 'src', 'case1.js' );
-        var fileData = base.getFileInfo( filePath );
+        var fileData = base.getFileInfo( 'src/case1.js', Project );
 
         var processContext = new ProcessContext( {
             baseDir: Project,
@@ -94,8 +93,8 @@ describe('tpl-merge', function() {
             fileEncodings: {}
         });
 
-        var f1 = base.getFileInfo( path.join( Project, 'src', 'require-tpl-31.js' ) );
-        var f2 = base.getFileInfo( path.join( Project, 'src', 'issue31.js' ) );
+        var f1 = base.getFileInfo( 'src/require-tpl-31.js', Project );
+        var f2 = base.getFileInfo( 'src/issue31.js', Project );
         processContext.addFile( f1 );
         processContext.addFile( f2 );
 
@@ -141,8 +140,8 @@ describe('tpl-merge', function() {
             fileEncodings: {}
         });
 
-        var f1 = base.getFileInfo( path.join( Project, 'src', 'require-tpl-31.js' ) );
-        var f2 = base.getFileInfo( path.join( Project, 'src', 'issue31.js' ) );
+        var f1 = base.getFileInfo( 'src/require-tpl-31.js', Project );
+        var f2 = base.getFileInfo( 'src/issue31.js', Project );
         processContext.addFile( f1 );
         processContext.addFile( f2 );
 

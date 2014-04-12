@@ -29,8 +29,7 @@ describe('less-compiler', function(){
             }
         });
 
-        var filePath = path.join('data', 'css-compressor', '1.less');
-        var fileData = base.getFileInfo(filePath);
+        var fileData = base.getFileInfo('data/css-compressor/1.less', __dirname);
         var processContext = {
             baseDir: __dirname,
             addFileLink: function(){}
@@ -49,8 +48,7 @@ describe('less-compiler', function(){
             }
         });
 
-        var filePath = path.join('data', 'css-compressor', '1.less');
-        var fileData = base.getFileInfo(filePath);
+        var fileData = base.getFileInfo('data/css-compressor/1.less', __dirname);
         var processContext = {
             baseDir: __dirname,
             addFileLink: function(){}
@@ -69,8 +67,7 @@ describe('less-compiler', function(){
             }
         });
 
-        var filePath = path.join('data', 'css-compressor', 'edp-issue-166.less');
-        var fileData = base.getFileInfo(filePath);
+        var fileData = base.getFileInfo('data/css-compressor/edp-issue-166.less', __dirname);
         var processContext = {
             baseDir: __dirname,
             addFileLink: function(){}

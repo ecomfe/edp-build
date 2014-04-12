@@ -25,8 +25,7 @@ var Project = path.resolve(__dirname, 'data', 'dummy-project');
 describe('add-copyright', function(){
     it('default', function(){
         var processor = new AddCopyright();
-        var filePath = path.join(Project, 'src', 'foo.js');
-        var fileData = base.getFileInfo(filePath);
+        var fileData = base.getFileInfo('src/foo.js', Project);
 
         var processContext = { baseDir: Project };
         processor.process(fileData, processContext, function(){

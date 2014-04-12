@@ -24,8 +24,7 @@ var base = require('./base');
 describe('js-compressor', function() {
     it('默认保留require, exports, module三个变量', function() {
         var processor = new JsCompressor();
-        var filePath = path.join('data', 'js-compressor', 'default.js');
-        var fileData = base.getFileInfo(filePath);
+        var fileData = base.getFileInfo('data/js-compressor/default.js', __dirname);
         processor.process(fileData, null, function() {
             expect(fileData.data).toBe('function main(){var require=0,exports=1,module=2,n=3;' +
                 'return require+exports+module+n}');
@@ -38,8 +37,7 @@ describe('js-compressor', function() {
                 except: ['require', 'foobar', 'callSuper']
             }
         });
-        var filePath = path.join('data', 'js-compressor', '5.js');
-        var fileData = base.getFileInfo(filePath);
+        var fileData = base.getFileInfo('data/js-compressor/5.js', __dirname);
         processor.process(fileData, null, function() {
             expect(fileData.data).toBe('function main(){function callSuper(){}var require=0,n=1,r=2,foobar=3;' +
                 'return callSuper(require+n+r+foobar)}');
@@ -52,8 +50,7 @@ describe('js-compressor', function() {
                 enable: true
             }
         });
-        var filePath = path.join('data', 'js-compressor', '5.js');
-        var fileData = base.getFileInfo(filePath);
+        var fileData = base.getFileInfo('data/js-compressor/5.js', __dirname);
         var processContext = new ProcessContext( {
             baseDir: 'src',
             exclude: [],
@@ -80,8 +77,7 @@ describe('js-compressor', function() {
             }
         });
 
-        var filePath = path.join('data', 'js-compressor', '6.js');
-        var fileData = base.getFileInfo(filePath);
+        var fileData = base.getFileInfo('data/js-compressor/6.js', __dirname);
         var processContext = new ProcessContext( {
             baseDir: 'src',
             exclude: [],
