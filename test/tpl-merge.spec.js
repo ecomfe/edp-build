@@ -52,7 +52,7 @@ describe('tpl-merge', function() {
             fileEncodings: {}
         });
         processor.process( fileData, processContext, function() {
-            processor.done( processContext );
+            processor.afterAll( processContext );
             var expected =
                 'define(\'case1\', [\n' +
                 '    \'foo\',\n' +
