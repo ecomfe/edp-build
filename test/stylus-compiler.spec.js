@@ -34,8 +34,7 @@ describe('stylus-compiler', function(){
             }
         });
 
-        var filePath = path.join('data', 'css-compressor', '1.styl');
-        var fileData = base.getFileInfo(filePath);
+        var fileData = base.getFileInfo('data/css-compressor/1.styl', __dirname);
         var processContext = {
             baseDir: __dirname,
             addFileLink: function(){}
@@ -58,8 +57,7 @@ describe('stylus-compiler', function(){
             }
         });
 
-        var filePath = path.join('data', 'css-compressor', '1.styl');
-        var fileData = base.getFileInfo(filePath);
+        var fileData = base.getFileInfo('data/css-compressor/1.styl', __dirname);
         var processContext = {
             baseDir: __dirname,
             addFileLink: function(){}

@@ -31,8 +31,7 @@ fs.readdirSync( '../lib/processor' ).forEach( function( file ) {
 
 describe('processor-exclude-support', function(){
     it('default', function(){
-        var filePath = path.join('data', 'css-compressor', 'default.css');
-        var fileData = base.getFileInfo(filePath);
+        var fileData = base.getFileInfo('data/css-compressor/default.css', __dirname);
         ctors.forEach(function(item){
             var Ctor = item[1];
             var instance = new Ctor({
