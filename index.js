@@ -187,64 +187,12 @@ function main( conf, callback ) {
         }
 
         var processor = processors[ processorIndex++ ];
-        var files = processContext.getFiles();
-
-        if ( Array.isArray( processor.files  ) ) {
-            var patterns = require( './lib/util/array' ).expand( processor.files );
-            files = edp.glob.filter( patterns, files, function( pattern, item ){
-                return edp.path.satisfy( item.path, pattern );
-            } );
+        edp.log.info( 'Running ' + processor.name );
+        if ( processor.start ) {
+            processor.start( processContext, nextProcess );
         }
         else {
-            files = files.filter(function(file){
-                // processor处理文件
-                // 如果一个文件属于exclude，并且不属于include，则跳过处理
-                if ( typeof processor.isExclude === 'function' 
-                    && processor.isExclude( file ) 
-                    && ( typeof processor.isInclude !== 'function' 
-                          || !processor.isInclude( file )
-                        )
-                ) {
-                    return false;
-                }
-
-                return true;
-            });
-        }
-
-        var fileIndex = 0;
-        var fileCount = files.length;
-        edp.log.info('Running ' + processor.name);
-
-        nextFile();
-
-        function nextFile() {
-            if ( fileIndex >= fileCount ) {
-                if ( typeof processor.done === 'function' ) {
-                    processor.done(processContext);
-                }
-
-                nextProcess();
-                return;
-            }
-
-            var file = files[ fileIndex++ ];
-            var start = Date.now();
-
-            // processor处理需要保证异步性，否则可能因为深层次的层级调用产生不期望的结果
-            // 比如错误被n次调用前的try捕获到
-            function processFinished() { 
-                var end = Date.now();
-                edp.log.write('  [%s/%s]: %s (%sms)', fileIndex, fileCount, file.path,
-                    end - start );
-                setTimeout( nextFile, 1 );
-            }
-
-            processor.process(
-                file, 
-                processContext, 
-                processFinished
-            );
+            nextProcess();
         }
     }
 
