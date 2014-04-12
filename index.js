@@ -174,14 +174,13 @@ function main( conf, callback ) {
 
     var start = Date.now();
     traverseDir( [baseDir].concat( conf.inputs || [] ), processContext );
-    edp.log.info( 'Scan project directory (%sms)', Date.now() - start );
+    edp.log.info( 'Scan build root directory (%sms)', Date.now() - start );
 
     var processorIndex = 0;
     var processorCount = processors.length;
 
     function nextProcess() {
         if ( processorIndex >= processorCount ) {
-            console.log();
             outputFiles();
             return;
         }
@@ -213,6 +212,7 @@ function main( conf, callback ) {
             }
         } );
 
+        edp.log.info( 'All done (%sms)', Date.now() - start );
         callback();
     }
 }
