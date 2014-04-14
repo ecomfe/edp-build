@@ -20,6 +20,7 @@ var base = require('./base');
 var CssCompressor = require('../lib/processor/css-compressor.js');
 var PathMapper = require('../lib/processor/path-mapper.js');
 
+var ProcessContext = require( '../lib/process-context' );
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
 // var ConfigFile = path.resolve(Project, 'module.conf');
 
@@ -44,11 +45,18 @@ describe('path-mapper', function() {
             from: 'src',
             to: 'asset'
         });
-        var filePath = path.join(Project, 'index.html');
-        var fileData = base.getFileInfo(filePath);
 
-        var processContext = {};
-        processor.process(fileData, processContext, function() {
+        var fileData = base.getFileInfo('index.html', Project);
+
+        var processContext = new ProcessContext( {
+            baseDir: Project,
+            exclude: [],
+            outputDir: 'output',
+            fileEncodings: {}
+        });
+        processContext.addFile(fileData);
+
+        base.launchProcessors([processor], processContext, function(){
             var readLoaderConfig = require( '../lib/util/read-loader-config' );
             var confInfo = readLoaderConfig( fileData.data );
             expect(confInfo).not.toBe(null);
@@ -70,11 +78,17 @@ describe('path-mapper', function() {
             from: 'src',
             to: 'asset'
         });
-        var filePath = path.join(Project, 'src', 'css', 'path-mapper.css');
-        var fileData = base.getFileInfo(filePath);
+        var fileData = base.getFileInfo('src/css/path-mapper.css',Project);
 
-        var processContext = {};
-        processor.process(fileData, processContext, function() {
+        var processContext = new ProcessContext( {
+            baseDir: Project,
+            exclude: [],
+            outputDir: 'output',
+            fileEncodings: {}
+        });
+        processContext.addFile(fileData);
+
+        base.launchProcessors([processor], processContext, function(){
             var processor = new CssCompressor();
             processor.process(fileData, {baseDir:__dirname}, function() {
                 var expected = 'div{' +
