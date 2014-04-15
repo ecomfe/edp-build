@@ -37,6 +37,31 @@ function list2Map(packages) {
 }
 
 describe('path-mapper', function() {
+    it('default', function(){
+        var processor = new PathMapper({
+            from: 'src',
+            to: 'asset'
+        });
+
+        var fileData = base.getFileInfo('issue-222.html', Project);
+
+        var processContext = new ProcessContext( {
+            baseDir: Project,
+            exclude: [],
+            outputDir: 'output',
+            fileEncodings: {}
+        });
+        processContext.addFile(fileData);
+
+        base.launchProcessors([processor], processContext, function(){
+            expect(fileData.data.indexOf('href="asset/test/main.less"')).toBeGreaterThan(0);
+            expect(fileData.data.indexOf('src="asset/img/logo.png"')).toBeGreaterThan(0);
+            expect(fileData.data.indexOf('href="asset/test.html"')).toBeGreaterThan(0);
+            expect(fileData.data.indexOf('<param name="movie" value="asset/img/flash.swf">')).toBeGreaterThan(0);
+            expect(fileData.data.indexOf('embed src="asset/img/flash.swf"')).toBeGreaterThan(0);
+            expect(fileData.data.indexOf('<param name="test" value="src/img/flash.swf">')).toBeGreaterThan(0);
+        });
+    });
     it('module-config', function(){
         var processor = new PathMapper({
             replacements: [
