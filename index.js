@@ -5,6 +5,7 @@
  */
 
 var fs = require( 'fs' );
+var ProcessorBase = require( './lib/processor/abstract' );
 var ProcessContext = require( './lib/process-context' );
 var FileInfo = require( './lib/file-info' );
 var edp = require( 'edp-core' );
@@ -84,7 +85,7 @@ function traverseDir( dir, processContext ) {
 function injectProcessor( conf ) {
     if ( conf && conf.injectProcessor ) {
         conf.injectProcessor( {
-            AbstractProcessor   : require( './lib/processor/abstract' ),
+            AbstractProcessor   : ProcessorBase,
             MD5Renamer          : require( './lib/processor/md5-renamer' ),
             Html2JsCompiler     : require( './lib/processor/html2js-compiler' ),
             StylusCompiler      : require( './lib/processor/stylus-compiler' ),
@@ -186,6 +187,10 @@ function main( conf, callback ) {
         }
 
         var processor = processors[ processorIndex++ ];
+        if ( !(processor instanceof ProcessorBase) ) {
+            processor = new ProcessorBase( processor );
+        }
+
         edp.log.info( 'Running ' + processor.name );
         if ( processor.start ) {
             processor.start( processContext, nextProcess );
