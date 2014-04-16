@@ -128,15 +128,17 @@ function main( conf, callback ) {
     injectProcessor( conf );
 
     var processors = conf.getProcessors();
-    if ( conf.stage in processors ) {
-        // 返回的是对象，key应该是stage的值
-        processors = processors[ conf.stage ];
-    }
-    else {
-        edp.log.error( 'Invalid stage value, candidates are = %s',
-            JSON.stringify( Object.keys( processors ) ) );
-        callback();
-        return;
+    if ( !Array.isArray( processors ) ) {
+        if ( conf.stage in processors ) {
+            // 返回的是对象，key应该是stage的值
+            processors = processors[ conf.stage ];
+        }
+        else {
+            edp.log.error( 'Invalid stage value, candidates are = %s',
+                JSON.stringify( Object.keys( processors ) ) );
+            callback();
+            return;
+        }
     }
 
     var processContext = new ProcessContext( {
