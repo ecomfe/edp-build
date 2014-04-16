@@ -105,27 +105,6 @@ function injectProcessor( conf ) {
     }
 }
 
-/**
- * 如果是普通的对象，那么转化为AbstractProcessor类型
- * @param {AbstractProcessor} processor 要检查的processor类型.
- */
-function patchProcessor(processor) {
-    var AbstractProcessor = require( './lib/processor/abstract' );
-    if (processor instanceof AbstractProcessor) {
-        return processor;
-    }
-    else {
-        // 普通的对象(Plain Object)
-        var propertiesObject = {};
-        for (var key in processor) {
-            propertiesObject[key] = {
-                value: processor[key]
-            };
-        }
-        propertiesObject.log = { value: edp.log };
-        return Object.create(AbstractProcessor.prototype, propertiesObject);
-    }
-}
 
 /**
  * 处理构建入口
@@ -149,14 +128,9 @@ function main( conf, callback ) {
     injectProcessor( conf );
 
     var processors = conf.getProcessors();
-    if ( Array.isArray( processors ) ) {
-        // 返回的是数组的情况，默认值
-        processors = processors.map(patchProcessor);
-    }
-    else if ( conf.stage in processors ) {
+    if ( conf.stage in processors ) {
         // 返回的是对象，key应该是stage的值
         processors = processors[ conf.stage ];
-        processors = processors.map( patchProcessor );
     }
     else {
         edp.log.error( 'Invalid stage value, candidates are = %s',
