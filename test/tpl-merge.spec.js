@@ -105,14 +105,14 @@ describe('tpl-merge', function() {
         waitsFor(function(){ return done; });
         base.launchProcessors(processors, processContext, function(){
             done = true;
-            var f2Expected = 'define("require-tpl-31",function(){require("jstpl!06088bcb.tpl")}),' +
+            var f2Expected = 'define("require-tpl-31",function(){require("jstpl!f6064694.tpl")}),' +
                 'define("issue31",function(){return require("./require-tpl-31"),"issue31"});';
-            var f1Expected = 'define("require-tpl-31",function(){require("jstpl!06088bcb.tpl")});';
+            var f1Expected = 'define("require-tpl-31",function(){require("jstpl!f6064694.tpl")});';
 
             runs(function(){
                 expect( f2.data ).toBe( f2Expected );
                 expect( f1.data ).toBe( f1Expected );
-                expect( processContext.getFileByPath( 'src/06088bcb.tpl.js' ) ).not.toBe( null );
+                expect( processContext.getFileByPath( 'src/f6064694.tpl.js' ) ).not.toBe( null );
             });
         });
 
@@ -161,6 +161,154 @@ describe('tpl-merge', function() {
                 expect( f2.data ).toBe( f2Expected );
                 expect( f1.data ).toBe( f1Expected );
                 expect( processContext.getFileByPath( 'src/8a339213.tpl.html' ) ).not.toBe( null );
+            });
+        });
+    });
+
+    it('outputPath', function(){
+        var p1 = new ModuleCompiler({
+            exclude: [],
+            configFile: 'module.conf',
+            entryExtnames: moduleEntries,
+            getCombineConfig: function( combineModules ) {
+                combineModules.issue31 = 1;
+                return combineModules;
+            }
+        });
+        var p2 = new TplMerge({
+            outputPath: 'src/foo/bar/tpl.html'
+        });
+        var p3 = new JsCompressor();
+
+        var processContext = new ProcessContext( {
+            baseDir: Project,
+            exclude: [],
+            outputDir: 'output',
+            fileEncodings: {}
+        });
+
+        var f1 = base.getFileInfo( 'src/require-tpl-31.js', Project );
+        var f2 = base.getFileInfo( 'src/issue31.js', Project );
+        processContext.addFile( f1 );
+        processContext.addFile( f2 );
+
+        var processors = [
+            p1, p2, p3
+        ];
+
+        var done = false;
+        waitsFor(function(){ return done; });
+        base.launchProcessors(processors, processContext, function(){
+            done = true;
+            var f2Expected = 'define("require-tpl-31",function(){require("er/tpl!foo/bar/tpl.html")}),' +
+                'define("issue31",function(){return require("./require-tpl-31"),"issue31"});';
+            var f1Expected = 'define("require-tpl-31",function(){require("er/tpl!foo/bar/tpl.html")});';
+
+            runs(function(){
+                expect( f2.data ).toBe( f2Expected );
+                expect( f1.data ).toBe( f1Expected );
+                expect( processContext.getFileByPath( 'src/foo/bar/tpl.html' ) ).not.toBe( null );
+            });
+        });
+    });
+
+    it('outputPath 2', function(){
+        var p1 = new ModuleCompiler({
+            exclude: [],
+            configFile: 'module.conf',
+            entryExtnames: moduleEntries,
+            getCombineConfig: function( combineModules ) {
+                combineModules.issue31 = 1;
+                return combineModules;
+            }
+        });
+        var p2 = new TplMerge({
+            outputType: 'js',
+            outputPluginId: 'jstpl',
+            outputPath: 'src/foo/bar/tpl.js'
+        });
+        var p3 = new JsCompressor();
+
+        var processContext = new ProcessContext( {
+            baseDir: Project,
+            exclude: [],
+            outputDir: 'output',
+            fileEncodings: {}
+        });
+
+        var f1 = base.getFileInfo( 'src/require-tpl-31.js', Project );
+        var f2 = base.getFileInfo( 'src/issue31.js', Project );
+        processContext.addFile( f1 );
+        processContext.addFile( f2 );
+
+        var processors = [
+            p1, p2, p3
+        ];
+
+        var done = false;
+        waitsFor(function(){ return done; });
+        base.launchProcessors(processors, processContext, function(){
+            done = true;
+            var f2Expected = 'define("require-tpl-31",function(){require("jstpl!foo/bar/tpl")}),' +
+                'define("issue31",function(){return require("./require-tpl-31"),"issue31"});';
+            var f1Expected = 'define("require-tpl-31",function(){require("jstpl!foo/bar/tpl")});';
+
+            runs(function(){
+                expect( f2.data ).toBe( f2Expected );
+                expect( f1.data ).toBe( f1Expected );
+                expect( processContext.getFileByPath( 'src/foo/bar/tpl.js' ) ).not.toBe( null );
+            });
+        });
+    });
+
+    it('outputPath + outputWrapper', function(){
+        var p1 = new ModuleCompiler({
+            exclude: [],
+            configFile: 'module.conf',
+            entryExtnames: moduleEntries,
+            getCombineConfig: function( combineModules ) {
+                combineModules.issue31 = 1;
+                return combineModules;
+            }
+        });
+        var p2 = new TplMerge({
+            outputType: 'js',
+            outputPluginId: 'jstpl',
+            outputPath: 'src/foo/bar/tpl2.js',
+            outputWrapper: 'define("foo/bar/tpl2", function(){ return %output%; });'
+        });
+        var p3 = new JsCompressor();
+
+        var processContext = new ProcessContext( {
+            baseDir: Project,
+            exclude: [],
+            outputDir: 'output',
+            fileEncodings: {}
+        });
+
+        var f1 = base.getFileInfo( 'src/require-tpl-31.js', Project );
+        var f2 = base.getFileInfo( 'src/issue31.js', Project );
+        processContext.addFile( f1 );
+        processContext.addFile( f2 );
+
+        var processors = [
+            p1, p2, p3
+        ];
+
+        var done = false;
+        waitsFor(function(){ return done; });
+        base.launchProcessors(processors, processContext, function(){
+            done = true;
+            var f2Expected = 'define("require-tpl-31",function(){require("jstpl!foo/bar/tpl2")}),' +
+                'define("issue31",function(){return require("./require-tpl-31"),"issue31"});';
+            var f1Expected = 'define("require-tpl-31",function(){require("jstpl!foo/bar/tpl2")});';
+
+            runs(function(){
+                expect( f2.data ).toBe( f2Expected );
+                expect( f1.data ).toBe( f1Expected );
+                var f = processContext.getFileByPath( 'src/foo/bar/tpl2.js' );
+                expect( f ).not.toBe( null );
+                expect( f.data.indexOf( 'define("foo/bar/tpl2"' ) ).toBe( 0 );
             });
         });
     });
