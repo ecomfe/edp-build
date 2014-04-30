@@ -14,6 +14,7 @@
  * @description
  *
  **/
+var edp = require( 'edp-core' );
 var path = require('path');
 var fs = require('fs');
 
@@ -71,6 +72,63 @@ exports.launchProcessors = function( processors, processContext, done ) {
     }
 
     nextProcessor();
+};
+
+exports.traverseDir = function( dir, processContext ) {
+    if ( Array.isArray(dir) ) {
+        dir.forEach( function (item) {
+            exports.traverseDir( item, processContext );
+        });
+        return;
+    }
+
+    var files = fs.readdirSync( dir );
+
+    files.forEach( function ( file ) {
+        if ( file === '.svn' || file === '.git' ) {
+            return;
+        }
+
+        file = edp.path.resolve( dir, file );
+        var stat = fs.statSync( file );
+
+        // if exclude, do nothing
+        var relativePath = edp.path.relative( processContext.baseDir, file );
+        var isExclude = false;
+        processContext.exclude.some( function ( excludeFile ) {
+            if ( edp.path.satisfy( relativePath, excludeFile, stat ) ) {
+                isExclude = true;
+                return true;
+            }
+        });
+        if ( isExclude ) {
+            return;
+        }
+
+        if ( stat.isDirectory() ) {
+            exports.traverseDir( file, processContext );
+        }
+        else {
+            var fileEncodings = processContext.fileEncodings;
+            var fileEncoding = null;
+            for ( var encodingPath in fileEncodings ) {
+                if ( edp.path.satisfy( relativePath, encodingPath ) ) {
+                    fileEncoding = fileEncodings[ encodingPath ];
+                    break;
+                }
+            }
+
+            var fileData = new FileInfo( {
+                data         : fs.readFileSync( file ),
+                extname      : edp.path.extname( file ).slice( 1 ),
+                path         : relativePath,
+                fullPath     : file,
+                stat         : stat,
+                fileEncoding : fileEncoding
+            } );
+            processContext.addFile( fileData );
+        }
+    });
 };
 
 

@@ -14,9 +14,6 @@
  * @description
  *
  **/
-// var edp = require( 'edp-core' );
-
-// var fs = require('fs');
 var path = require('path');
 
 var base = require('./base');
