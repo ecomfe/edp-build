@@ -93,11 +93,17 @@ describe( 'md5-renamer', function() {
         var p1 = new MD5Renamer({
             files: [
                 'issue-235.html',
+                'issue-261.html',
                 'src/**/*.css'
             ],
             outputTemplate: '{basename}-{md5sum}{extname}',
             start: 1,
-            end: 12
+            end: 12,
+            resolve: function( lookup, resource ){
+                if ( resource.indexOf( '{%$tplData.feRoot%}' ) === 0 ) {
+                    return resource.replace( '{%$tplData.feRoot%}/', '' );
+                }
+            }
         });
         var processContext = new ProcessContext( {
             baseDir: Project,
@@ -143,11 +149,22 @@ describe( 'md5-renamer', function() {
                 expect( f6.data.indexOf( '../common/logo-ba001c53c2b.gif' ) ).not.toBe( -1 );
                 expect( f6.data.indexOf( 'background: url(../common/logo-ba001c53c2b.gif)  ;' ) ).not.toBe( -1 );
                 expect( f6.data.indexOf( 'background: url("../common/logo-ba001c53c2b.gif");' ) ).not.toBe( -1 );
+
+                var f7 = processContext.getFileByPath( 'issue-261.html' );
+                expect( f7.data.indexOf( '{%$tplData.feRoot%}/src/common/main-d299e81d71c.js?foo=bar#hello=world' ) ).not.toBe( -1 );
+                expect( f7.data.indexOf( '{%$tplData.feRoot%}/src/common/main-5de4eeb0d4f.css' ) ).not.toBe( -1 );
+                expect( f7.data.indexOf( '{%$tplData.feRoot%}/src/common/logo-ba001c53c2b.gif' ) ).not.toBe( -1 );
+                expect( f7.data.indexOf( '<script src="http://www.baidu.com/a.js?x=1"></script>' ) ).not.toBe( -1 );
+                expect( f7.data.indexOf( '<script src="//www.baidu.com/foo/bar.js?y=2"></script>' ) ).not.toBe( -1 );
+                expect( f7.data.indexOf( '<script src="https://www.google.com/ssl.js#a=b"></script>' ) ).not.toBe( -1 );
+                expect( f7.data.indexOf( '<embed src=\'{%$tplData.feRoot%}/src/common/logo-ba001c53c2b.gif\' widht=100 height=200 />' ) ).not.toBe( -1 );
+                expect( f7.data.indexOf( '<param value=\'{%$tplData.feRoot%}/src/common/logo-ba001c53c2b.gif\' name="movie" />' ) ).not.toBe( -1 );
+                expect( f7.data.indexOf( '<param value="{%$tplData.feRoot%}/src/common/logo.gif" />' ) ).not.toBe( -1 );
             });
         });
     });
 
-    it( 'issue-235-1', function(){
+    it( 'issue-235-1 & issue-261', function(){
         // replacements不生效的问题
         var p1 = new MD5Renamer({
             outputTemplate: '{basename}-{md5sum}{extname}',
