@@ -130,6 +130,48 @@ describe('module-compiler', function(){
             // expect(moduleInfo[3].id).toBe('foo');
         });
     });
+
+    it('bizId support', function(){
+        var processor = new ModuleCompiler({
+            exclude: [],
+            bizId: 'foo/bar',
+            configFile: 'module.conf',
+            entryExtnames: moduleEntries,
+            getCombineConfig: function() {
+                return {
+                    'case-xtpl': true
+                };
+            }
+        });
+
+        var filePath = path.join(Project, 'src', 'case-xtpl.js');
+        var fileData = base.getFileInfo(filePath);
+
+        var processContext = { baseDir: Project };
+        processor.process(fileData, processContext, function(){
+            var expected =
+                'define(\'foo/bar/xtpl\', function (require) {\n' +
+                '    return \'xtpl\';\n' +
+                '});\n' +
+                'define(\'foo/bar/xtpl2\', function (require) {\n' +
+                '    return require(\'xtpl\');\n' +
+                '});\n' +
+                'define(\'foo/bar/xtpl3\', function (require) {\n' +
+                '    return require(\'xtpl\');\n' +
+                '});\n' +
+                'define(\'foo/bar/common/xtpl\', function (require) {\n' +
+                '    return require(\'xtpl\');\n' +
+                '});\n' +
+                'define(\'foo/bar/case-xtpl\', function (require) {\n' +
+                '    var xtpl = require(\'xtpl\');\n' +
+                '    var ztpl = require(\'common/xtpl\');\n' +
+                '    console.log(xtpl);\n' +
+                '    console.log(ztpl);\n' +
+                '});';
+            expect( fileData.data ).toBe( expected );
+        });
+    });
+
 });
 
 
