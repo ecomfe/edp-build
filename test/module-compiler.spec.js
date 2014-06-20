@@ -66,8 +66,7 @@ describe('module-compiler', function(){
         var processContext = { baseDir: Project };
         processor.process(fileData, processContext, function(){
             var ast = edp.esl.getAst( fileData.data );
-            var analyseModule = require('../lib/util/analyse-module.js');
-            var moduleInfo = analyseModule(ast);
+            var moduleInfo = edp.amd.analyseModule(ast);
             expect(moduleInfo).not.toBe(null);
             expect(moduleInfo.length).toBe(4);
             expect(moduleInfo[0].id).toBe('io/File');
@@ -119,9 +118,8 @@ describe('module-compiler', function(){
             expect( fileData.data ).toBe( expected );
 
             // return;
-            // var ast = edp.esl.getAst( fileData.data );
-            // var analyseModule = require('../lib/util/analyse-module.js');
-            // var moduleInfo = analyseModule(ast);
+            // var ast = edp.amd.getAst( fileData.data );
+            // var moduleInfo = edp.amd.analyseModule(ast);
             // expect(moduleInfo).not.toBe(null);
             // expect(moduleInfo.length).toBe(4);
             // expect(moduleInfo[0].id).toBe('io/File');
