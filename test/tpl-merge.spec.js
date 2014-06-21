@@ -19,7 +19,7 @@ var moduleEntries = 'html,htm,phtml,tpl,vm,js';
 
 // function getModuleInfo(name) {
 //     var code = fs.readFileSync(path.resolve(Project, 'src', name), 'utf-8');
-//     var ast = edp.esl.getAst( code );
+//     var ast = edp.amd.getAst( code );
 //     var moduleInfo = analyseModyle(ast);
 
 //     return moduleInfo;

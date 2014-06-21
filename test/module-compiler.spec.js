@@ -59,7 +59,7 @@ describe('module-compiler', function(){
 
         var processContext = { baseDir: Project };
         processor.process(fileData, processContext, function(){
-            var ast = edp.esl.getAst( fileData.data );
+            var ast = edp.amd.getAst( fileData.data );
             var moduleInfo = edp.amd.analyseModule(ast);
             expect(moduleInfo).not.toBe(null);
             expect(moduleInfo.length).toBe(4);

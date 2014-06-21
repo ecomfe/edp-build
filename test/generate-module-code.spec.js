@@ -18,7 +18,7 @@ function normalCode(str) {
 }
 
 var standardFile = getFile('std.js');
-var factoryAst = edp.esl.getAst( standardFile );
+var factoryAst = edp.amd.getAst( standardFile );
 factoryAst = factoryAst.body[0].expression['arguments'][0];
 
 
@@ -103,7 +103,7 @@ describe('generate-module-code', function () {
             ];
 
         var wrapperFile = getFile('wrapper.js');
-        var ast = edp.esl.getAst( wrapperFile );
+        var ast = edp.amd.getAst( wrapperFile );
 
         var code = generateModuleCode(moduleInfo, ast);
         expect(normalCode(code)).toBe(normalCode(getFile('wrapper-compiled.js')));

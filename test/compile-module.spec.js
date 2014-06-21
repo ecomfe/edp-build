@@ -193,7 +193,7 @@ describe('compile-module', function() {
             true
         );
 
-        var ast = edp.esl.getAst( moduleCode );
+        var ast = edp.amd.getAst( moduleCode );
         // 期待进行合并操作后只有一个define调用语句
         // 即没有合并解析失败的模块
         expect(ast.body.length).toBe(1);

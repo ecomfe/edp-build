@@ -33,7 +33,7 @@ describe('array', function(){
 
     it('getAllModules', function(){
         var moduleConfig = './data/dummy-project/module.conf';
-        var allModules = edp.esl.getAllModules( moduleConfig );
+        var allModules = edp.amd.getAllModules( moduleConfig );
         allModules.sort();
 
         expect( allModules.indexOf( 'etpl' ) ).not.toBe( -1 );

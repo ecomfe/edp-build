@@ -36,8 +36,8 @@ describe('compile-module-2', function() {
             }
         );
 
-        var ast = edp.esl.getAst( moduleCode );
-        var moduleInfo = edp.esl.analyseModule( ast );
+        var ast = edp.amd.getAst( moduleCode );
+        var moduleInfo = edp.amd.analyseModule( ast );
         var moduleIds = moduleInfo.map(function( info ){ return info.id || '<anonymous>'; });
         moduleIds.sort();
         expect( moduleIds ).toEqual( [ 'common/dummy', 'er', 'er/View', 'er/main', 'net/Http' ] );
@@ -55,8 +55,8 @@ describe('compile-module-2', function() {
             }
         );
 
-        var ast = edp.esl.getAst( moduleCode );
-        var moduleInfo = edp.esl.analyseModule( ast );
+        var ast = edp.amd.getAst( moduleCode );
+        var moduleInfo = edp.amd.analyseModule( ast );
 
         if ( moduleInfo && !Array.isArray( moduleInfo ) ) {
             moduleInfo = [ moduleInfo ];
@@ -83,8 +83,8 @@ describe('compile-module-2', function() {
             }
         );
 
-        var ast = edp.esl.getAst( moduleCode );
-        var moduleInfo = edp.esl.analyseModule( ast );
+        var ast = edp.amd.getAst( moduleCode );
+        var moduleInfo = edp.amd.analyseModule( ast );
 
         if ( moduleInfo && !Array.isArray( moduleInfo ) ) {
             moduleInfo = [ moduleInfo ];
@@ -111,8 +111,8 @@ describe('compile-module-2', function() {
             }
         );
 
-        var ast = edp.esl.getAst( moduleCode );
-        var moduleInfo = edp.esl.analyseModule( ast );
+        var ast = edp.amd.getAst( moduleCode );
+        var moduleInfo = edp.amd.analyseModule( ast );
 
         if ( moduleInfo && !Array.isArray( moduleInfo ) ) {
             moduleInfo = [ moduleInfo ];
@@ -138,8 +138,8 @@ describe('compile-module-2', function() {
             }
         );
 
-        var ast = edp.esl.getAst( moduleCode );
-        var moduleInfo = edp.esl.analyseModule( ast );
+        var ast = edp.amd.getAst( moduleCode );
+        var moduleInfo = edp.amd.analyseModule( ast );
         if ( !Array.isArray( moduleInfo ) ) {
             moduleInfo = [ moduleInfo ];
         }

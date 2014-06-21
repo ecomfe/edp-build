@@ -54,8 +54,8 @@ describe('issue-136', function(){
         var fileData = base.getFileInfo(filePath);
 
         function dumpModuleIds( code ) {
-            var ast = edp.esl.getAst( code );
-            var moduleInfo = edp.esl.analyseModule( ast );
+            var ast = edp.amd.getAst( code );
+            var moduleInfo = edp.amd.analyseModule( ast );
             var moduleIds = moduleInfo.map(function( info ){ return info.id || '<anonymous>'; });
             moduleIds.sort();
             console.log( JSON.stringify( moduleIds ) );
