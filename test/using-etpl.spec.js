@@ -1,19 +1,7 @@
-/***************************************************************************
- *
- * Copyright (c) 2014 Baidu.com, Inc. All Rights Reserved
- * $Id$
- *
- **************************************************************************/
-
-
-
 /**
- * using-etpl.spec.js ~ 2014/03/22 15:29:24
  * @author leeight(liyubei@baidu.com)
- * @version $Revision$
- * @description
- *
- **/
+ */
+
 // var fs = require('fs');
 var path = require('path');
 
@@ -58,7 +46,7 @@ describe('using-etpl', function(){
                 '    if (typeof exports == \'object\' && typeof module == \'object\') {\n' +
                 '        exports = module.exports = etpl;\n' +
                 '    } else if (typeof define == \'function\' && define.amd) {\n' +
-                '        define(\'etpl/main\', etpl);\n' +
+                '        define(\'etpl/main\', [], etpl);\n' +
                 '    } else {\n' +
                 '        root.etpl = etpl;\n' +
                 '    }\n' +
@@ -66,11 +54,18 @@ describe('using-etpl', function(){
                 '\n' +
                 'define(\'etpl\', [\'etpl/main\'], function ( main ) { return main; });\n' +
                 '\n' +
-                'define(\'biz/tpl\', function (require) {\n' +
+                'define(\'biz/tpl\', [\n' +
+                '    \'require\',\n' +
+                '    \'etpl\'\n' +
+                '], function (require) {\n' +
                 '    return require(\'etpl\');\n' +
                 '});\n' +
                 '\n' +
-                'define(\'using-etpl\', function (require) {\n' +
+                'define(\'using-etpl\', [\n' +
+                '    \'require\',\n' +
+                '    \'./biz/tpl\',\n' +
+                '    \'etpl/main\'\n' +
+                '], function (require) {\n' +
                 '    var template = require(\'./biz/tpl\');\n' +
                 '    var z = require(\'etpl/main\');\n' +
                 '    console.log(template + z);\n' +

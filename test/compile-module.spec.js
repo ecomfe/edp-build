@@ -33,7 +33,12 @@ describe('compile-module', function() {
             false
         );
         var expectedCode =
-        'define(\'foo\', function (require) {\n' +
+        'define(\'foo\', [\n' +
+        '    \'require\',\n' +
+        '    \'io/File\',\n' +
+        '    \'net/Http\',\n' +
+        '    \'er/View\'\n' +
+        '], function (require) {\n' +
         '    var ioFile = require(\'io/File\');\n' +
         '    var netHttp = require(\'net/Http\');\n' +
         '    var erView = require(\'er/View\');\n' +
@@ -51,18 +56,18 @@ describe('compile-module', function() {
         );
 
         var expectedCode =
-        'define(\'net/Http\', function (require) {\n' +
+        'define(\'net/Http\', [\'require\'], function (require) {\n' +
         '    return \'net/Http\';\n' +
         '});\n\n' +
-        'define(\'er/View\', function (require) {\n' +
+        'define(\'er/View\', [\n    \'require\',\n    \'net/Http\'\n], function (require) {\n' +
         '    return require(\'net/Http\') + \';\' + \'er/View\';\n' +
         '});\n\n' +
-        'define(\'er/main\', function (require) {\n' +
+        'define(\'er/main\', [\n    \'require\',\n    \'./View\'\n], function (require) {\n' +
         '    var view = require(\'./View\');\n' +
         '    return \'er\';\n' +
         '});\n\n' +
         'define(\'er\', [\'er/main\'], function ( main ) { return main; });\n\n' +
-        'define(\'bar\', function (require) {\n' +
+        'define(\'bar\', [\n    \'require\',\n    \'er\'\n], function (require) {\n' +
         '    var er = require(\'er\');\n' +
         '    return er;\n' +
         '});';
@@ -78,13 +83,13 @@ describe('compile-module', function() {
         );
 
         var expectedCode =
-        'define(\'net/Http\', function (require) {\n' +
+        'define(\'net/Http\', [\'require\'], function (require) {\n' +
         '    return \'net/Http\';\n' +
         '});\n\n' +
-        'define(\'er/View\', function (require) {\n' +
+        'define(\'er/View\', [\n    \'require\',\n    \'net/Http\'\n], function (require) {\n' +
         '    return require(\'net/Http\') + \';\' + \'er/View\';\n' +
         '});\n\n' +
-        'define(\'er/main\', function (require) {\n' +
+        'define(\'er/main\', [\n    \'require\',\n    \'./View\'\n], function (require) {\n' +
         '    var view = require(\'./View\');\n' +
         '    return \'er\';\n' +
         '});\n\n' +
@@ -105,7 +110,7 @@ describe('compile-module', function() {
 
         // XXX(user) 没办法exclude自己.
         var expectedCode =
-        'define(\'er/main\', function (require) {\n' +
+        'define(\'er/main\', [\n    \'require\',\n    \'./View\'\n], function (require) {\n' +
         '    var view = require(\'./View\');\n' +
         '    return \'er\';\n' +
         '});\n\n' +
@@ -124,7 +129,7 @@ describe('compile-module', function() {
         );
 
         var expectedCode =
-        'define(\'er/main\', function (require) {\n' +
+        'define(\'er/main\', [\n    \'require\',\n    \'./View\'\n], function (require) {\n' +
         '    var view = require(\'./View\');\n' +
         '    return \'er\';\n' +
         '});\n\n' +
@@ -143,7 +148,7 @@ describe('compile-module', function() {
         );
 
         var expectedCode =
-        'define(\'er/main\', function (require) {\n' +
+        'define(\'er/main\', [\n    \'require\',\n    \'./View\'\n], function (require) {\n' +
         '    var view = require(\'./View\');\n' +
         '    return \'er\';\n' +
         '});\n\n' +
@@ -160,16 +165,18 @@ describe('compile-module', function() {
         );
 
         var expectedCode =
-        'define(\'io/File\', function (require) {\n' +
+        'define(\'io/File\', [\'require\'], function (require) {\n' +
         '    return \'io/File\';\n' +
         '});\n\n' +
-        'define(\'net/Http\', function (require) {\n' +
+        'define(\'net/Http\', [\'require\'], function (require) {\n' +
         '    return \'net/Http\';\n' +
         '});\n\n' +
-        'define(\'er/View\', function (require) {\n' +
+        'define(\'er/View\', [\n    \'require\',\n    \'net/Http\'\n], function (require) {\n' +
         '    return require(\'net/Http\') + \';\' + \'er/View\';\n' +
         '});\n\n' +
-        'define(\'foo\', function (require) {\n' +
+        'define(\'foo\', [\n' +
+        '    \'require\',\n    \'io/File\',\n    \'net/Http\',\n    \'er/View\'\n' +
+        '], function (require) {\n' +
         '    var ioFile = require(\'io/File\');\n' +
         '    var netHttp = require(\'net/Http\');\n' +
         '    var erView = require(\'er/View\');\n' +

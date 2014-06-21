@@ -1,19 +1,7 @@
-/***************************************************************************
- *
- * Copyright (c) 2014 Baidu.com, Inc. All Rights Reserved
- * $Id$
- *
- **************************************************************************/
-
-
-
 /**
- * using-xtpl.spec.js ~ 2014/03/22 09:45:57
  * @author leeight(liyubei@baidu.com)
- * @version $Revision$
- * @description
- *
- **/
+ */
+
 // var fs = require('fs');
 var path = require('path');
 
@@ -45,23 +33,28 @@ describe('using-xtpl', function(){
         var processContext = { baseDir: Project };
         processor.process(fileData, processContext, function(){
             var expected =
-                'define(\'common/xtpl\', function (require) {\n' +
+                'define(\'common/xtpl\', [\'require\'], function (require) {\n' +
                 '    return \'xtpl\';\n' +
                 '});\n' +
                 '\n' +
                 '\n' +
                 '/** d e f i n e */\n' +
-                'define("xtpl", function(require){ return require("common/xtpl"); });\n' +
+                'define(\'xtpl\', [\'common/xtpl\'], function (target) { return target; });\n' +
                 '\n' +
                 '\n' +
                 '/** d e f i n e */\n' +
-                'define("xtpl2", function(require){ return require("common/xtpl"); });\n' +
+                'define(\'xtpl2\', [\'common/xtpl\'], function (target) { return target; });\n' +
                 '\n' +
                 '\n' +
                 '/** d e f i n e */\n' +
-                'define("xtpl3", function(require){ return require("common/xtpl"); });\n' +
+                'define(\'xtpl3\', [\'common/xtpl\'], function (target) { return target; });\n' +
                 '\n' +
-                'define(\'common/using-xtpl\', function (require) {\n' +
+                'define(\'common/using-xtpl\', [\n' +
+                '    \'require\',\n' +
+                '    \'./xtpl\',\n' +
+                '    \'xtpl\',\n' +
+                '    \'common/xtpl\'\n' +
+                '], function (require) {\n' +
                 '    var a = require(\'./xtpl\');\n' +
                 '    var b = require(\'xtpl\');\n' +
                 '    var c = require(\'common/xtpl\');\n' +

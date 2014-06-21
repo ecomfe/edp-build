@@ -1,19 +1,7 @@
-/***************************************************************************
- *
- * Copyright (c) 2014 Baidu.com, Inc. All Rights Reserved
- * $Id$
- *
- **************************************************************************/
-
-
-
 /**
- * using-ztpl.spec.js ~ 2014/03/22 15:14:04
  * @author leeight(liyubei@baidu.com)
- * @version $Revision$
- * @description
- *
- **/
+ */
+
 // var fs = require('fs');
 var path = require('path');
 
@@ -48,18 +36,21 @@ describe('using-ztpl', function(){
             var expected =
                 '(function (root) {\n' +
                 '    var ztpl = \'ztpl\';\n' +
-                '    define(\'common/ztpl\', ztpl);\n' +
+                '    define(\'common/ztpl\', [], ztpl);\n' +
                 '}(this));\n' +
                 '\n' +
                 '\n' +
                 '/** d e f i n e */\n' +
-                'define("ztpl", function(require){ return require("common/ztpl"); });\n' +
+                'define(\'ztpl\', [\'common/ztpl\'], function (target) { return target; });\n' +
                 '\n' +
                 '\n' +
                 '/** d e f i n e */\n' +
-                'define("ztpl2", function(require){ return require("common/ztpl"); });\n' +
+                'define(\'ztpl2\', [\'common/ztpl\'], function (target) { return target; });\n' +
                 '\n' +
-                'define(\'using-ztpl\', function (require) {\n' +
+                'define(\'using-ztpl\', [\n' +
+                '    \'require\',\n' +
+                '    \'./common/ztpl\'\n' +
+                '], function (require) {\n' +
                 '    var ztpl = require(\'./common/ztpl\');\n' +
                 '    console.log(ztpl);\n' +
                 '});';

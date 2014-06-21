@@ -25,16 +25,21 @@ describe('replace-require-resource', function(){
         var file = path.resolve(Project, 'src', 'case1.js');
         var code = fs.readFileSync(file, 'utf-8');
         var z = replaceRequireResource(code, 'tpl', function(resourceId){
-            return '[' + resourceId + ']';
+            return resourceId + '-replaced';
         });
         var expected =
         'define(\'case1\', [\n' +
         '    \'foo\',\n' +
-        '    \'tpl!./tpl/123.html\'\n' +
-        '], function (foo, require, exports, module) {\n' +
-        '    require(\'[tpl!./tpl/list.tpl.html]\');\n' +
+        '    \'require\',\n' +
+        '    \'tpl!./tpl/123.html-replaced\',\n' +
+        '    \'tpl!./tpl/list.tpl.html-replaced\',\n' +
+        '    \'no-such-plugin!./tpl/list.tpl.html\',\n' +
+        '    \'tpl!er/tpl/hello.tpl.html-replaced\',\n' +
+        '    \'jquery\'\n' +
+        '], function (foo, require, res) {\n' +
+        '    require(\'tpl!./tpl/list.tpl.html-replaced\');\n' +
         '    require(\'no-such-plugin!./tpl/list.tpl.html\');\n' +
-        '    require(\'[tpl!er/tpl/hello.tpl.html]\');\n' +
+        '    require(\'tpl!er/tpl/hello.tpl.html-replaced\');\n' +
         '    var z = require(\'jquery\');\n' +
         '    return \'case1\';\n' +
         '});';
@@ -46,16 +51,21 @@ describe('replace-require-resource', function(){
         var file = path.resolve(Project, 'src', 'case1.js');
         var code = fs.readFileSync(file, 'utf-8');
         var z = replaceRequireResource(code, ['tpl', 'no-such-plugin'], function(resourceId){
-            return '[' + resourceId + ']';
+            return resourceId + '-replaced';
         });
         var expected =
         'define(\'case1\', [\n' +
         '    \'foo\',\n' +
-        '    \'tpl!./tpl/123.html\'\n' +
-        '], function (foo, require, exports, module) {\n' +
-        '    require(\'[tpl!./tpl/list.tpl.html]\');\n' +
-        '    require(\'[no-such-plugin!./tpl/list.tpl.html]\');\n' +
-        '    require(\'[tpl!er/tpl/hello.tpl.html]\');\n' +
+        '    \'require\',\n' +
+        '    \'tpl!./tpl/123.html-replaced\',\n' +
+        '    \'tpl!./tpl/list.tpl.html-replaced\',\n' +
+        '    \'no-such-plugin!./tpl/list.tpl.html-replaced\',\n' +
+        '    \'tpl!er/tpl/hello.tpl.html-replaced\',\n' +
+        '    \'jquery\'\n' +
+        '], function (foo, require, res) {\n' +
+        '    require(\'tpl!./tpl/list.tpl.html-replaced\');\n' +
+        '    require(\'no-such-plugin!./tpl/list.tpl.html-replaced\');\n' +
+        '    require(\'tpl!er/tpl/hello.tpl.html-replaced\');\n' +
         '    var z = require(\'jquery\');\n' +
         '    return \'case1\';\n' +
         '});';

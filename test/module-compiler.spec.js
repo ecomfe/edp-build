@@ -1,19 +1,8 @@
-/***************************************************************************
- *
- * Copyright (c) 2014 Baidu.com, Inc. All Rights Reserved
- * $Id$
- *
- **************************************************************************/
-
-
-
 /**
- * module-compiler.spec.js ~ 2014/02/12 11:22:11
  * @author leeight(liyubei@baidu.com)
- * @version $Revision$
- * @description
- * 测试一下ModuleCompiler的功能是否正常
- **/
+ * @file 测试一下ModuleCompiler的功能是否正常
+ */
+
 var edp = require( 'edp-core' );
 
 var path = require('path');
@@ -40,7 +29,12 @@ describe('module-compiler', function(){
 
         var processContext = { baseDir: Project };
         processor.process(fileData, processContext, function(){
-            var expected = 'define(\'foo\', function (require) {\n' +
+            var expected = 'define(\'foo\', [\n' +
+                '    \'require\',\n' +
+                '    \'io/File\',\n' +
+                '    \'net/Http\',\n' +
+                '    \'er/View\'\n' +
+                '], function (require) {\n' +
                 '    var ioFile = require(\'io/File\');\n' +
                 '    var netHttp = require(\'net/Http\');\n' +
                 '    var erView = require(\'er/View\');\n' +
@@ -94,22 +88,26 @@ describe('module-compiler', function(){
         var processContext = { baseDir: Project };
         processor.process(fileData, processContext, function(){
             var expected =
-                'define(\'xtpl\', function (require) {\n' +
+                'define(\'xtpl\', [\'require\'], function (require) {\n' +
                 '    return \'xtpl\';\n' +
                 '});\n' +
                 '\n\n' +
                 '/** d e f i n e */\n' +
-                'define("xtpl2", function(require){ return require("xtpl"); });\n' +
+                'define(\'xtpl2\', [\'xtpl\'], function (target) { return target; });\n' +
                 '\n' +
                 '\n' +
                 '/** d e f i n e */\n' +
-                'define("xtpl3", function(require){ return require("xtpl"); });\n' +
+                'define(\'xtpl3\', [\'xtpl\'], function (target) { return target; });\n' +
                 '\n' +
                 '\n' +
                 '/** d e f i n e */\n' +
-                'define("common/xtpl", function(require){ return require("xtpl"); });\n' +
+                'define(\'common/xtpl\', [\'xtpl\'], function (target) { return target; });\n' +
                 '\n' +
-                'define(\'case-xtpl\', function (require) {\n' +
+                'define(\'case-xtpl\', [\n' +
+                '    \'require\',\n' +
+                '    \'xtpl\',\n' +
+                '    \'common/xtpl\'\n' +
+                '], function (require) {\n' +
                 '    var xtpl = require(\'xtpl\');\n' +
                 '    var ztpl = require(\'common/xtpl\');\n' +
                 '    console.log(xtpl);\n' +
@@ -148,19 +146,23 @@ describe('module-compiler', function(){
         var processContext = { baseDir: Project };
         processor.process(fileData, processContext, function(){
             var expected =
-                'define(\'foo/bar/xtpl\', function (require) {\n' +
+                'define(\'foo/bar/xtpl\', [\'require\'], function (require) {\n' +
                 '    return \'xtpl\';\n' +
                 '});\n' +
-                'define(\'foo/bar/xtpl2\', function (require) {\n' +
-                '    return require(\'xtpl\');\n' +
+                'define(\'foo/bar/xtpl2\', [\'xtpl\'], function (target) {\n' +
+                '    return target;\n' +
                 '});\n' +
-                'define(\'foo/bar/xtpl3\', function (require) {\n' +
-                '    return require(\'xtpl\');\n' +
+                'define(\'foo/bar/xtpl3\', [\'xtpl\'], function (target) {\n' +
+                '    return target;\n' +
                 '});\n' +
-                'define(\'foo/bar/common/xtpl\', function (require) {\n' +
-                '    return require(\'xtpl\');\n' +
+                'define(\'foo/bar/common/xtpl\', [\'xtpl\'], function (target) {\n' +
+                '    return target;\n' +
                 '});\n' +
-                'define(\'foo/bar/case-xtpl\', function (require) {\n' +
+                'define(\'foo/bar/case-xtpl\', [\n' +
+                '    \'require\',\n' +
+                '    \'xtpl\',\n' +
+                '    \'common/xtpl\'\n' +
+                '], function (require) {\n' +
                 '    var xtpl = require(\'xtpl\');\n' +
                 '    var ztpl = require(\'common/xtpl\');\n' +
                 '    console.log(xtpl);\n' +

@@ -48,6 +48,7 @@ describe('generate-module-code', function () {
     it('single module has dependencies should pass', function () {
         var moduleInfo = {
                 dependencies: ['foo', 'bar'],
+                actualDependencies: ['foo', 'bar'],
                 factoryAst: factoryAst
             };
 
@@ -60,6 +61,7 @@ describe('generate-module-code', function () {
         var moduleInfo = {
                 id: 'single',
                 dependencies: ['foo', 'bar'],
+                actualDependencies: ['foo', 'bar'],
                 factoryAst: factoryAst
             };
 
@@ -73,6 +75,7 @@ describe('generate-module-code', function () {
                 {
                     id: 'module1',
                     dependencies: ['foo', 'bar'],
+                    actualDependencies: ['foo', 'bar'],
                     factoryAst: factoryAst
                 },
                 {
@@ -94,6 +97,7 @@ describe('generate-module-code', function () {
                 {
                     id: 'module',
                     dependencies: ['foo', 'bar'],
+                    actualDependencies: ['foo', 'bar'],
                     factoryAst: factoryAst
                 }
             ];

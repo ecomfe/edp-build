@@ -1,12 +1,3 @@
-/***************************************************************************
- *
- * Copyright (c) 2014 Baidu.com, Inc. All Rights Reserved
- * $Id$
- *
- **************************************************************************/
-
-
-
 /**
  * tpl-merge.spec.js ~ 2014/02/24 22:23:50
  * @author leeight(liyubei@baidu.com)
@@ -53,8 +44,11 @@ describe('tpl-merge', function() {
             var expected =
                 'define(\'case1\', [\n' +
                 '    \'foo\',\n' +
-                '    \'tpl!./tpl/123.html\'\n' +
-                '], function (foo, require, exports, module) {\n' +
+                '    \'require\',\n' +
+                '    \'tpl!d0d179ca.tpl.html\',\n' +
+                '    \'no-such-plugin!d0d179ca.tpl.html\',\n' +
+                '    \'jquery\'\n' +
+                '], function (foo, require, res) {\n' +
                 '    require(\'tpl!d0d179ca.tpl.html\');\n' +
                 '    require(\'no-such-plugin!d0d179ca.tpl.html\');\n' +
                 '    require(\'tpl!d0d179ca.tpl.html\');\n' +
@@ -102,9 +96,9 @@ describe('tpl-merge', function() {
         waitsFor(function(){ return done; });
         base.launchProcessors(processors, processContext, function(){
             done = true;
-            var f2Expected = 'define("require-tpl-31",function(){require("jstpl!f6064694.tpl")}),' +
-                'define("issue31",function(){return require("./require-tpl-31"),"issue31"});';
-            var f1Expected = 'define("require-tpl-31",function(){require("jstpl!f6064694.tpl")});';
+            var f2Expected = 'define("require-tpl-31",["require","jstpl!f6064694.tpl"],function(require){require("jstpl!f6064694.tpl")}),' +
+                'define("issue31",["require","./require-tpl-31"],function(require){return require("./require-tpl-31"),"issue31"});';
+            var f1Expected = 'define("require-tpl-31",["require","jstpl!f6064694.tpl"],function(require){require("jstpl!f6064694.tpl")});';
 
             runs(function(){
                 expect( f2.data ).toBe( f2Expected );
@@ -150,9 +144,9 @@ describe('tpl-merge', function() {
         waitsFor(function(){ return done; });
         base.launchProcessors(processors, processContext, function(){
             done = true;
-            var f2Expected = 'define("require-tpl-31",function(){require("er/tpl!8a339213.tpl.html")}),' +
-                'define("issue31",function(){return require("./require-tpl-31"),"issue31"});';
-            var f1Expected = 'define("require-tpl-31",function(){require("er/tpl!8a339213.tpl.html")});';
+            var f2Expected = 'define("require-tpl-31",["require","er/tpl!8a339213.tpl.html"],function(require){require("er/tpl!8a339213.tpl.html")}),' +
+                'define("issue31",["require","./require-tpl-31"],function(require){return require("./require-tpl-31"),"issue31"});';
+            var f1Expected = 'define("require-tpl-31",["require","er/tpl!8a339213.tpl.html"],function(require){require("er/tpl!8a339213.tpl.html")});';
 
             runs(function(){
                 expect( f2.data ).toBe( f2Expected );
@@ -197,9 +191,9 @@ describe('tpl-merge', function() {
         waitsFor(function(){ return done; });
         base.launchProcessors(processors, processContext, function(){
             done = true;
-            var f2Expected = 'define("require-tpl-31",function(){require("er/tpl!foo/bar/tpl.html")}),' +
-                'define("issue31",function(){return require("./require-tpl-31"),"issue31"});';
-            var f1Expected = 'define("require-tpl-31",function(){require("er/tpl!foo/bar/tpl.html")});';
+            var f2Expected = 'define("require-tpl-31",["require","er/tpl!foo/bar/tpl.html"],function(require){require("er/tpl!foo/bar/tpl.html")}),' +
+                'define("issue31",["require","./require-tpl-31"],function(require){return require("./require-tpl-31"),"issue31"});';
+            var f1Expected = 'define("require-tpl-31",["require","er/tpl!foo/bar/tpl.html"],function(require){require("er/tpl!foo/bar/tpl.html")});';
 
             runs(function(){
                 expect( f2.data ).toBe( f2Expected );
@@ -246,9 +240,9 @@ describe('tpl-merge', function() {
         waitsFor(function(){ return done; });
         base.launchProcessors(processors, processContext, function(){
             done = true;
-            var f2Expected = 'define("require-tpl-31",function(){require("jstpl!foo/bar/tpl")}),' +
-                'define("issue31",function(){return require("./require-tpl-31"),"issue31"});';
-            var f1Expected = 'define("require-tpl-31",function(){require("jstpl!foo/bar/tpl")});';
+            var f2Expected = 'define("require-tpl-31",["require","jstpl!foo/bar/tpl"],function(require){require("jstpl!foo/bar/tpl")}),' +
+                'define("issue31",["require","./require-tpl-31"],function(require){return require("./require-tpl-31"),"issue31"});';
+            var f1Expected = 'define("require-tpl-31",["require","jstpl!foo/bar/tpl"],function(require){require("jstpl!foo/bar/tpl")});';
 
             runs(function(){
                 expect( f2.data ).toBe( f2Expected );
@@ -296,9 +290,9 @@ describe('tpl-merge', function() {
         waitsFor(function(){ return done; });
         base.launchProcessors(processors, processContext, function(){
             done = true;
-            var f2Expected = 'define("require-tpl-31",function(){require("jstpl!foo/bar/tpl2")}),' +
-                'define("issue31",function(){return require("./require-tpl-31"),"issue31"});';
-            var f1Expected = 'define("require-tpl-31",function(){require("jstpl!foo/bar/tpl2")});';
+            var f2Expected = 'define("require-tpl-31",["require","jstpl!foo/bar/tpl2"],function(require){require("jstpl!foo/bar/tpl2")}),' +
+                'define("issue31",["require","./require-tpl-31"],function(require){return require("./require-tpl-31"),"issue31"});';
+            var f1Expected = 'define("require-tpl-31",["require","jstpl!foo/bar/tpl2"],function(require){require("jstpl!foo/bar/tpl2")});';
 
             runs(function(){
                 expect( f2.data ).toBe( f2Expected );
