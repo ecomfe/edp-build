@@ -56,6 +56,7 @@ describe('tpl-merge', function() {
                 '    return \'case1\';\n' +
                 '});';
             expect( fileData.data ).toBe( expected );
+            expect( processContext.getFileByPath( 'dep/er/3.0.2/src/tpl/hello.tpl.html' ) ).not.toBe( null );
         });
     });
 
@@ -152,6 +153,7 @@ describe('tpl-merge', function() {
                 expect( f2.data ).toBe( f2Expected );
                 expect( f1.data ).toBe( f1Expected );
                 expect( processContext.getFileByPath( 'src/8a339213.tpl.html' ) ).not.toBe( null );
+                expect( processContext.getFileByPath( 'src/tpl/list.tpl.html' ) ).not.toBe( null );
             });
         });
     });
