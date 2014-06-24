@@ -1,5 +1,5 @@
 /**
- * bcs-uploader.spec.js
+ * @file bcs-uploader.spec.js
  * @author zengjialuo(zengjialuo@baidu.com)
  **/
 var path = require( 'path' );
@@ -59,23 +59,3 @@ describe('bcs-uploader', function () {
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* vim: set ts=4 sw=4 sts=4 tw=100: */
