@@ -23,12 +23,12 @@ describe('bcs-uploader', function () {
         );
 
         // Mock upload
-        processor.sdk._sendRequest = createSpy('sdk._sendRequest').andCallFake(
-            function( options, data, targetUrl, def ){
+        processor.sdk._sendRequest = createSpy( 'sdk._sendRequest' ).andCallFake(
+            function ( options, data, targetUrl, def ) {
                 setTimeout(
-                    function(){
+                    function () {
                         var bcsUrl = decodeURIComponent( targetUrl.replace(/\?.*/g, '') );
-                        if ( bcsUrl.indexOf('.js') > -1 ) {
+                        if ( bcsUrl.indexOf( '.js' ) > -1 ) {
                             def.resolve( bcsUrl );
                         } else {
                             def.reject( 'mock failing' );
