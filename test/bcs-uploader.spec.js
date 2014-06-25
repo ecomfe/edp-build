@@ -3,7 +3,6 @@
  * @author zengjialuo(zengjialuo@baidu.com)
  **/
 var path = require( 'path' );
-var edp = require( 'edp-core' );
 
 var BcsUploader = require( '../lib/processor/bcs-uploader.js' );
 var ProcessContext = require( '../lib/process-context' );
@@ -24,15 +23,21 @@ describe('bcs-uploader', function () {
         );
 
         // Mock upload
-        processor.sdk.realUpload = function ( data, bucket, objectName ) {
-            var def = new edp.Deferred();
-            if (objectName.indexOf('.js') > -1 ) {
-                def.resolve( 'http://bcscdn.baidu.com/' + bucket + '/' + objectName );
-            } else {
-                def.reject( 'mock failing' );
+        processor.sdk._sendRequest = createSpy('sdk._sendRequest').andCallFake(
+            function( options, data, targetUrl, def ){
+                setTimeout(
+                    function(){
+                        var bcsUrl = decodeURIComponent( targetUrl.replace(/\?.*/g, '') );
+                        if ( bcsUrl.indexOf('.js') > -1 ) {
+                            def.resolve( bcsUrl );
+                        } else {
+                            def.reject( 'mock failing' );
+                        }
+                    },
+                    10
+                );
             }
-            return def;
-        };
+        );
 
         var processContext = new ProcessContext(
             {
@@ -49,8 +54,10 @@ describe('bcs-uploader', function () {
         processContext.addFile( fileData2 );
 
         base.launchProcessors( [processor], processContext, function() {
-            expect( fileData1.get( 'bcsUploadSuccess' ) ).toEqual( true );
-            expect( fileData2.get( 'bcsUploadSuccess' ) ).toEqual( undefined );
+            expect( fileData1.get( 'bcsUrl' ) ).toMatch(
+                /^http:\/\/(.+)\.baidu\.com\/ad-test\/bcj-static\/src\/foo.js/
+            );
+            expect( fileData2.get( 'bcsUrl' ) ).toBeUndefined();
             done();
         });
 
