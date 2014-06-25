@@ -50,14 +50,18 @@ describe('bcs-uploader', function () {
         
         var fileData1 = base.getFileInfo( 'src/foo.js', projectDir );
         var fileData2 = base.getFileInfo( 'src/biz/foo.css', projectDir );
+        var fileData3 = base.getFileInfo( 'src/bar.js', projectDir );
         processContext.addFile( fileData1 );
         processContext.addFile( fileData2 );
+        processContext.addFile( fileData3 );
+        fileData3.outputPath = null;
 
         base.launchProcessors( [processor], processContext, function() {
             expect( fileData1.get( 'bcsUrl' ) ).toMatch(
                 /^http:\/\/(.+)\.baidu\.com\/ad-test\/bcj-static\/src\/foo.js/
             );
             expect( fileData2.get( 'bcsUrl' ) ).toBeUndefined();
+            expect( fileData3.get( 'bcsUrl' ) ).toBeUndefined();
             done();
         });
 
