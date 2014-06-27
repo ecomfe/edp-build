@@ -193,8 +193,10 @@ function main( conf, callback ) {
             }
         } );
 
-        edp.log.info( 'All done (%sms)', Date.now() - start );
-        callback();
+        require( './lib/util/pingback' )(function(){
+            edp.log.info( 'All done (%sms)', Date.now() - start );
+            callback();
+        });
     }
 }
 
