@@ -30,7 +30,8 @@
     "clean-css": "~2.1.6",
     "iconv-lite": "~0.2.11",
     "html2js": "~0.0.2",
-    "stylus": "~0.44.0"
+    "stylus": "~0.44.0",
+    "async": "~0.9.0"
   },
   "main": "index.js",
   "repository": "git://github.com/ecomfe/edp-build",
