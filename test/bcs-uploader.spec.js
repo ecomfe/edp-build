@@ -18,7 +18,7 @@ describe('bcs-uploader', function () {
 
                 bucket: 'ad-test',
                 prefix: 'bcj-static',
-                concurrent: 5
+                concurrent: 2
             }
         );
 
@@ -57,6 +57,7 @@ describe('bcs-uploader', function () {
         fileData3.outputPath = null;
 
         base.launchProcessors( [processor], processContext, function() {
+            expect( processor.concurrent ).toBe (2);
             expect( fileData1.get( 'bcsUrl' ) ).toMatch(
                 /^http:\/\/(.+)\.baidu\.com\/ad-test\/bcj-static\/src\/foo.js/
             );
