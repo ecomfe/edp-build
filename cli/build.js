@@ -50,7 +50,7 @@ function loadConf( confFile, baseDir ) {
         }
 
         parentDir = path.resolve( dir, '..' );
-    } while ( parentDir != dir );
+    } while ( parentDir !== dir );
 
     return require( '../lib/config' );
 }
