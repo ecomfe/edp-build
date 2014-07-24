@@ -62,6 +62,7 @@ describe('path-mapper', function() {
             expect(fileData.data.indexOf('<param name="test" value="src/img/flash.swf">')).toBeGreaterThan(0);
         });
     });
+
     it('module-config', function(){
         var processor = new PathMapper({
             replacements: [
@@ -92,6 +93,28 @@ describe('path-mapper', function() {
             expect(pkgMap['dummy']).toBe('http://www.baidu.com/img/src');
             expect(pkgMap['er']).toBe('../dep/er/3.0.2/asset');
             expect(pkgMap['swfupload']).toBe('../dep/swfupload/2.2.0');
+        });
+    });
+
+    it('inline-css', function(){
+        var processor = new PathMapper({
+            from: 'src',
+            to: 'asset'
+        });
+
+        var fileData = base.getFileInfo('issue-281.html', Project);
+
+        var processContext = new ProcessContext( {
+            baseDir: Project,
+            exclude: [],
+            outputDir: 'output',
+            fileEncodings: {}
+        });
+        processContext.addFile(fileData);
+
+        base.launchProcessors([processor], processContext, function(){
+            expect(fileData.data.trim()).toBe(
+                base.getFileInfo('issue-281.expected.html', Project).data.trim());
         });
     });
 

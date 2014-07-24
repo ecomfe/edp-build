@@ -97,14 +97,14 @@ describe('tpl-merge', function() {
         waitsFor(function(){ return done; });
         base.launchProcessors(processors, processContext, function(){
             done = true;
-            var f2Expected = 'define("require-tpl-31",["require","jstpl!f6064694.tpl"],function(require){require("jstpl!f6064694.tpl")}),' +
+            var f2Expected = 'define("require-tpl-31",["require","jstpl!398d3d1e.tpl"],function(require){require("jstpl!398d3d1e.tpl")}),' +
                 'define("issue31",["require","./require-tpl-31"],function(require){return require("./require-tpl-31"),"issue31"});';
-            var f1Expected = 'define("require-tpl-31",["require","jstpl!f6064694.tpl"],function(require){require("jstpl!f6064694.tpl")});';
+            var f1Expected = 'define("require-tpl-31",["require","jstpl!398d3d1e.tpl"],function(require){require("jstpl!398d3d1e.tpl")});';
 
             runs(function(){
                 expect( f2.data ).toBe( f2Expected );
                 expect( f1.data ).toBe( f1Expected );
-                expect( processContext.getFileByPath( 'src/f6064694.tpl.js' ) ).not.toBe( null );
+                expect( processContext.getFileByPath( 'src/398d3d1e.tpl.js' ) ).not.toBe( null );
             });
         });
 
