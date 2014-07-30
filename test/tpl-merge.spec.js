@@ -26,7 +26,7 @@ var moduleEntries = 'html,htm,phtml,tpl,vm,js';
 // }
 
 describe('tpl-merge', function() {
-    it('case1 should pass', function(){
+    it('case1 should pass', function(done){
         var processor = new TplMerge({
             pluginIds: [ 'tpl', 'er/tpl', 'no-such-plugin' ]
         });
@@ -57,10 +57,11 @@ describe('tpl-merge', function() {
                 '});';
             expect( fileData.data ).toBe( expected );
             expect( processContext.getFileByPath( 'dep/er/3.0.2/src/tpl/hello.tpl.html' ) ).not.toBe( null );
+            done();
         });
     });
 
-    it('ecomfe/edp/issues/139', function(){
+    it('ecomfe/edp/issues/139', function(done){
         // 同样的tpl在多个js中出现，这些js都应该被处理
         // 以前的判断逻辑导致只处理第一次出现的那个js文件
         var p1 = new ModuleCompiler({
@@ -93,24 +94,19 @@ describe('tpl-merge', function() {
         var processors = [
             p1, p2, p3
         ];
-        var done = false;
-        waitsFor(function(){ return done; });
         base.launchProcessors(processors, processContext, function(){
-            done = true;
             var f2Expected = 'define("require-tpl-31",["require","jstpl!398d3d1e.tpl"],function(require){require("jstpl!398d3d1e.tpl")}),' +
                 'define("issue31",["require","./require-tpl-31"],function(require){return require("./require-tpl-31"),"issue31"});';
             var f1Expected = 'define("require-tpl-31",["require","jstpl!398d3d1e.tpl"],function(require){require("jstpl!398d3d1e.tpl")});';
 
-            runs(function(){
-                expect( f2.data ).toBe( f2Expected );
-                expect( f1.data ).toBe( f1Expected );
-                expect( processContext.getFileByPath( 'src/398d3d1e.tpl.js' ) ).not.toBe( null );
-            });
+            expect( f2.data ).toBe( f2Expected );
+            expect( f1.data ).toBe( f1Expected );
+            expect( processContext.getFileByPath( 'src/398d3d1e.tpl.js' ) ).not.toBe( null );
+            done();
         });
-
     });
 
-    it('issue#31', function(){
+    it('issue#31', function(done){
         // 同样的tpl在多个js中出现，这些js都应该被处理
         // 以前的判断逻辑导致只处理第一次出现的那个js文件
         var p1 = new ModuleCompiler({
@@ -141,24 +137,20 @@ describe('tpl-merge', function() {
             p1, p2, p3
         ];
 
-        var done = false;
-        waitsFor(function(){ return done; });
         base.launchProcessors(processors, processContext, function(){
-            done = true;
             var f2Expected = 'define("require-tpl-31",["require","er/tpl!8a339213.tpl.html"],function(require){require("er/tpl!8a339213.tpl.html")}),' +
                 'define("issue31",["require","./require-tpl-31"],function(require){return require("./require-tpl-31"),"issue31"});';
             var f1Expected = 'define("require-tpl-31",["require","er/tpl!8a339213.tpl.html"],function(require){require("er/tpl!8a339213.tpl.html")});';
 
-            runs(function(){
-                expect( f2.data ).toBe( f2Expected );
-                expect( f1.data ).toBe( f1Expected );
-                expect( processContext.getFileByPath( 'src/8a339213.tpl.html' ) ).not.toBe( null );
-                expect( processContext.getFileByPath( 'src/tpl/list.tpl.html' ) ).not.toBe( null );
-            });
+            expect( f2.data ).toBe( f2Expected );
+            expect( f1.data ).toBe( f1Expected );
+            expect( processContext.getFileByPath( 'src/8a339213.tpl.html' ) ).not.toBe( null );
+            expect( processContext.getFileByPath( 'src/tpl/list.tpl.html' ) ).not.toBe( null );
+            done();
         });
     });
 
-    it('outputPath', function(){
+    it('outputPath', function(done){
         var p1 = new ModuleCompiler({
             exclude: [],
             configFile: 'module.conf',
@@ -189,23 +181,19 @@ describe('tpl-merge', function() {
             p1, p2, p3
         ];
 
-        var done = false;
-        waitsFor(function(){ return done; });
         base.launchProcessors(processors, processContext, function(){
-            done = true;
             var f2Expected = 'define("require-tpl-31",["require","er/tpl!foo/bar/tpl.html"],function(require){require("er/tpl!foo/bar/tpl.html")}),' +
                 'define("issue31",["require","./require-tpl-31"],function(require){return require("./require-tpl-31"),"issue31"});';
             var f1Expected = 'define("require-tpl-31",["require","er/tpl!foo/bar/tpl.html"],function(require){require("er/tpl!foo/bar/tpl.html")});';
 
-            runs(function(){
-                expect( f2.data ).toBe( f2Expected );
-                expect( f1.data ).toBe( f1Expected );
-                expect( processContext.getFileByPath( 'src/foo/bar/tpl.html' ) ).not.toBe( null );
-            });
+            expect( f2.data ).toBe( f2Expected );
+            expect( f1.data ).toBe( f1Expected );
+            expect( processContext.getFileByPath( 'src/foo/bar/tpl.html' ) ).not.toBe( null );
+            done();
         });
     });
 
-    it('outputPath 2', function(){
+    it('outputPath 2', function(done){
         var p1 = new ModuleCompiler({
             exclude: [],
             configFile: 'module.conf',
@@ -238,23 +226,19 @@ describe('tpl-merge', function() {
             p1, p2, p3
         ];
 
-        var done = false;
-        waitsFor(function(){ return done; });
         base.launchProcessors(processors, processContext, function(){
-            done = true;
             var f2Expected = 'define("require-tpl-31",["require","jstpl!foo/bar/tpl"],function(require){require("jstpl!foo/bar/tpl")}),' +
                 'define("issue31",["require","./require-tpl-31"],function(require){return require("./require-tpl-31"),"issue31"});';
             var f1Expected = 'define("require-tpl-31",["require","jstpl!foo/bar/tpl"],function(require){require("jstpl!foo/bar/tpl")});';
 
-            runs(function(){
-                expect( f2.data ).toBe( f2Expected );
-                expect( f1.data ).toBe( f1Expected );
-                expect( processContext.getFileByPath( 'src/foo/bar/tpl.js' ) ).not.toBe( null );
-            });
+            expect( f2.data ).toBe( f2Expected );
+            expect( f1.data ).toBe( f1Expected );
+            expect( processContext.getFileByPath( 'src/foo/bar/tpl.js' ) ).not.toBe( null );
+            done();
         });
     });
 
-    it('outputPath + outputWrapper', function(){
+    it('outputPath + outputWrapper', function(done){
         var p1 = new ModuleCompiler({
             exclude: [],
             configFile: 'module.conf',
@@ -288,21 +272,17 @@ describe('tpl-merge', function() {
             p1, p2, p3
         ];
 
-        var done = false;
-        waitsFor(function(){ return done; });
         base.launchProcessors(processors, processContext, function(){
-            done = true;
             var f2Expected = 'define("require-tpl-31",["require","jstpl!foo/bar/tpl2"],function(require){require("jstpl!foo/bar/tpl2")}),' +
                 'define("issue31",["require","./require-tpl-31"],function(require){return require("./require-tpl-31"),"issue31"});';
             var f1Expected = 'define("require-tpl-31",["require","jstpl!foo/bar/tpl2"],function(require){require("jstpl!foo/bar/tpl2")});';
 
-            runs(function(){
-                expect( f2.data ).toBe( f2Expected );
-                expect( f1.data ).toBe( f1Expected );
-                var f = processContext.getFileByPath( 'src/foo/bar/tpl2.js' );
-                expect( f ).not.toBe( null );
-                expect( f.data.indexOf( 'define("foo/bar/tpl2"' ) ).toBe( 0 );
-            });
+            expect( f2.data ).toBe( f2Expected );
+            expect( f1.data ).toBe( f1Expected );
+            var f = processContext.getFileByPath( 'src/foo/bar/tpl2.js' );
+            expect( f ).not.toBe( null );
+            expect( f.data.indexOf( 'define("foo/bar/tpl2"' ) ).toBe( 0 );
+            done();
         });
     });
 });

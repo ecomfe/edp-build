@@ -10,7 +10,7 @@ var base = require( './base' );
 var projectDir = path.resolve( __dirname, 'data', 'dummy-project' );
 
 describe('bcs-uploader', function () {
-    it('default', function (done) {
+    xit('default', function (done) {
         var processor = new BcsUploader(
             {
                 ak: 'ak',
