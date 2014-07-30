@@ -24,10 +24,7 @@ var pageEntries = 'html,htm,phtml,tpl,vm';
 describe('less-compiler', function(){
     it('default', function(){
         var processor = new LessCompiler({
-            entryExtnames: pageEntries,
-            compileOptions: {
-                compress: true
-            }
+            entryExtnames: pageEntries
         });
 
         var fileData = base.getFileInfo('data/css-compressor/1.less', __dirname);
