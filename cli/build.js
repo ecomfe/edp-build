@@ -4,8 +4,8 @@
  *         treelite[c.xinle@gmail.com]
  */
 
-var edp = require( 'edp-core' );
-var fs = require( 'fs' );
+var edp = require('edp-core');
+var fs = require('fs');
 
 var log = edp.log;
 var path = edp.path;
@@ -28,13 +28,13 @@ var DEFAULT_BUILD_CONF = 'edp-build-config.js';
  * @param {string=} baseDir 自动查找配置文件的基础路径
  * @return {Object}
  */
-function loadConf( confFile, baseDir ) {
+function loadConf(confFile, baseDir) {
     var cwd = process.cwd();
 
-    if ( confFile ) {
-        confFile = path.resolve( cwd, confFile );
-        if ( fs.existsSync( confFile ) ) {
-            return require( confFile );
+    if (confFile) {
+        confFile = path.resolve(cwd, confFile);
+        if (fs.existsSync(confFile)) {
+            return require(confFile);
         }
 
         return null;
@@ -44,15 +44,15 @@ function loadConf( confFile, baseDir ) {
     var parentDir = baseDir || cwd;
     do {
         dir = parentDir;
-        confFile = path.resolve( dir, DEFAULT_BUILD_CONF );
-        if ( fs.existsSync( confFile ) ) {
-            return require( confFile );
+        confFile = path.resolve(dir, DEFAULT_BUILD_CONF);
+        if (fs.existsSync(confFile)) {
+            return require(confFile);
         }
 
-        parentDir = path.resolve( dir, '..' );
-    } while ( parentDir !== dir );
+        parentDir = path.resolve(dir, '..');
+    } while (parentDir !== dir);
 
-    return require( '../lib/config' );
+    return require('../lib/config');
 }
 
 /**
@@ -95,63 +95,64 @@ cli.options = [
  * @param {Array} args 命令运行参数
  * @param {Object} opts 命令运行选项
  */
-cli.main = function ( args, opts ) {
-    var inputDir = args[ 0 ];
+cli.main = function (args, opts) {
+    var inputDir = args[0];
     var outputDir = opts.output;
 
     // 装载构建配置模块
-    var conf = loadConf( opts.config, inputDir );
-    if ( !conf ) {
-        log.error( 'Build Config cannot found!' );
-        process.exit( 0 );
+    var conf = loadConf(opts.config, inputDir);
+    if (!conf) {
+        log.error('Build Config cannot found!');
+        process.exit(1);
     }
 
     // 处理构建的输入和输出目录
-    if ( inputDir ) {
-        conf.input = path.resolve( process.cwd(), inputDir );
-        conf.output = path.resolve( inputDir, 'output' );
+    if (inputDir) {
+        conf.input = path.resolve(process.cwd(), inputDir);
+        conf.output = path.resolve(inputDir, 'output');
     }
-    outputDir && (conf.output = path.resolve( process.cwd(), outputDir ));
+    outputDir && (conf.output = path.resolve(process.cwd(), outputDir));
     outputDir = conf.output;
     inputDir = conf.input;
 
     // 当输出目录存在时：
     // 1. 默认直接抛出异常，防止项目构建输出影响和覆盖原有文件
     // 2. 如果设置了force参数，强制删除当前存在的目录
-    if ( fs.existsSync( outputDir ) ) {
-        if ( opts.force ) {
-            util.rmdir( outputDir );
+    if (fs.existsSync(outputDir)) {
+        if (opts.force) {
+            util.rmdir(outputDir);
         }
         else {
-            log.error( outputDir + ' directory already exists!' );
+            log.error(outputDir + ' directory already exists!');
+            process.exit(1);
             return;
         }
     }
 
     // 解析exclude参数
     var exclude = conf.exclude || [];
-    if ( opts.exclude ) {
+    if (opts.exclude) {
         exclude = conf.exclude = opts.exclude
-            .replace( /(^\s+|\s+$)/g, '' )
-            .split( /\s*,\s*/ );
+            .replace(/(^\s+|\s+$)/g, '')
+            .split(/\s*,\s*/);
     }
 
     // 如果output目录处于baseDir下，自动将output目录添加到exclude
-    var outputRelative = path.relative( inputDir, outputDir );
-    if ( !/^\.\./.test( outputRelative ) ) {
-        exclude.push( outputRelative );
+    var outputRelative = path.relative(inputDir, outputDir);
+    if (!/^\.\./.test(outputRelative)) {
+        exclude.push(outputRelative);
     }
 
     // Processors的组合
     conf.stage = opts.stage || 'default';
 
-    if ( typeof conf.init === 'function' ) {
-        conf.init( conf, function( config ){
-            require( '../index' )( config || conf );
+    if (typeof conf.init === 'function') {
+        conf.init(conf, function(config) {
+            require('../index')(config || conf);
         });
     }
     else {
-        require( '../index' )( conf );
+        require('../index')(conf);
     }
 };
 
