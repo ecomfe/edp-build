@@ -3,7 +3,6 @@
  * @author errorrik[errorrik@gmail.com],
  *         firede[firede@firede.us]
  */
-
 var fs = require( 'fs' );
 var ProcessorBase = require( './lib/processor/abstract' );
 var ProcessContext = require( './lib/process-context' );
@@ -194,10 +193,8 @@ function main( conf, callback ) {
             }
         } );
 
-        require( './lib/util/pingback' )(function(){
-            edp.log.info( 'All done (%sms)', Date.now() - start );
-            callback();
-        });
+        edp.log.info( 'All done (%sms)', Date.now() - start );
+        callback();
     }
 }
 
