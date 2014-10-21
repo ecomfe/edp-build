@@ -2,11 +2,12 @@
  * @author leeight(liyubei@baidu.com)
  */
 
-// var fs = require('fs');
+var fs = require('fs');
 var path = require('path');
 
 var base = require('./base');
 var ModuleCompiler = require('../lib/processor/module-compiler.js');
+var ProcessContext = require('../lib/process-context.js');
 
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
 // var ConfigFile = path.resolve(Project, 'module.conf');
@@ -34,7 +35,10 @@ describe('using-etpl', function(){
         var filePath = path.join(Project, 'src', 'using-etpl.js');
         var fileData = base.getFileInfo(filePath);
 
-        var processContext = { baseDir: Project };
+        var processContext = new ProcessContext({
+            baseDir: Project
+        });
+        processor.beforeAll(processContext);
         processor.process(fileData, processContext, function(){
             var expected =
                 '(function (root) {\n' +
@@ -52,7 +56,7 @@ describe('using-etpl', function(){
                 '    }\n' +
                 '}(this));\n' +
                 '\n' +
-                'define(\'etpl\', [\'etpl/main\'], function ( main ) { return main; });\n' +
+                'define(\'etpl\', [\'etpl/main\'], function (main) { return main; });\n' +
                 '\n' +
                 'define(\'biz/tpl\', [\n' +
                 '    \'require\',\n' +
@@ -70,7 +74,7 @@ describe('using-etpl', function(){
                 '    var z = require(\'etpl/main\');\n' +
                 '    console.log(template + z);\n' +
                 '});';
-            expect( fileData.data ).toBe( expected );
+            expect(fileData.data).toBe(expected);
         });
     });
 });

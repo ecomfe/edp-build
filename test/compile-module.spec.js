@@ -14,7 +14,7 @@
  * @description
  *
  **/
-var edp = require( 'edp-core' );
+var edp = require('edp-core');
 
 var fs = require('fs');
 var path = require('path');
@@ -66,7 +66,7 @@ describe('compile-module', function() {
         '    var view = require(\'./View\');\n' +
         '    return \'er\';\n' +
         '});\n\n' +
-        'define(\'er\', [\'er/main\'], function ( main ) { return main; });\n\n' +
+        'define(\'er\', [\'er/main\'], function (main) { return main; });\n\n' +
         'define(\'bar\', [\n    \'require\',\n    \'er\'\n], function (require) {\n' +
         '    var er = require(\'er\');\n' +
         '    return er;\n' +
@@ -93,7 +93,7 @@ describe('compile-module', function() {
         '    var view = require(\'./View\');\n' +
         '    return \'er\';\n' +
         '});\n\n' +
-        'define(\'er\', [\'er/main\'], function ( main ) { return main; });';
+        'define(\'er\', [\'er/main\'], function (main) { return main; });';
         expect(moduleCode).toEqual(expectedCode);
     });
 
@@ -114,7 +114,7 @@ describe('compile-module', function() {
         '    var view = require(\'./View\');\n' +
         '    return \'er\';\n' +
         '});\n\n' +
-        'define(\'er\', [\'er/main\'], function ( main ) { return main; });';
+        'define(\'er\', [\'er/main\'], function (main) { return main; });';
         expect(moduleCode).toEqual(expectedCode);
     });
 
@@ -133,7 +133,7 @@ describe('compile-module', function() {
         '    var view = require(\'./View\');\n' +
         '    return \'er\';\n' +
         '});\n\n' +
-        'define(\'er\', [\'er/main\'], function ( main ) { return main; });';
+        'define(\'er\', [\'er/main\'], function (main) { return main; });';
         expect(moduleCode).toEqual(expectedCode);
     });
 
@@ -152,7 +152,7 @@ describe('compile-module', function() {
         '    var view = require(\'./View\');\n' +
         '    return \'er\';\n' +
         '});\n\n' +
-        'define(\'er\', [\'er/main\'], function ( main ) { return main; });';
+        'define(\'er\', [\'er/main\'], function (main) { return main; });';
         expect(moduleCode).toEqual(expectedCode);
     });
 

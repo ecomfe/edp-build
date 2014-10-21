@@ -7,6 +7,7 @@ var path = require('path');
 
 var base = require('./base');
 var ModuleCompiler = require('../lib/processor/module-compiler.js');
+var ProcessContext = require('../lib/process-context.js');
 
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
 // var ConfigFile = path.resolve(Project, 'module.conf');
@@ -31,7 +32,10 @@ describe('using-ztpl', function(){
         var filePath = path.join(Project, 'src', 'using-ztpl.js');
         var fileData = base.getFileInfo(filePath);
 
-        var processContext = { baseDir: Project };
+        var processContext = new ProcessContext({
+            baseDir: Project
+        });
+        processor.beforeAll(processContext);
         processor.process(fileData, processContext, function(){
             var expected =
                 '(function (root) {\n' +

@@ -9,6 +9,7 @@ var path = require('path');
 
 var base = require('./base');
 var ModuleCompiler = require('../lib/processor/module-compiler.js');
+var ProcessContext = require('../lib/process-context.js');
 
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
 // var ConfigFile = path.resolve(Project, 'module.conf');
@@ -27,7 +28,10 @@ describe('module-compiler', function(){
         var filePath = path.join(Project, 'src', 'foo.js');
         var fileData = base.getFileInfo(filePath);
 
-        var processContext = { baseDir: Project };
+        var processContext = new ProcessContext({
+            baseDir: Project
+        });
+        processor.beforeAll(processContext);
         processor.process(fileData, processContext, function(){
             var expected = 'define(\'foo\', [\n' +
                 '    \'require\',\n' +
@@ -57,7 +61,10 @@ describe('module-compiler', function(){
         var filePath = path.join(Project, 'src', 'foo.js');
         var fileData = base.getFileInfo(filePath);
 
-        var processContext = { baseDir: Project };
+        var processContext = new ProcessContext({
+            baseDir: Project
+        });
+        processor.beforeAll(processContext);
         processor.process(fileData, processContext, function(){
             var ast = edp.amd.getAst( fileData.data );
             var moduleInfo = edp.amd.analyseModule(ast);
@@ -85,7 +92,10 @@ describe('module-compiler', function(){
         var filePath = path.join(Project, 'src', 'case-xtpl.js');
         var fileData = base.getFileInfo(filePath);
 
-        var processContext = { baseDir: Project };
+        var processContext = new ProcessContext({
+            baseDir: Project
+        });
+        processor.beforeAll(processContext);
         processor.process(fileData, processContext, function(){
             var expected =
                 'define(\'xtpl\', [\'require\'], function (require) {\n' +
@@ -143,7 +153,10 @@ describe('module-compiler', function(){
         var filePath = path.join(Project, 'src', 'case-xtpl.js');
         var fileData = base.getFileInfo(filePath);
 
-        var processContext = { baseDir: Project };
+        var processContext = new ProcessContext({
+            baseDir: Project
+        });
+        processor.beforeAll(processContext);
         processor.process(fileData, processContext, function(){
             var expected =
                 'define(\'foo/bar/xtpl\', [\'require\'], function (require) {\n' +
