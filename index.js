@@ -39,12 +39,26 @@ function traverseDir( dir, processContext ) {
         // if exclude, do nothing
         var relativePath = edp.path.relative( processContext.baseDir, file );
         var isExclude = false;
+
         processContext.exclude.some( function ( excludeFile ) {
+
             if ( edp.path.satisfy( relativePath, excludeFile, stat ) ) {
                 isExclude = true;
                 return true;
             }
+
         });
+
+        // include 优先级更高
+        processContext.include.some( function ( includeFile ) {
+
+            if ( edp.path.satisfy( relativePath, includeFile, stat ) ) {
+                isExclude = false;
+                return true;
+            }
+
+        });
+
         if ( isExclude ) {
             return;
         }
@@ -122,6 +136,7 @@ function main( conf, callback ) {
     // 3. 处理：processors对每个已读取的文件进行处理
     // 4. 输出：统一对处理结果进行输出，区分（文本/二进制）
     var exclude = conf.exclude || [];
+    var include = conf.include || [];
     var baseDir = conf.input;
     var outputDir = conf.output;
     var fileEncodings = conf.fileEncodings || {};
@@ -145,6 +160,7 @@ function main( conf, callback ) {
     var processContext = new ProcessContext( {
         baseDir: baseDir,
         exclude: exclude,
+        include: include,
         outputDir: outputDir,
         fileEncodings: fileEncodings
     } );
