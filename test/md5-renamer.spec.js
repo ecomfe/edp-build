@@ -1,18 +1,18 @@
 /***************************************************************************
- * 
+ *
  * Copyright (c) 2014 Baidu.com, Inc. All Rights Reserved
- * $Id$ 
- * 
+ * $Id$
+ *
  **************************************************************************/
- 
- 
- 
+
+
+
 /**
  * md5-renamer.spec.js ~ 2014/04/30 13:35:06
  * @author leeight(liyubei@baidu.com)
- * @version $Revision$ 
- * @description 
- *  
+ * @version $Revision$
+ * @description
+ *
  **/
 var edp = require( 'edp-core' );
 var path = require( 'path' );
@@ -210,6 +210,40 @@ describe( 'md5-renamer', function() {
             done();
         });
     });
+
+    // svg字体/css-sprites中url带hash的问题
+    it( 'issue-293', function(done){
+
+        var p1 = new MD5Renamer({
+            files: [
+                'issue-293.html',
+                'src/css/issue-293.css'
+            ],
+            outputTemplate: '{basename}-{md5sum}{extname}',
+            start: 1,
+            end: 12
+        });
+
+        var processContext = new ProcessContext( {
+            baseDir: Project,
+            exclude: [],
+            outputDir: 'output',
+            fileEncodings: {}
+        });
+
+        base.traverseDir( Project, processContext );
+
+        base.launchProcessors( [p1], processContext, function () {
+            var logo = processContext.getFileByPath('src/common/logo.gif');
+            expect(logo.outputPaths).toEqual(([ 'src/common/logo-ba001c53c2b.gif' ]));
+            var html = processContext.getFileByPath( 'issue-293.html' );
+            expect(html.data.indexOf('src/common/logo-ba001c53c2b.gif#100-100')).not.toBe(-1);
+            var css = processContext.getFileByPath('src/css/issue-293.css');
+            expect(css.data.indexOf('../common/logo-ba001c53c2b.gif#100-100')).not.toBe(-1);
+            done();
+        });
+    });
+
 });
 
 
