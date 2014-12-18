@@ -1,0 +1,13 @@
+div {
+    color: red;
+    background: url(./a.png#300*200) center center;
+}
+
+a {
+    text-decoration: none;
+    background: url(./b.png#nocombine) no-repeat;
+}
+
+span {
+    background: url(./c.png) no-repeat;
+}
