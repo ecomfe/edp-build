@@ -1,0 +1,15 @@
+div {
+  color: red;
+  background-image: url("sprite-default.png#300*200");
+  background-position: -0px -0px;
+}
+
+a {
+  text-decoration: none;
+  background: url(./b.png#nocombine) no-repeat;
+}
+
+span {
+  background-image: url("sprite-default.png#271*134");
+  background-position: -300px -0px;
+}

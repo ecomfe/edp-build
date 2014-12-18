@@ -100,7 +100,8 @@ function injectProcessor(conf) {
             TplMerge            : require('./lib/processor/tpl-merge'),
             StringReplace       : require('./lib/processor/string-replace'),
             BcsUploader         : require('./lib/processor/bcs-uploader'),
-            OutputCleaner       : require('./lib/processor/output-cleaner')
+            OutputCleaner       : require('./lib/processor/output-cleaner'),
+            CssSpriter          : require('./lib/processor/css-spriter')
         });
     }
 }
