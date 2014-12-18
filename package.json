@@ -1,7 +1,7 @@
 {
   "name": "edp-build",
   "description": "Package for edp build",
-  "version": "1.0.15-beta.5",
+  "version": "1.0.15-beta.6",
   "contributors": [
     {
       "name": "errorrik",
@@ -36,8 +36,7 @@
     "iconv-lite": "~0.2.11",
     "html2js": "~0.0.2",
     "stylus": "~0.44.0",
-    "async": "~0.9.0",
-    "css-spriter": "~0.0.19"
+    "async": "~0.9.0"
   },
   "main": "index.js",
   "repository": "git://github.com/ecomfe/edp-build",
