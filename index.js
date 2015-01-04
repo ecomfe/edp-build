@@ -13,7 +13,7 @@ var edp = require( 'edp-core' );
 
 /**
  * 遍历目录
- * 
+ *
  * @inner
  * @param {string|Array.<string>} dir 目录路径
  * @param {ProcessContext} processContext 构建环境对象
@@ -78,7 +78,7 @@ function traverseDir( dir, processContext ) {
 
 /**
  * 向配置模块里注入构建处理器
- * 
+ *
  * @inner
  * @param {Object} conf 配置模块
  */
@@ -100,6 +100,7 @@ function injectProcessor( conf ) {
             ReplaceDebug        : require( './lib/processor/replace-debug' ),
             TplMerge            : require( './lib/processor/tpl-merge' ),
             StringReplace       : require( './lib/processor/string-replace' ),
+            InlineReplace       : require( './lib/processor/inline-replace' ),
             BcsUploader         : require( './lib/processor/bcs-uploader' ),
             OutputCleaner       : require( './lib/processor/output-cleaner' )
         } );
@@ -109,7 +110,7 @@ function injectProcessor( conf ) {
 
 /**
  * 处理构建入口
- * 
+ *
  * @param {Object} conf 构建功能配置模块
  * @param {Function=} callback 构建完成的回调函数
  */
