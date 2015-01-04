@@ -29,31 +29,41 @@ var Project = path.resolve(__dirname, 'data', 'dummy-project');
 
 describe('inline-replace-processor', function() {
 
-    it('default', function() {
+    var inline = new InlineReplace();
+    var processContext = new ProcessContext( {
+        baseDir: Project,
+        exclude: [],
+        outputDir: 'output',
+        fileEncodings: {}
+    });
 
-        var inline = new InlineReplace();
-        var processContext = new ProcessContext( {
-            baseDir: Project,
-            exclude: [],
-            outputDir: 'output',
-            fileEncodings: {}
+    var fileData = base.getFileInfo('data/dummy-project/issue-70.html', __dirname);
+
+    // js src/foo.js
+    var testJsInfo = base.getFileInfo('./src/foo.js', Project);
+    processContext.addFile(testJsInfo);
+
+    // css src/css/path-mapper.css
+    var testCssInfo = base.getFileInfo('./src/css/path-mapper.css', Project);
+    processContext.addFile(testCssInfo);
+
+    inline.process(fileData, processContext, function() {
+
+        it('inline script', function() {
+            expect(fileData.data.indexOf(testJsInfo.data)).toBeGreaterThan(0);
         });
 
-        var fileData = base.getFileInfo('data/dummy-project/issue-70.html', __dirname);
-
-        // js src/foo.js
-        var testJsInfo = base.getFileInfo('./src/foo.js', Project);
-        processContext.addFile(testJsInfo);
-
-        // css src/css/path-mapper.css
-        var testCssInfo = base.getFileInfo('./src/css/path-mapper.css', Project);
-        processContext.addFile(testCssInfo);
-
-        inline.process(fileData, processContext, function() {
-
-            expect(fileData.data.indexOf(testJsInfo.data)).toBeGreaterThan(0);
+        it('inline link', function() {
             expect(fileData.data.indexOf(testCssInfo.data)).toBeGreaterThan(0);
+        });
 
+        it('only inline by data-inline', function() {
+            expect(fileData.data.indexOf([
+                "define(function(require) {",
+                "    var er = require('er');",
+                "    return er;",
+                "});"
+            ].join('\n'))).toBe(-1);
         });
 
     });
