@@ -40,30 +40,29 @@ describe('inline-replace-processor', function() {
     var fileData = base.getFileInfo('data/dummy-project/issue-70.html', __dirname);
 
     // js src/foo.js
-    var testJsInfo = base.getFileInfo('./src/foo.js', Project);
-    processContext.addFile(testJsInfo);
+    var testJsFoo = base.getFileInfo('./src/foo.js', Project);
+    processContext.addFile(testJsFoo);
 
     // css src/css/path-mapper.css
-    var testCssInfo = base.getFileInfo('./src/css/path-mapper.css', Project);
-    processContext.addFile(testCssInfo);
+    var testCss = base.getFileInfo('./src/css/path-mapper.css', Project);
+    processContext.addFile(testCss);
+
+    // js src/bar.js
+    var testJsBar = base.getFileInfo('./src/bar.js', Project);
+    processContext.addFile(testJsBar);
 
     inline.process(fileData, processContext, function() {
 
         it('inline script', function() {
-            expect(fileData.data.indexOf(testJsInfo.data)).toBeGreaterThan(0);
+            expect(fileData.data.indexOf(testJsFoo.data)).toBeGreaterThan(0);
         });
 
         it('inline link', function() {
-            expect(fileData.data.indexOf(testCssInfo.data)).toBeGreaterThan(0);
+            expect(fileData.data.indexOf(testCss.data)).toBeGreaterThan(0);
         });
 
         it('only inline by data-inline', function() {
-            expect(fileData.data.indexOf([
-                "define(function(require) {",
-                "    var er = require('er');",
-                "    return er;",
-                "});"
-            ].join('\n'))).toBe(-1);
+            expect(fileData.data.indexOf(testJsBar.data)).toBe(-1);
         });
 
     });
