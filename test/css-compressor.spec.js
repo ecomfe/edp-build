@@ -21,9 +21,8 @@ var base = require('./base');
 
 describe('css-compressor', function() {
     it('default', function() {
-        var processor = new CssCompressor();
-        var filePath = path.join('data', 'css-compressor', 'default.css');
-        var fileData = base.getFileInfo(filePath);
+        var processor = new CssCompressor({ compressOptions: { keepBreaks: false } });
+        var fileData = base.getFileInfo('data/css-compressor/default.css', __dirname);
         processor.process(fileData, {baseDir:__dirname}, function() {
             expect(fileData.data).toBe(
                 'div{color:red;background:url(/foo.png)}' +
@@ -35,11 +34,11 @@ describe('css-compressor', function() {
     it('set `relativeTo`', function() {
         var processor = new CssCompressor({
             compressOptions: {
-                relativeTo: __dirname
+                relativeTo: __dirname,
+                keepBreaks: false
             }
         });
-        var filePath = path.join('data', 'css-compressor', 'default.css');
-        var fileData = base.getFileInfo(filePath);
+        var fileData = base.getFileInfo('data/css-compressor/default.css', __dirname);
         processor.process(fileData, {baseDir: __dirname}, function() {
             expect(fileData.data).toBe(
                 'div{color:red;background:url(/foo.png)}' +

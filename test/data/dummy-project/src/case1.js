@@ -14,7 +14,7 @@
  * @description 
  *  
  **/
-define('case1', ['foo', 'tpl!./tpl/123.html'], function(foo, require, exports, module){
+define('case1', ['foo', 'require', 'tpl!./tpl/123.html'], function(foo, require, res){
     require('tpl!./tpl/list.tpl.html');
     require('no-such-plugin!./tpl/list.tpl.html');
     require('tpl!er/tpl/hello.tpl.html');

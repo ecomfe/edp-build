@@ -5,6 +5,7 @@
  */
 
 var fs = require( 'fs' );
+var ProcessorBase = require( './lib/processor/abstract' );
 var ProcessContext = require( './lib/process-context' );
 var FileInfo = require( './lib/file-info' );
 var edp = require( 'edp-core' );
@@ -84,7 +85,7 @@ function traverseDir( dir, processContext ) {
 function injectProcessor( conf ) {
     if ( conf && conf.injectProcessor ) {
         conf.injectProcessor( {
-            AbstractProcessor   : require( './lib/processor/abstract' ),
+            AbstractProcessor   : ProcessorBase,
             MD5Renamer          : require( './lib/processor/md5-renamer' ),
             Html2JsCompiler     : require( './lib/processor/html2js-compiler' ),
             StylusCompiler      : require( './lib/processor/stylus-compiler' ),
@@ -98,32 +99,13 @@ function injectProcessor( conf ) {
             AddCopyright        : require( './lib/processor/add-copyright' ),
             ReplaceDebug        : require( './lib/processor/replace-debug' ),
             TplMerge            : require( './lib/processor/tpl-merge' ),
-            StringReplaceProcessor : require( './lib/processor/string-replace-processor' )
+            StringReplace       : require( './lib/processor/string-replace' ),
+            BcsUploader         : require( './lib/processor/bcs-uploader' ),
+            OutputCleaner       : require( './lib/processor/output-cleaner' )
         } );
     }
 }
 
-/**
- * 如果是普通的对象，那么转化为AbstractProcessor类型
- * @param {AbstractProcessor} processor 要检查的processor类型.
- */
-function patchProcessor(processor) {
-    var AbstractProcessor = require( './lib/processor/abstract' );
-    if (processor instanceof AbstractProcessor) {
-        return processor;
-    }
-    else {
-        // 普通的对象(Plain Object)
-        var propertiesObject = {};
-        for (var key in processor) {
-            propertiesObject[key] = {
-                value: processor[key]
-            }
-        }
-        propertiesObject.log = { value: edp.log };
-        return Object.create(AbstractProcessor.prototype, propertiesObject);
-    }
-}
 
 /**
  * 处理构建入口
@@ -145,7 +127,21 @@ function main( conf, callback ) {
     var fileEncodings = conf.fileEncodings || {};
 
     injectProcessor( conf );
-    var processors = conf.getProcessors().map(patchProcessor);
+
+    var processors = conf.getProcessors();
+    if ( !Array.isArray( processors ) ) {
+        if ( conf.stage in processors ) {
+            // 返回的是对象，key应该是stage的值
+            processors = processors[ conf.stage ];
+        }
+        else {
+            edp.log.error( 'Invalid stage value, candidates are = %s',
+                JSON.stringify( Object.keys( processors ) ) );
+            callback();
+            return;
+        }
+    }
+
     var processContext = new ProcessContext( {
         baseDir: baseDir,
         exclude: exclude,
@@ -154,65 +150,30 @@ function main( conf, callback ) {
     } );
 
 
+    var start = Date.now();
     traverseDir( [baseDir].concat( conf.inputs || [] ), processContext );
+    edp.log.info( 'Scan build root directory (%sms)', Date.now() - start );
 
     var processorIndex = 0;
     var processorCount = processors.length;
 
     function nextProcess() {
         if ( processorIndex >= processorCount ) {
-            console.log();
             outputFiles();
             return;
         }
 
         var processor = processors[ processorIndex++ ];
-        var files = processContext.getFiles().filter(function(file){
-            // processor处理文件
-            // 如果一个文件属于exclude，并且不属于include，则跳过处理
-            if ( typeof processor.isExclude === 'function' 
-                 && processor.isExclude( file ) 
-                 && ( typeof processor.isInclude !== 'function' 
-                      || !processor.isInclude( file )
-                    )
-            ) {
-                return false;
-            }
+        if ( !(processor instanceof ProcessorBase) ) {
+            processor = new ProcessorBase( processor );
+        }
 
-            return true;
-        });
-
-        var fileIndex = 0;
-        var fileCount = files.length;
-        edp.log.info('Running ' + processor.name);
-
-        nextFile();
-
-        function nextFile() {
-            if ( fileIndex >= fileCount ) {
-                if ( typeof processor.done === 'function' ) {
-                    processor.done(processContext);
-                }
-
-                nextProcess();
-                return;
-            }
-
-            var file = files[ fileIndex++ ];
-
-            // processor处理需要保证异步性，否则可能因为深层次的层级调用产生不期望的结果
-            // 比如错误被n次调用前的try捕获到
-            function processFinished() { 
-                setTimeout( nextFile, 1 );
-            }
-
-            edp.log.write('  [%s/%s]: %s', fileIndex, fileCount, file.path);
-
-            processor.process(
-                file, 
-                processContext, 
-                processFinished
-            );
+        edp.log.info( 'Running ' + processor.name );
+        if ( processor.start ) {
+            processor.start( processContext, nextProcess );
+        }
+        else {
+            nextProcess();
         }
     }
 
@@ -233,7 +194,10 @@ function main( conf, callback ) {
             }
         } );
 
-        callback();
+        require( './lib/util/pingback' )(function(){
+            edp.log.info( 'All done (%sms)', Date.now() - start );
+            callback();
+        });
     }
 }
 

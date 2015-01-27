@@ -5,7 +5,7 @@
 
 var fs = require('fs');
 var path = require('path');
-var esprima = require('esprima');
+var edp = require( 'edp-core' );
 var generateModuleCode = require('../lib/util/generate-module-code');
 var baseDir = path.resolve(__dirname, 'data', 'generate-module-code');
 
@@ -18,8 +18,8 @@ function normalCode(str) {
 }
 
 var standardFile = getFile('std.js');
-var factoryAst = esprima.parse(standardFile);
-factoryAst = factoryAst.body[0].expression.arguments[0];
+var factoryAst = edp.amd.getAst( standardFile );
+factoryAst = factoryAst.body[0].expression['arguments'][0];
 
 
 describe('generate-module-code', function () {
@@ -48,6 +48,7 @@ describe('generate-module-code', function () {
     it('single module has dependencies should pass', function () {
         var moduleInfo = {
                 dependencies: ['foo', 'bar'],
+                actualDependencies: ['foo', 'bar'],
                 factoryAst: factoryAst
             };
 
@@ -60,6 +61,7 @@ describe('generate-module-code', function () {
         var moduleInfo = {
                 id: 'single',
                 dependencies: ['foo', 'bar'],
+                actualDependencies: ['foo', 'bar'],
                 factoryAst: factoryAst
             };
 
@@ -73,6 +75,7 @@ describe('generate-module-code', function () {
                 {
                     id: 'module1',
                     dependencies: ['foo', 'bar'],
+                    actualDependencies: ['foo', 'bar'],
                     factoryAst: factoryAst
                 },
                 {
@@ -89,17 +92,18 @@ describe('generate-module-code', function () {
         var moduleInfo = [
                 {
                     id: 'walker',
-                    factoryAst: { type: 'Identifier', name: 'Walker' } 
+                    factoryAst: { type: 'Identifier', name: 'Walker' }
                 },
                 {
                     id: 'module',
                     dependencies: ['foo', 'bar'],
-                    factoryAst: factoryAst 
+                    actualDependencies: ['foo', 'bar'],
+                    factoryAst: factoryAst
                 }
             ];
 
         var wrapperFile = getFile('wrapper.js');
-        var ast = esprima.parse(wrapperFile);
+        var ast = edp.amd.getAst( wrapperFile );
 
         var code = generateModuleCode(moduleInfo, ast);
         expect(normalCode(code)).toBe(normalCode(getFile('wrapper-compiled.js')));
