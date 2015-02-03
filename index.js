@@ -125,6 +125,7 @@ function main( conf, callback ) {
     var baseDir = conf.input;
     var outputDir = conf.output;
     var fileEncodings = conf.fileEncodings || {};
+    var needIncludeParent = conf.needIncludeParent || false;
 
     injectProcessor( conf );
 
@@ -187,6 +188,14 @@ function main( conf, callback ) {
 
                 file.outputPaths.push( file.outputPath );
                 file.outputPaths.forEach( function ( outputPath ) {
+                    // 如果inputs包含了父级文件夹，则outputPath必然带../
+                    // 这些文件也会被生成在output外，这不是我们预期的
+                    if ( needIncludeParent ) {
+                        // 替换掉../，确保生成的文件都在output内
+                        // 这样edp-build-config.js只要在pathMapper换路径即可
+                        outputPath = outputPath.replace( /\.\.\//g, '' );
+                    }
+
                     var outputFile = edp.path.resolve( outputDir, outputPath );
                     mkdirp.sync( edp.path.dirname( outputFile ) );
                     fs.writeFileSync( outputFile, fileBuffer );
@@ -194,7 +203,7 @@ function main( conf, callback ) {
             }
         } );
 
-        require( './lib/util/pingback' )(function(){
+        require( './lib/util/pingback' )(function () {
             edp.log.info( 'All done (%sms)', Date.now() - start );
             callback();
         });
