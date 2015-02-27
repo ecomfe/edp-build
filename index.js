@@ -100,6 +100,7 @@ function injectProcessor( conf ) {
             ReplaceDebug        : require( './lib/processor/replace-debug' ),
             TplMerge            : require( './lib/processor/tpl-merge' ),
             StringReplace       : require( './lib/processor/string-replace' ),
+            SourceProcessor     : require( './lib/processor/source-combine' ),
             BcsUploader         : require( './lib/processor/bcs-uploader' ),
             OutputCleaner       : require( './lib/processor/output-cleaner' )
         } );
