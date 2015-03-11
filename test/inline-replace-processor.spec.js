@@ -51,6 +51,10 @@ describe('inline-replace-processor', function() {
     var testJsBar = base.getFileInfo('./src/bar.js', Project);
     processContext.addFile(testJsBar);
 
+    // 去掉空文件引用
+    var emptyScript = '<script data-inline src="./src/noooooooo.js"></script>';
+    fileData.data = fileData.data.replace(emptyScript, '');
+
     inline.process(fileData, processContext, function() {
 
         it('inline script', function() {
@@ -66,6 +70,23 @@ describe('inline-replace-processor', function() {
         });
 
     });
+
+    // 测试空文件引用
+    var emptyFileData = base.getFileInfo('data/dummy-project/issue-70.html', __dirname);
+
+    try {
+
+        inline.process(emptyFileData, processContext, function() {
+
+        });
+
+    }
+    catch (ex) {
+
+        it('throw err when file not found', function() {
+            expect(ex).toBe(ex);
+        });
+    }
 
 });
 
