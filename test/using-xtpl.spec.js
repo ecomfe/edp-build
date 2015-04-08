@@ -16,6 +16,18 @@ var moduleEntries = 'html,htm,phtml,tpl,vm,js';
 // var pageEntries = 'html,htm,phtml,tpl,vm';
 
 describe('using-xtpl', function(){
+    beforeEach(function () {
+        processContext = new ProcessContext({
+            baseDir: Project,
+            exclude: [],
+            outputDir: 'output',
+            fileEncodings: {}
+        });
+
+        base.traverseDir(Project, processContext);
+        base.traverseDir(path.join(Project, '..', 'base'), processContext);
+    });
+
     it('default', function(){
         var processor = new ModuleCompiler({
             exclude: [],
@@ -31,16 +43,9 @@ describe('using-xtpl', function(){
         var filePath = path.join(Project, 'src', 'common', 'using-xtpl.js');
         var fileData = base.getFileInfo(filePath);
 
-        var processContext = new ProcessContext({
-            baseDir: Project
-        });
         processor.beforeAll(processContext);
         processor.process(fileData, processContext, function(){
             var expected =
-                'define(\'common/xtpl\', [\'require\'], function (require) {\n' +
-                '    return \'xtpl\';\n' +
-                '});\n' +
-                '\n' +
                 '\n' +
                 '/** d e f i n e */\n' +
                 'define(\'xtpl\', [\'common/xtpl\'], function (target) { return target; });\n' +
@@ -52,6 +57,10 @@ describe('using-xtpl', function(){
                 '\n' +
                 '/** d e f i n e */\n' +
                 'define(\'xtpl3\', [\'common/xtpl\'], function (target) { return target; });\n' +
+                '\n' +
+                'define(\'common/xtpl\', [\'require\'], function (require) {\n' +
+                '    return \'xtpl\';\n' +
+                '});\n' +
                 '\n' +
                 'define(\'common/using-xtpl\', [\n' +
                 '    \'require\',\n' +

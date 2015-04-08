@@ -16,6 +16,18 @@ var moduleEntries = 'html,htm,phtml,tpl,vm,js';
 // var pageEntries = 'html,htm,phtml,tpl,vm';
 
 describe('using-etpl', function(){
+    beforeEach(function () {
+        processContext = new ProcessContext({
+            baseDir: Project,
+            exclude: [],
+            outputDir: 'output',
+            fileEncodings: {}
+        });
+
+        base.traverseDir(Project, processContext);
+        base.traverseDir(path.join(Project, '..', 'base'), processContext);
+    });
+
     // 需要测试的是如果combine的时候有package的代码需要合并，最后处理的是否正常.
     it('default', function(){
         var processor = new ModuleCompiler({
@@ -35,9 +47,6 @@ describe('using-etpl', function(){
         var filePath = path.join(Project, 'src', 'using-etpl.js');
         var fileData = base.getFileInfo(filePath);
 
-        var processContext = new ProcessContext({
-            baseDir: Project
-        });
         processor.beforeAll(processContext);
         processor.process(fileData, processContext, function(){
             var expected =
