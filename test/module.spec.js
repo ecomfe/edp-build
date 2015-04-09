@@ -88,6 +88,41 @@ describe('module', function () {
 
         expect(actual).toBe(expected);
     });
+
+    it('issues/51', function () {
+        // 指定包名的时候也应该可以合并才对的
+        var moduleId = 'er';
+
+        var bundleConfigs = {};
+        bundleConfigs[moduleId] = 1;
+
+        var compilerContext = new CompilerContext(processContext,
+                configFile, reader, bundleConfigs);
+        var module = new Module(moduleId, compilerContext);
+        var expected =
+            'define(\'net/Http\', [\'require\'], function (require) {\n' +
+            '    return \'net/Http\';\n' +
+            '});\n' +
+            '\n' +
+            'define(\'er/View\', [\n' +
+            '    \'require\',\n' +
+            '    \'net/Http\'\n' +
+            '], function (require) {\n' +
+            '    return require(\'net/Http\') + \';\' + \'er/View\';\n' +
+            '});\n' +
+            '\n' +
+            'define(\'er/main\', [\n' +
+            '    \'require\',\n' +
+            '    \'./View\'\n' +
+            '], function (require) {\n' +
+            '    var view = require(\'./View\');\n' +
+            '    return \'er\';\n' +
+            '});\n' +
+            '\n' +
+            'define(\'er\', [\'er/main\'], function (main) { return main; });';
+        var actual = module.toBundle();
+        expect(actual).toBe(expected);
+    });
 });
 
 
