@@ -74,6 +74,9 @@ describe('path-mapper', function() {
 
         var fileData = base.getFileInfo('index.html', Project);
 
+        // issue-76.html 未配置baseUrl，期望在 build 产物中不插入 baseUrl
+        var fileNoBaseurlData = base.getFileInfo('issue-76.html', Project);
+
         var processContext = new ProcessContext( {
             baseDir: Project,
             exclude: [],
@@ -81,6 +84,7 @@ describe('path-mapper', function() {
             fileEncodings: {}
         });
         processContext.addFile(fileData);
+        processContext.addFile(fileNoBaseurlData);
 
         base.launchProcessors([processor], processContext, function(){
             var readLoaderConfig = require( '../lib/util/read-loader-config' );
@@ -93,7 +97,15 @@ describe('path-mapper', function() {
             expect(pkgMap['dummy']).toBe('http://www.baidu.com/img/src');
             expect(pkgMap['er']).toBe('../dep/er/3.0.2/asset');
             expect(pkgMap['swfupload']).toBe('../dep/swfupload/2.2.0');
-        });
+
+            var noBaseurlConfInfo = readLoaderConfig( fileNoBaseurlData.data );
+            expect(noBaseurlConfInfo).not.toBe(null);
+
+            var config = noBaseurlConfInfo.data;
+            expect(config).not.toBe(null);
+            expect(config.baseUrl).toBe(undefined);
+            expect(config.urlArgs).not.toBe(null);
+       });
     });
 
     it('inline-css', function(){
