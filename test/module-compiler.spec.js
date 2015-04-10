@@ -34,7 +34,7 @@ describe('module-compiler', function(){
         base.traverseDir(path.join(Project, '..', 'base'), processContext);
     });
 
-    xit('default', function(){
+    it('default', function(){
         var processor = new ModuleCompiler({
             exclude: [],
             configFile: 'module.conf',
@@ -60,7 +60,7 @@ describe('module-compiler', function(){
         });
     });
 
-    xit('getCombineConfig', function(){
+    it('getCombineConfig', function(){
         var processor = new ModuleCompiler({
             exclude: [],
             configFile: 'module.conf',
@@ -86,7 +86,7 @@ describe('module-compiler', function(){
         });
     });
 
-    xit('case-xtpl', function(){
+    it('case-xtpl', function(){
         var processor = new ModuleCompiler({
             exclude: [],
             configFile: 'module.conf',
@@ -134,7 +134,7 @@ describe('module-compiler', function(){
         });
     });
 
-    xit('bizId support', function(){
+    it('bizId support', function(){
         var processor = new ModuleCompiler({
             exclude: [],
             bizId: 'foo/bar',
