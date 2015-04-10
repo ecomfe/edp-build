@@ -12,7 +12,7 @@ var edp = require('edp-core');
 
 /**
  * 遍历目录
- * 
+ *
  * @inner
  * @param {string|Array.<string>} dir 目录路径
  * @param {ProcessContext} processContext 构建环境对象
@@ -77,7 +77,7 @@ function traverseDir(dir, processContext) {
 
 /**
  * 向配置模块里注入构建处理器
- * 
+ *
  * @inner
  * @param {Object} conf 配置模块
  */
@@ -88,6 +88,7 @@ function injectProcessor(conf) {
             MD5Renamer          : require('./lib/processor/md5-renamer'),
             Html2JsCompiler     : require('./lib/processor/html2js-compiler'),
             StylusCompiler      : require('./lib/processor/stylus-compiler'),
+            HtmlMinifier        : require('./lib/processor/html-minifier'),
             JsCompressor        : require('./lib/processor/js-compressor'),
             CssCompressor       : require('./lib/processor/css-compressor'),
             LessCompiler        : require('./lib/processor/less-compiler'),
@@ -109,7 +110,7 @@ function injectProcessor(conf) {
 
 /**
  * 处理构建入口
- * 
+ *
  * @param {Object} conf 构建功能配置模块
  * @param {Function=} callback 构建完成的回调函数
  */

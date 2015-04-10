@@ -6,3 +6,4 @@ before_script:
   - "npm i jasmine-node@beta"
   - "npm i css-spriter"
   - "npm i edpx-bcs"
+  - "npm i html-minifier"
