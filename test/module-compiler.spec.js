@@ -13,11 +13,6 @@ var ModuleCompiler = require('../lib/processor/module-compiler.js');
 var ProcessContext = require('../lib/process-context.js');
 
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
-// var ConfigFile = path.resolve(Project, 'module.conf');
-
-var moduleEntries = 'html,htm,phtml,tpl,vm,js';
-// var pageEntries = 'html,htm,phtml,tpl,vm';
-
 
 describe('module-compiler', function(){
     var processContext;
@@ -34,17 +29,12 @@ describe('module-compiler', function(){
         base.traverseDir(path.join(Project, '..', 'base'), processContext);
     });
 
-    it('default', function(){
-        var processor = new ModuleCompiler({
-            exclude: [],
-            configFile: 'module.conf',
-            entryExtnames: moduleEntries
-        });
+    it('default', function (done) {
+        var processor = new ModuleCompiler();
         var filePath = path.join(Project, 'src', 'foo.js');
-        var fileData = base.getFileInfo(filePath);
 
-        processor.beforeAll(processContext);
-        processor.process(fileData, processContext, function(){
+        base.launchProcessors([processor], processContext, function () {
+            var fileData = processContext.getFileByPath('src/foo.js');
             var expected = 'define(\'foo\', [\n' +
                 '    \'require\',\n' +
                 '    \'io/File\',\n' +
@@ -57,24 +47,21 @@ describe('module-compiler', function(){
                 '    return \'foo\';\n' +
                 '});';
             expect(fileData.data).toBe(expected);
+            done();
         });
     });
 
-    it('getCombineConfig', function(){
+    it('getCombineConfig', function (done) {
         var processor = new ModuleCompiler({
-            exclude: [],
-            configFile: 'module.conf',
-            entryExtnames: moduleEntries,
-            getCombineConfig: function(combineModules) {
+            getCombineConfig: function (combineModules) {
                 combineModules.foo = 1;
                 return combineModules;
             }
         });
-        var filePath = path.join(Project, 'src', 'foo.js');
-        var fileData = base.getFileInfo(filePath);
 
-        processor.beforeAll(processContext);
-        processor.process(fileData, processContext, function(){
+        base.launchProcessors([processor], processContext, function () {
+            var fileData = processContext.getFileByPath('src/foo.js');
+
             var ast = edp.amd.getAst(fileData.data);
             var moduleInfo = edp.amd.analyseModule(ast);
             expect(moduleInfo).not.toBe(null);
@@ -83,14 +70,13 @@ describe('module-compiler', function(){
             expect(moduleInfo[1].id).toBe('net/Http');
             expect(moduleInfo[2].id).toBe('er/View');
             expect(moduleInfo[3].id).toBe('foo');
+
+            done();
         });
     });
 
-    it('case-xtpl', function(){
+    it('case-xtpl', function (done) {
         var processor = new ModuleCompiler({
-            exclude: [],
-            configFile: 'module.conf',
-            entryExtnames: moduleEntries,
             getCombineConfig: function() {
                 return {
                     'case-xtpl': true
@@ -98,11 +84,8 @@ describe('module-compiler', function(){
             }
         });
 
-        var filePath = path.join(Project, 'src', 'case-xtpl.js');
-        var fileData = base.getFileInfo(filePath);
-
-        processor.beforeAll(processContext);
-        processor.process(fileData, processContext, function(){
+        base.launchProcessors([processor], processContext, function () {
+            var fileData = processContext.getFileByPath('src/case-xtpl.js');
             var expected =
                 '\n' +
                 '/** d e f i n e */\n' +
@@ -130,28 +113,23 @@ describe('module-compiler', function(){
                 '    console.log(xtpl);\n' +
                 '    console.log(ztpl);\n' +
                 '});';
-            expect( fileData.data ).toBe( expected );
+            expect(fileData.data).toBe(expected);
+            done();
         });
     });
 
-    it('bizId support', function(){
+    it('bizId support', function (done) {
         var processor = new ModuleCompiler({
-            exclude: [],
             bizId: 'foo/bar',
-            configFile: 'module.conf',
-            entryExtnames: moduleEntries,
-            getCombineConfig: function() {
+            getCombineConfig: function () {
                 return {
                     'case-xtpl': true
                 };
             }
         });
 
-        var filePath = path.join(Project, 'src', 'case-xtpl.js');
-        var fileData = base.getFileInfo(filePath);
-
-        processor.beforeAll(processContext);
-        processor.process(fileData, processContext, function(){
+        base.launchProcessors([processor], processContext, function () {
+            var fileData = processContext.getFileByPath('src/case-xtpl.js');
             var expected =
                 'define(\'foo/bar/xtpl2\', [\'xtpl\'], function (target) {\n' +
                 '    return target;\n' +
@@ -175,7 +153,8 @@ describe('module-compiler', function(){
                 '    console.log(xtpl);\n' +
                 '    console.log(ztpl);\n' +
                 '});';
-            expect( fileData.data ).toBe( expected );
+            expect(fileData.data).toBe(expected);
+            done();
         });
     });
 
