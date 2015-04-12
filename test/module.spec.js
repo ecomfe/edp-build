@@ -123,6 +123,22 @@ describe('module', function () {
         var actual = module.toBundle();
         expect(actual).toBe(expected);
     });
+
+    it('etpl/tpl', function () {
+        var moduleId = 'etpl/tpl';
+
+        var bundleConfigs = {};
+        bundleConfigs[moduleId] = 1;
+
+        var compilerContext = new CompilerContext(processContext,
+                configFile, reader, bundleConfigs);
+        var module = new Module(moduleId, compilerContext);
+
+        var fs = require('fs');
+        var actual = module.toBundle();
+        var expected = fs.readFileSync('data/expected/module-etpl-tpl.expected.txt', 'utf-8');
+        expect(actual).toBe(expected);
+    });
 });
 
 
