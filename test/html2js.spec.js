@@ -24,6 +24,7 @@ describe('html2js-compiler', function() {
 
     var processor = new Html2JsCompiler({
         extnames: ['html'],
+        files: ['*.html'],
         keepSource: true
     });
 
@@ -42,32 +43,39 @@ describe('html2js-compiler', function() {
 
     processContext.addFile(file);
 
-    processor.process(file, processContext, function() {
+    var otherFile = base.getFileInfo('data/dummy-project/src/foo.js', __dirname);
+    processContext.addFile(otherFile);
 
-        var jsFile;
+    var jsFile;
 
-        it('have xxx.html.js', function() {
+    it('have xxx.html.js', function(done) {
+        processor.start(processContext, function() {
             jsFile = processContext.getFilesByPatterns(['*.html.js'])[0];
             expect(jsFile).not.toBe(undefined);
+            done();
         });
-
-        it('extname should be js', function() {
-            expect(jsFile.extname).toBe('js');
-        });
-
-        it('should wrap define', function() {
-            expect(/define/.test(jsFile.data)).toBe(true);
-        });
-
-        it('should match html', function() {
-            expect(/<!-- target:MAIN_PAGE_foo_123/.test(jsFile.data)).toBe(true);
-        });
-
-        it('keep source file', function() {
-            expect(file.extname).toBe('html');
-        });
-
     });
+
+    it('files filter', function() {
+        expect(processor.processFiles.length).toBe(1);
+    });
+
+    it('extname should be js', function() {
+        expect(jsFile.extname).toBe('js');
+    });
+
+    it('wrap define', function() {
+        expect(/^define/.test(jsFile.data)).toBe(true);
+    });
+
+    it('match html', function() {
+        expect(/<!-- target:MAIN_PAGE_foo_123/.test(jsFile.data)).toBe(true);
+    });
+
+    it('keep source file', function() {
+        expect(processContext.getFilesByPatterns(['*.html']).length).toBe(1);
+    });
+
 
 });
 
