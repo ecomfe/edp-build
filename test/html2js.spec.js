@@ -24,7 +24,6 @@ describe('html2js-compiler', function() {
 
     var processor = new Html2JsCompiler({
         extnames: ['html'],
-        files: ['*.html'],
         keepSource: true
     });
 
