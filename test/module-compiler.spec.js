@@ -87,6 +87,10 @@ describe('module-compiler', function(){
         base.launchProcessors([processor], processContext, function () {
             var fileData = processContext.getFileByPath('src/case-xtpl.js');
             var expected =
+                'define(\'xtpl\', [\'require\'], function (require) {\n' +
+                '    return \'xtpl\';\n' +
+                '});' +
+                '\n\n' +
                 '\n' +
                 '/** d e f i n e */\n' +
                 'define(\'xtpl2\', [\'xtpl\'], function (target) { return target; });\n' +
@@ -99,10 +103,6 @@ describe('module-compiler', function(){
                 '/** d e f i n e */\n' +
                 'define(\'common/xtpl\', [\'xtpl\'], function (target) { return target; });\n' +
                 '\n' +
-                'define(\'xtpl\', [\'require\'], function (require) {\n' +
-                '    return \'xtpl\';\n' +
-                '});' +
-                '\n\n' +
                 'define(\'case-xtpl\', [\n' +
                 '    \'require\',\n' +
                 '    \'xtpl\',\n' +
@@ -131,6 +131,9 @@ describe('module-compiler', function(){
         base.launchProcessors([processor], processContext, function () {
             var fileData = processContext.getFileByPath('src/case-xtpl.js');
             var expected =
+                'define(\'foo/bar/xtpl\', [\'require\'], function (require) {\n' +
+                '    return \'xtpl\';\n' +
+                '});\n' +
                 'define(\'foo/bar/xtpl2\', [\'xtpl\'], function (target) {\n' +
                 '    return target;\n' +
                 '});\n' +
@@ -139,9 +142,6 @@ describe('module-compiler', function(){
                 '});\n' +
                 'define(\'foo/bar/common/xtpl\', [\'xtpl\'], function (target) {\n' +
                 '    return target;\n' +
-                '});\n' +
-                'define(\'foo/bar/xtpl\', [\'require\'], function (require) {\n' +
-                '    return \'xtpl\';\n' +
                 '});\n' +
                 'define(\'foo/bar/case-xtpl\', [\n' +
                 '    \'require\',\n' +
@@ -200,6 +200,37 @@ describe('module-compiler', function(){
                 '    return \'dynamic-module/foo\' + require(\'./list.tpl\');\n' +
                 '});';
             expect(actual).toBe(expected);
+            done();
+        });
+    });
+
+    it('paths & package alias', function (done) {
+        var Project = path.resolve(__dirname, 'data', 'dummy-project-2');
+        var processContext = new ProcessContext({
+            baseDir: Project,
+            exclude: [],
+            outputDir: 'output',
+            fileEncodings: {}
+        });
+        base.traverseDir(Project, processContext);
+
+        var p2 = new ModuleCompiler();
+
+        function getModuleIds(code) {
+            var ast = edp.amd.getAst(code);
+            var defs = edp.amd.analyseModule(ast) || [];
+            return defs.map(function (item) {
+                return item.id;
+            }).sort();
+        }
+
+        base.launchProcessors([p2], processContext, function () {
+            var foo = processContext.getFileByPath('src/foo.js');
+            var bar = processContext.getFileByPath('src/bar.js');
+            var why = processContext.getFileByPath('src/why.js');
+            expect(getModuleIds(why.data)).toEqual([ 'cl', 'common/css', 'etpl', 'etpl/main', 'lib/css', 'why' ]);
+            expect(getModuleIds(foo.data)).toEqual([ 'cl', 'common/css', 'foo', 'lib/css' ]);
+            expect(getModuleIds(bar.data)).toEqual([ 'bar', 'cl', 'common/css', 'lib/css' ]);
             done();
         });
     });

@@ -47,6 +47,11 @@ describe('using-ztpl', function(){
         processor.beforeAll(processContext);
         processor.process(fileData, processContext, function(){
             var expected =
+                '(function (root) {\n' +
+                '    var ztpl = \'ztpl\';\n' +
+                '    define(\'common/ztpl\', [], ztpl);\n' +
+                '}(this));\n' +
+                '\n' +
                 '\n' +
                 '/** d e f i n e */\n' +
                 'define(\'ztpl\', [\'common/ztpl\'], function (target) { return target; });\n' +
@@ -54,11 +59,6 @@ describe('using-ztpl', function(){
                 '\n' +
                 '/** d e f i n e */\n' +
                 'define(\'ztpl2\', [\'common/ztpl\'], function (target) { return target; });\n' +
-                '\n' +
-                '(function (root) {\n' +
-                '    var ztpl = \'ztpl\';\n' +
-                '    define(\'common/ztpl\', [], ztpl);\n' +
-                '}(this));\n' +
                 '\n' +
                 'define(\'using-ztpl\', [\n' +
                 '    \'require\',\n' +

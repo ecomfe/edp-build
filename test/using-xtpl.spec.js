@@ -46,6 +46,10 @@ describe('using-xtpl', function(){
         processor.beforeAll(processContext);
         processor.process(fileData, processContext, function(){
             var expected =
+                'define(\'common/xtpl\', [\'require\'], function (require) {\n' +
+                '    return \'xtpl\';\n' +
+                '});\n' +
+                '\n' +
                 '\n' +
                 '/** d e f i n e */\n' +
                 'define(\'xtpl\', [\'common/xtpl\'], function (target) { return target; });\n' +
@@ -57,10 +61,6 @@ describe('using-xtpl', function(){
                 '\n' +
                 '/** d e f i n e */\n' +
                 'define(\'xtpl3\', [\'common/xtpl\'], function (target) { return target; });\n' +
-                '\n' +
-                'define(\'common/xtpl\', [\'require\'], function (require) {\n' +
-                '    return \'xtpl\';\n' +
-                '});\n' +
                 '\n' +
                 'define(\'common/using-xtpl\', [\n' +
                 '    \'require\',\n' +

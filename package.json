@@ -27,6 +27,7 @@
   "dependencies": {
     "async": "~0.9.0",
     "clean-css": "~2.1.6",
+    "debug": "^2.1.3",
     "edp-core": "~1.0.12",
     "escodegen": "~1.3.2",
     "estraverse": "~1.5.0",
