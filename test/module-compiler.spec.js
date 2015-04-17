@@ -222,6 +222,10 @@ describe('module-compiler', function(){
                 return [];
             }
             var defs = edp.amd.analyseModule(ast) || [];
+            if (!Array.isArray(defs)) {
+                defs = [defs];
+            }
+
             return defs.map(function (item) {
                 return item.id;
             }).sort();
