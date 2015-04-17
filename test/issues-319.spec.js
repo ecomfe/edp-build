@@ -63,7 +63,6 @@ describe('issue-319', function () {
             var fs = require('fs');
             var actual = processContext.getFileByPath('src/319.js').data;
             var expected = fs.readFileSync('data/expected/issues-319.expected.txt', 'utf-8');
-            fs.writeFileSync('a.txt', actual);
             expect(actual).toBe(expected);
             done();
         });

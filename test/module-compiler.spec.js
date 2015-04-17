@@ -218,6 +218,9 @@ describe('module-compiler', function(){
 
         function getModuleIds(code) {
             var ast = edp.amd.getAst(code);
+            if (!ast) {
+                return [];
+            }
             var defs = edp.amd.analyseModule(ast) || [];
             return defs.map(function (item) {
                 return item.id;
@@ -228,9 +231,13 @@ describe('module-compiler', function(){
             var foo = processContext.getFileByPath('src/foo.js');
             var bar = processContext.getFileByPath('src/bar.js');
             var why = processContext.getFileByPath('src/why.js');
+            var lang = processContext.getFileByPath('src/lang.js');
+            var langZh = processContext.getFileByPath('src/lang/zh.js');
             expect(getModuleIds(why.data)).toEqual([ 'cl', 'common/css', 'etpl', 'etpl/main', 'lib/css', 'why' ]);
             expect(getModuleIds(foo.data)).toEqual([ 'cl', 'common/css', 'foo', 'lib/css' ]);
             expect(getModuleIds(bar.data)).toEqual([ 'bar', 'cl', 'common/css', 'lib/css' ]);
+            expect(getModuleIds(lang.data)).toEqual([ 'bar2', 'foo2', 'lang' ]);
+            expect(getModuleIds(langZh.data)).toEqual([ 'bar2', 'foo3', 'lang/zh' ]);
             done();
         });
     });
