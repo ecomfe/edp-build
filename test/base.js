@@ -14,9 +14,10 @@
  * @description
  *
  **/
-var edp = require( 'edp-core' );
 var path = require('path');
 var fs = require('fs');
+
+var edp = require('edp-core');
 
 var FileInfo = require('../lib/file-info.js');
 var JsCompressor = require('../lib/processor/js-compressor.js');
@@ -31,7 +32,7 @@ exports.getFileInfo = function (filePath, buildRoot) {
         stat: fs.statSync(fullPath),
         fileEncoding: 'utf-8'
     });
-    
+
     return fileData;
 };
 
@@ -68,7 +69,10 @@ exports.launchProcessors = function( processors, processContext, done ) {
         }
 
         var processor = processors[ processorIndex++ ];
-        processor.start( processContext, nextProcessor );
+        processor.start( processContext, function () {
+            processor.afterAll(processContext);
+            nextProcessor();
+        });
     }
 
     nextProcessor();
@@ -131,6 +135,23 @@ exports.traverseDir = function( dir, processContext ) {
     });
 };
 
+
+exports.getModuleIds = function (code) {
+    var ast = edp.amd.getAst(code);
+    if (!ast) {
+        return [];
+    }
+    var defs = edp.amd.analyseModule(ast) || [];
+    if (!Array.isArray(defs)) {
+        defs = [defs];
+    }
+
+    defs = defs.map(function (item) {
+        return item.id;
+    });
+    defs.sort();
+    return defs;
+};
 
 
 

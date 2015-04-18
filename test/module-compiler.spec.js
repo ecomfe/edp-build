@@ -216,32 +216,48 @@ describe('module-compiler', function(){
 
         var p2 = new ModuleCompiler();
 
-        function getModuleIds(code) {
-            var ast = edp.amd.getAst(code);
-            if (!ast) {
-                return [];
-            }
-            var defs = edp.amd.analyseModule(ast) || [];
-            if (!Array.isArray(defs)) {
-                defs = [defs];
-            }
-
-            return defs.map(function (item) {
-                return item.id;
-            }).sort();
-        }
-
         base.launchProcessors([p2], processContext, function () {
             var foo = processContext.getFileByPath('src/foo.js');
             var bar = processContext.getFileByPath('src/bar.js');
             var why = processContext.getFileByPath('src/why.js');
             var lang = processContext.getFileByPath('src/lang.js');
             var langZh = processContext.getFileByPath('src/lang/zh.js');
-            expect(getModuleIds(why.data)).toEqual([ 'cl', 'common/css', 'etpl', 'etpl/main', 'lib/css', 'why' ]);
-            expect(getModuleIds(foo.data)).toEqual([ 'cl', 'common/css', 'foo', 'lib/css' ]);
-            expect(getModuleIds(bar.data)).toEqual([ 'bar', 'cl', 'common/css', 'lib/css' ]);
-            expect(getModuleIds(lang.data)).toEqual([ 'bar2', 'foo2', 'lang' ]);
-            expect(getModuleIds(langZh.data)).toEqual([ 'bar2', 'foo3', 'lang/zh' ]);
+            expect(base.getModuleIds(why.data)).toEqual([ 'cl', 'common/css', 'etpl', 'etpl/main', 'lib/css', 'why' ]);
+            expect(base.getModuleIds(foo.data)).toEqual([ 'cl', 'common/css', 'foo', 'lib/css' ]);
+            expect(base.getModuleIds(bar.data)).toEqual([ 'bar', 'cl', 'common/css', 'lib/css' ]);
+            expect(base.getModuleIds(lang.data)).toEqual([ 'bar2', 'foo2', 'lang' ]);
+            expect(base.getModuleIds(langZh.data)).toEqual([ 'bar2', 'foo3', 'lang/zh' ]);
+            done();
+        });
+    });
+
+    it('ssp promise duplicate issue', function (done) {
+        // 这个issue原因在于
+        // ModuleCompiler的执行过程中会修改 FileInfo.data
+        // 而且因为 foo 依赖 bar 并且 bar 先执行，因此 bar 的 data 里面
+        // 已经包含了 promise 的代码
+        // 之后当我们开始合并 foo 的代码的时候，bar.data 已经不是我们期望
+        // 的内容了（因为已经包含了 promise 的代码，貌似 bar.rawData 是我们所期望的）
+        // #325重构之前，因为每次都是fs.readFileSync，所以得到的内容是干净的
+        var p2 = new ModuleCompiler({
+            getCombineConfig: function() {
+                return {
+                    'ssp/bar': 1,
+                    'ssp/foo': {
+                        files: [
+                            '!ssp/promise'
+                        ]
+                    }
+                };
+            }
+        });
+
+        base.launchProcessors([p2], processContext, function () {
+            var bar = processContext.getFileByPath('src/ssp/bar.js');
+            expect(base.getModuleIds(bar.data)).toEqual(['ssp/bar', 'ssp/promise']);
+
+            var foo = processContext.getFileByPath('src/ssp/foo.js');
+            expect(base.getModuleIds(foo.data)).toEqual(['ssp/bar', 'ssp/foo']);
             done();
         });
     });

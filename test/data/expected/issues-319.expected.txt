@@ -16,9 +16,8 @@ define('startup/template', [], function () {
         root.etpl = etpl;
     }
 }(this));
-define('etpl', ['etpl/main'], function (main) {
-    return main;
-});
+
+define('etpl', ['etpl/main'], function (main) { return main; });
 
 define('etpl/tpl', [
     'require',

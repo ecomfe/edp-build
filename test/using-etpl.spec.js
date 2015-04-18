@@ -1,8 +1,8 @@
 /**
+ * @file test/using-etpl.spec.js
  * @author leeight(liyubei@baidu.com)
  */
 
-var fs = require('fs');
 var path = require('path');
 
 var base = require('./base');
@@ -10,12 +10,10 @@ var ModuleCompiler = require('../lib/processor/module-compiler.js');
 var ProcessContext = require('../lib/process-context.js');
 
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
-// var ConfigFile = path.resolve(Project, 'module.conf');
 
-var moduleEntries = 'html,htm,phtml,tpl,vm,js';
-// var pageEntries = 'html,htm,phtml,tpl,vm';
+describe('using-etpl', function () {
+    var processContext;
 
-describe('using-etpl', function(){
     beforeEach(function () {
         processContext = new ProcessContext({
             baseDir: Project,
@@ -29,26 +27,20 @@ describe('using-etpl', function(){
     });
 
     // 需要测试的是如果combine的时候有package的代码需要合并，最后处理的是否正常.
-    it('default', function(){
+    it('default', function () {
         var processor = new ModuleCompiler({
-            exclude: [],
-            configFile: 'module.conf',
-            entryExtnames: moduleEntries,
-            getCombineConfig: function() {
+            getCombineConfig: function () {
                 return {
                     'using-etpl': {
-                        include: [ 'etpl/**' ],
-                        exclude: [ 'etpl/tpl' ]
+                        include: ['etpl/**'],
+                        exclude: ['etpl/tpl']
                     }
                 };
             }
         });
 
-        var filePath = path.join(Project, 'src', 'using-etpl.js');
-        var fileData = base.getFileInfo(filePath);
-
-        processor.beforeAll(processContext);
-        processor.process(fileData, processContext, function(){
+        base.launchProcessors([processor], processContext, function () {
+            var fileData = processContext.getFileByPath('src/using-etpl.js');
             var expected =
                 '(function (root) {\n' +
                 '    function Engine() {\n' +
