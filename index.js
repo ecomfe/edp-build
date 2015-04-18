@@ -81,7 +81,6 @@ function traverseDir(dir, processContext) {
                 extname: edp.path.extname(file).slice(1),
                 path: relativePath,
                 fullPath: file,
-                stat: stat,
                 fileEncoding: fileEncoding
             });
             processContext.addFile(fileData);

@@ -152,12 +152,6 @@ describe('path-mapper', function() {
             var processor = new CssCompressor();
             processor.process(fileData, {baseDir:__dirname}, function() {
                 var expected = 'div{' +
-                    'background:url(../../asset/img/logo.gif);' +
-                    'background:url(//www.baidu.com/src/img/logo.gif);' +
-                    'background:url(//www.baidu.com/src/img/logo.gif);' +
-                    'background:url(http://www.baidu.com/src/img/logo.gif);' +
-                    'background:url(http://www.baidu.com/src/img/logo.gif);' +
-                    'background:url(https://www.baidu.com/src/img/logo.gif);' +
                     'background:url(../../img/logo.gif)' +
                 '}';
                 expect(fileData.data).toBe(expected);
