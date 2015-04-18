@@ -36,6 +36,44 @@ describe('compiler-context', function () {
         reader = new Reader(processContext, configFile);
     });
 
+    it('getModuleDefinition', function () {
+        var Project = path.resolve(__dirname, 'data', 'dummy-project');
+        var processContext = new ProcessContext({
+            baseDir: Project,
+            exclude: [],
+            outputDir: 'output',
+            fileEncodings: {}
+        });
+        base.traverseDir(Project, processContext);
+
+        var configFile = path.resolve(processContext.baseDir, 'module.conf');
+        var reader = new Reader(processContext, configFile);
+
+        var moduleCombineConfigs = {};
+        var moduleMapConfigs = {};
+        var context = new CompilerContext(processContext,
+            configFile, reader, moduleCombineConfigs, moduleMapConfigs);
+
+        var d1 = context.getModuleDefinition('er');
+        expect(d1.ast).not.toBeUndefined();
+        expect(d1.ast.type).toEqual('Program');
+        expect(d1.modDefs[0]).not.toBeUndefined();
+        expect(d1.modDefs[0].id).toEqual('er/main');
+        expect(d1.modDefs[0].dependencies).toBeUndefined();
+        expect(d1.pkgDef).not.toBeUndefined();
+        expect(d1.pkgDef.name).toEqual('er');
+        expect(d1.pkgDef.main).toEqual('main');
+        expect(d1.pkgDef.module).toEqual('er/main');
+
+        var d2 = context.getModuleDefinition('er/main');
+        expect(d2.ast).not.toBeUndefined();
+        expect(d2.ast.type).toEqual('Program');
+        expect(d2.modDefs[0]).not.toBeUndefined();
+        expect(d2.modDefs[0].id).toEqual('er/main');
+        expect(d2.modDefs[0].dependencies).toBeUndefined();
+        expect(d2.pkgDef).toBeNull();
+    });
+
     it('getXXX', function () {
         var moduleCombineConfigs = {};
         var moduleMapConfigs = {
