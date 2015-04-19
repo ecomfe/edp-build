@@ -90,20 +90,27 @@ describe('js-compressor', function() {
      * 在JS代码中不要出现DEBUG的定义和赋值操作，只是去使用它
      * 然后就可以通过 global_defs 来改写这些变量的值了
      */
-    xit('测试global defines', function (done) {
-        var count = 0;
-
-        var c0 = getProcessContext();
-        var p0 = new JsCompressor();
-        base.launchProcessors([p0], c0, function () {
-            var fd = c0.getFileByPath('6.js');
-            expect(fd.data).toEqual('function log(o){if(DEBUG)console.log(o);console.log(FLAGS_boolean)}console.log(kURL);');
-            count ++;
-            if (count === 2) {
-                done();
+    it('测试global defines', function (done) {
+        var c1 = getProcessContext();
+        var p1 = new JsCompressor({
+            compressOptions: {
+                global_defs: {
+                    FLAGS_boolean: 123,
+                    DEBUG: false,
+                    kURL: 'http://www.baidu.com'
+                }
             }
         });
 
+        base.launchProcessors([p1], c1, function () {
+            var fd = c1.getFileByPath('6.js');
+            // conditionals: false
+            expect(fd.data).toBe('function log(n){if(!1)console.log(n);console.log(123)}console.log("http://www.baidu.com");');
+            done();
+        });
+    });
+
+    it('测试global defines with conditionals true', function (done) {
         var c1 = getProcessContext();
         var p1 = new JsCompressor({
             compressOptions: {
@@ -112,17 +119,15 @@ describe('js-compressor', function() {
                     DEBUG: false,
                     kURL: 'http://www.baidu.com'
                 },
-                dead_code: true
+                conditionals: true
             }
         });
 
         base.launchProcessors([p1], c1, function () {
             var fd = c1.getFileByPath('6.js');
-            expect(fd.data).toBe('function log(o){if(!1)console.log(o);console.log(123)}console.log("http://www.baidu.com");');
-            count ++;
-            if (count === 2) {
-                done();
-            }
+            // conditionals: true
+            expect(fd.data).toBe('function log(n){console.log(123)}console.log("http://www.baidu.com");');
+            done();
         });
     });
 });
