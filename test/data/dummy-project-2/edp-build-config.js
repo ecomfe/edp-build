@@ -4,14 +4,21 @@ var path = require( 'path' );
 exports.output = path.resolve( __dirname, 'output' );
 
 exports.getProcessors = function () {
-    var moduleProcessor = new ModuleCompiler({
+    var mp = new ModuleCompiler({
         files: [
             '*.js'
         ]
     });
+    var jp = new JsCompressor({
+        sourceMapOptions: {
+            enable: false,
+            host: 'http://192.168.199.239:9999/output/',
+            root: 'this/is/the/fucking/sourcemap/directory',
+        }
+    });
 
     return {
-        'default': [ moduleProcessor ]
+        'default': [mp, jp]
     };
 };
 

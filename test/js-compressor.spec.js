@@ -76,9 +76,48 @@ describe('js-compressor', function() {
         base.launchProcessors([processor], processContext, function () {
             var fileData = processContext.getFileByPath('5.js');
             expect(fileData.data).toBe('function main(){function n(){}var require=0,exports=1,module=2,o=3;' +
-                'return n(require+exports+module+o)}\n//# sourceMappingURL=5.sourcemap');
-            expect(processContext.getFileByPath('5.sourcemap')).not.toBe(null);
-            expect(processContext.getFileByPath('5.org.js')).not.toBe(null);
+                'return n(require+exports+module+o)}\n//# sourceMappingURL=source_map/5.js.map');
+            expect(processContext.getFileByPath('source_map/5.js.map')).not.toBe(null);
+            expect(processContext.getFileByPath('source_map/5.js')).not.toBe(null);
+            done();
+        });
+    });
+
+    it('支持设置sourceMapOptions + root', function (done) {
+        var processor = new JsCompressor({
+            sourceMapOptions: {
+                enable: true,
+                root: 'this/is/the/fucking/sourcemap/directory'
+            }
+        });
+        base.launchProcessors([processor], processContext, function () {
+            var fileData = processContext.getFileByPath('5.js');
+            expect(fileData.data).toBe('function main(){function n(){}var require=0,exports=1,module=2,o=3;' +
+                'return n(require+exports+module+o)}\n//# sourceMappingURL=this/is/the/fucking/sourcemap/directory/5.js.map');
+            expect(processContext.getFileByPath('this/is/the/fucking/sourcemap/directory/5.js.map')).not.toBe(null);
+            expect(processContext.getFileByPath('this/is/the/fucking/sourcemap/directory/5.js')).not.toBe(null);
+            done();
+        });
+    });
+
+    it('支持设置sourceMapOptions + host + root', function (done) {
+        var processor = new JsCompressor({
+            sourceMapOptions: {
+                enable: true,
+                host: 'http://fe.baidu.com/version/8964/',
+                root: 'this/is/the/fucking/sourcemap/directory'
+            }
+        });
+        base.launchProcessors([processor], processContext, function () {
+            var fileData = processContext.getFileByPath('5.js');
+            expect(fileData.data).toBe('function main(){function n(){}var require=0,exports=1,module=2,o=3;' +
+                'return n(require+exports+module+o)}\n//# sourceMappingURL=http://fe.baidu.com/version/8964/this/is/the/fucking/sourcemap/directory/5.js.map');
+            expect(processContext.getFileByPath('this/is/the/fucking/sourcemap/directory/5.js.map')).not.toBe(null);
+            expect(processContext.getFileByPath('this/is/the/fucking/sourcemap/directory/5.js')).not.toBe(null);
+
+            var f1 = processContext.getFileByPath('src/foo/bar/1.js');
+            expect(f1.data).toBe('define(function(require){return"foo/bar/1"});' +
+                '\n//# sourceMappingURL=http://fe.baidu.com/version/8964/this/is/the/fucking/sourcemap/directory/src/foo/bar/1.js.map');
             done();
         });
     });
