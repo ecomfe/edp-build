@@ -16,76 +16,113 @@
  **/
 var path = require('path');
 
+var base = require('./base');
 var ProcessContext = require('../lib/process-context.js');
 var JsCompressor = require('../lib/processor/js-compressor.js');
-var base = require('./base');
-
+var Project = path.resolve(__dirname, 'data', 'js-compressor');
 
 describe('js-compressor', function() {
-    it('默认保留require, exports, module三个变量', function() {
+    var processContext;
+
+    function getProcessContext(opt_baseDir) {
+        var baseDir = opt_baseDir || Project;
+        var ctx = new ProcessContext({
+            baseDir: baseDir,
+            exclude: [],
+            outputDir: 'output',
+            fileEncodings: {}
+        });
+
+        base.traverseDir(baseDir, ctx);
+        base.traverseDir(path.join(baseDir, '..', 'base'), ctx);
+
+        return ctx;
+    }
+
+    beforeEach(function () {
+        processContext = getProcessContext(Project);
+    });
+
+    it('默认保留require, exports, module三个变量', function (done) {
         var processor = new JsCompressor();
-        var fileData = base.getFileInfo('data/js-compressor/default.js', __dirname);
-        processor.process(fileData, null, function() {
-            expect(fileData.data).toBe('function main(){var require=0,exports=1,module=2,n=3;' +
-                'return require+exports+module+n}');
+        base.launchProcessors([processor], processContext, function () {
+            var fileData = processContext.getFileByPath('default.js');
+            expect(fileData.data).toBe('function main(){var require=0,exports=1,module=2,o=3;' +
+                'return require+exports+module+o}');
+            done();
         });
     });
 
-    it('支持设置mangleOptions', function() {
+    it('支持设置mangleOptions', function (done) {
         var processor = new JsCompressor({
             mangleOptions: {
                 except: ['require', 'foobar', 'callSuper']
             }
         });
-        var fileData = base.getFileInfo('data/js-compressor/5.js', __dirname);
-        processor.process(fileData, null, function() {
-            expect(fileData.data).toBe('function main(){function callSuper(){}var require=0,n=1,r=2,foobar=3;' +
-                'return callSuper(require+n+r+foobar)}');
+        base.launchProcessors([processor], processContext, function () {
+            var fileData = processContext.getFileByPath('5.js');
+            expect(fileData.data).toBe('function main(){function callSuper(){}var require=0,n=1,o=2,foobar=3;' +
+                'return callSuper(require+n+o+foobar)}');
+            done();
         });
     });
 
-    it('支持设置sourceMapOptions', function() {
+    it('支持设置sourceMapOptions', function (done) {
         var processor = new JsCompressor({
             sourceMapOptions: {
                 enable: true
             }
         });
-        var fileData = base.getFileInfo('data/js-compressor/5.js', __dirname);
-        var processContext = new ProcessContext( {
-            baseDir: 'src',
-            exclude: [],
-            outputDir: 'output',
-            fileEncodings: {}
-        } );
-        processor.process(fileData, processContext, function() {
-            expect(fileData.data).toBe('function main(){function n(){}var require=0,exports=1,module=2,r=3;' +
-                'return n(require+exports+module+r)}\n//# sourceMappingURL=5.sourcemap');
+        base.launchProcessors([processor], processContext, function () {
+            var fileData = processContext.getFileByPath('5.js');
+            expect(fileData.data).toBe('function main(){function n(){}var require=0,exports=1,module=2,o=3;' +
+                'return n(require+exports+module+o)}\n//# sourceMappingURL=5.sourcemap');
+            expect(processContext.getFileByPath('5.sourcemap')).not.toBe(null);
+            expect(processContext.getFileByPath('5.org.js')).not.toBe(null);
+            done();
         });
-        expect(processContext.getFileByPath(path.join('data', 'js-compressor', '5.sourcemap'))).not.toBe(null);
-        expect(processContext.getFileByPath(path.join('data', 'js-compressor', '5.org.js'))).not.toBe(null);
     });
 
-    // FIXME(user) uglify-js有个bug，导致暂时无法通过
-    xit('测试global defines', function(){
-        var processor = new JsCompressor({
-            compressOptions: {
-                'global_defs': {
-                    'FLAGS_boolean': 123,
-                    DEBUG: false,
-                    kURL: 'http://www.baidu.com'
-                }
+    /**
+     * Global Define的用法是这样子的
+     * 在页面中定义
+     * var DEBUG = true;
+     * 在JS代码中不要出现DEBUG的定义和赋值操作，只是去使用它
+     * 然后就可以通过 global_defs 来改写这些变量的值了
+     */
+    xit('测试global defines', function (done) {
+        var count = 0;
+
+        var c0 = getProcessContext();
+        var p0 = new JsCompressor();
+        base.launchProcessors([p0], c0, function () {
+            var fd = c0.getFileByPath('6.js');
+            expect(fd.data).toEqual('function log(o){if(DEBUG)console.log(o);console.log(FLAGS_boolean)}console.log(kURL);');
+            count ++;
+            if (count === 2) {
+                done();
             }
         });
 
-        var fileData = base.getFileInfo('data/js-compressor/6.js', __dirname);
-        var processContext = new ProcessContext( {
-            baseDir: 'src',
-            exclude: [],
-            outputDir: 'output',
-            fileEncodings: {}
-        } );
-        processor.process(fileData, processContext, function() {
-            expect(fileData.data).toBe('123');
+        var c1 = getProcessContext();
+        var p1 = new JsCompressor({
+            compressOptions: {
+                global_defs: {
+                    FLAGS_boolean: 123,
+                    DEBUG: false,
+                    kURL: 'http://www.baidu.com'
+                },
+                dead_code: true
+            }
+        });
+
+        base.launchProcessors([p1], c1, function () {
+            var fd = c1.getFileByPath('6.js');
+            expect(fd.data).toBe('function log(o){if(!1)console.log(o);console.log(123)}console.log("http://www.baidu.com");');
+            count ++;
+            if (count === 2) {
+                done();
+            }
         });
     });
 });
