@@ -30,16 +30,20 @@ fs.readdirSync( '../lib/processor' ).forEach( function( file ) {
 } );
 
 describe('processor-exclude-support', function(){
-    it('default', function(){
-        var fileData = base.getFileInfo('data/css-compressor/default.css', __dirname);
-        ctors.forEach(function(item){
-            var Ctor = item[1];
-            var instance = new Ctor({
-                exclude: [ '*' ],
-                include: [ 'default.css' ]
-            });
-            expect( instance.isExclude( fileData ) ).toBe( true );
-            expect( instance.isInclude( fileData ) ).toBe( true );
+    var fileData = base.getFileInfo('data/css-compressor/default.css', __dirname);
+    ctors.forEach(function(item){
+        it(item[0], function(){
+                var Ctor = item[1];
+                if (typeof Ctor !== 'function') {
+                    return;
+                }
+
+                var instance = new Ctor({
+                    exclude: [ '*' ],
+                    include: [ 'default.css' ]
+                });
+                expect( instance.isExclude( fileData ) ).toBe( true );
+                expect( instance.isInclude( fileData ) ).toBe( true );
         });
     });
 });

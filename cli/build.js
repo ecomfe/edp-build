@@ -13,7 +13,7 @@ var util = edp.util;
 
 /**
  * 默认构建配置文件
- * 
+ *
  * @inner
  * @const
  * @type {string}
@@ -22,7 +22,7 @@ var DEFAULT_BUILD_CONF = 'edp-build-config.js';
 
 /**
  * 加载配置文件
- * 
+ *
  * @inner
  * @param {string=} confFile 配置文件路径
  * @param {string=} baseDir 自动查找配置文件的基础路径
@@ -147,7 +147,7 @@ cli.main = function (args, opts) {
     conf.stage = opts.stage || 'default';
 
     if (typeof conf.init === 'function') {
-        conf.init(conf, function(config) {
+        conf.init(conf, function (config) {
             require('../index')(config || conf);
         });
     }

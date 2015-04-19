@@ -15,20 +15,20 @@
  *
  **/
 var edp = require( 'edp-core' );
-var ArrayBase = require( '../lib/util/array' );
+var u = require('underscore');
 
 describe('array', function(){
     it('expand', function(){
         /* jshint ignore:start */
         var a = [, 1, '2', true, null, undefined, new Object() ];
-        expect( ArrayBase.expand( a ) ).toEqual( a );
+        expect( u.flatten( a ) ).toEqual( a );
 
         var b = [, 1, '2', true, null, undefined, new Object(), [] ];
-        expect( ArrayBase.expand( b ) ).toEqual( a );
+        expect( u.flatten( b ) ).toEqual( a );
         /* jshint ignore:end */
 
         var c = [ 1, 2, [ 3, 4 ], [ 5, [ 6, 7, [ [ 8 ] ] ] ] ];
-        expect( ArrayBase.expand( c ) ).toEqual( [ 1, 2, 3, 4, 5, 6, 7, 8 ] );
+        expect( u.flatten( c ) ).toEqual( [ 1, 2, 3, 4, 5, 6, 7, 8 ] );
     });
 
     it('getAllModules', function(){
