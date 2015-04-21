@@ -1,41 +1,46 @@
 /**
+ * @file test/using-etpl.spec.js
  * @author leeight(liyubei@baidu.com)
  */
 
-// var fs = require('fs');
 var path = require('path');
 
 var base = require('./base');
 var ModuleCompiler = require('../lib/processor/module-compiler.js');
+var ProcessContext = require('../lib/process-context.js');
 
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
-// var ConfigFile = path.resolve(Project, 'module.conf');
 
-var moduleEntries = 'html,htm,phtml,tpl,vm,js';
-// var pageEntries = 'html,htm,phtml,tpl,vm';
+describe('using-etpl', function () {
+    var processContext;
 
-describe('using-etpl', function(){
-    // 需要测试的是如果combine的时候有package的代码需要合并，最后处理的是否正常.
-    it('default', function(){
-        var processor = new ModuleCompiler({
+    beforeEach(function () {
+        processContext = new ProcessContext({
+            baseDir: Project,
             exclude: [],
-            configFile: 'module.conf',
-            entryExtnames: moduleEntries,
-            getCombineConfig: function() {
+            outputDir: 'output',
+            fileEncodings: {}
+        });
+
+        base.traverseDir(Project, processContext);
+        base.traverseDir(path.join(Project, '..', 'base'), processContext);
+    });
+
+    // 需要测试的是如果combine的时候有package的代码需要合并，最后处理的是否正常.
+    it('default', function () {
+        var processor = new ModuleCompiler({
+            getCombineConfig: function () {
                 return {
                     'using-etpl': {
-                        include: [ 'etpl/**' ],
-                        exclude: [ 'etpl/tpl' ]
+                        include: ['etpl/**'],
+                        exclude: ['etpl/tpl']
                     }
                 };
             }
         });
 
-        var filePath = path.join(Project, 'src', 'using-etpl.js');
-        var fileData = base.getFileInfo(filePath);
-
-        var processContext = { baseDir: Project };
-        processor.process(fileData, processContext, function(){
+        base.launchProcessors([processor], processContext, function () {
+            var fileData = processContext.getFileByPath('src/using-etpl.js');
             var expected =
                 '(function (root) {\n' +
                 '    function Engine() {\n' +
@@ -52,7 +57,7 @@ describe('using-etpl', function(){
                 '    }\n' +
                 '}(this));\n' +
                 '\n' +
-                'define(\'etpl\', [\'etpl/main\'], function ( main ) { return main; });\n' +
+                'define(\'etpl\', [\'etpl/main\'], function (main) { return main; });\n' +
                 '\n' +
                 'define(\'biz/tpl\', [\n' +
                 '    \'require\',\n' +
@@ -70,7 +75,7 @@ describe('using-etpl', function(){
                 '    var z = require(\'etpl/main\');\n' +
                 '    console.log(template + z);\n' +
                 '});';
-            expect( fileData.data ).toBe( expected );
+            expect(fileData.data).toBe(expected);
         });
     });
 });

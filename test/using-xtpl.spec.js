@@ -1,37 +1,42 @@
 /**
+ * @file test/using-xtpl.spec.js
  * @author leeight(liyubei@baidu.com)
  */
 
-// var fs = require('fs');
 var path = require('path');
 
 var base = require('./base');
 var ModuleCompiler = require('../lib/processor/module-compiler.js');
+var ProcessContext = require('../lib/process-context.js');
 
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
-// var ConfigFile = path.resolve(Project, 'module.conf');
 
-var moduleEntries = 'html,htm,phtml,tpl,vm,js';
-// var pageEntries = 'html,htm,phtml,tpl,vm';
+describe('using-xtpl', function () {
+    var processContext;
 
-describe('using-xtpl', function(){
-    it('default', function(){
-        var processor = new ModuleCompiler({
+    beforeEach(function () {
+        processContext = new ProcessContext({
+            baseDir: Project,
             exclude: [],
-            configFile: 'module.conf',
-            entryExtnames: moduleEntries,
-            getCombineConfig: function() {
+            outputDir: 'output',
+            fileEncodings: {}
+        });
+
+        base.traverseDir(Project, processContext);
+        base.traverseDir(path.join(Project, '..', 'base'), processContext);
+    });
+
+    it('default', function () {
+        var processor = new ModuleCompiler({
+            getCombineConfig: function () {
                 return {
                     'common/using-xtpl': true
                 };
             }
         });
 
-        var filePath = path.join(Project, 'src', 'common', 'using-xtpl.js');
-        var fileData = base.getFileInfo(filePath);
-
-        var processContext = { baseDir: Project };
-        processor.process(fileData, processContext, function(){
+        base.launchProcessors([processor], processContext, function () {
+            var fileData = processContext.getFileByPath('src/common/using-xtpl.js');
             var expected =
                 'define(\'common/xtpl\', [\'require\'], function (require) {\n' +
                 '    return \'xtpl\';\n' +
@@ -60,7 +65,7 @@ describe('using-xtpl', function(){
                 '    var c = require(\'common/xtpl\');\n' +
                 '    return a + b + c;\n' +
                 '});';
-            expect( fileData.data ).toBe( expected );
+            expect(fileData.data).toBe(expected);
         });
     });
 });

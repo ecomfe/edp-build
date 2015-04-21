@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test html-minifier</title>
+    <!-- commit-in-head -->
+</head>
+<body>
+
+    <!--  commit-in-body -->
+    <p>
+        我是内容
+        <!--
+            commit-multiline
+            commit-multiline
+            commit-multiline
+            commit-multiline
+        -->
+    </p>
+
+    <script type="text/template" >
+
+        <!-- target: hello -->
+        Hello <strong>ETPL</strong>!
+
+        <!-- target: bye -->
+        Bye <strong>ETPL</strong>!
+
+        <!-- target: page -->
+        <header>
+            <!-- block: header -->Header Content<!-- /block -->
+        </header>
+        <div class="main"><!-- block: content --><!-- /block --></div>
+
+        <!-- // just add some message -->
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>hello world.</title>
+    <script src="http://s1.bdstatic.com/r/www/cache/ecom/esl/1-6-6/esl.js"></script>
+    <script>window.DEBUG=true;</script>
+    <script>
+    require.config({
+        'urlArgs': {
+            'foo': 'v=20150129',
+            'bar': 'v=20150129'
+        }
+    });
+    </script>
+</head>
+<body>
+<script>
+require(['foo', 'bar'], function(foo, bar){
+    console.log(foo);
+    console.log(bar);
+});
+</script>
+</body>
+</html>

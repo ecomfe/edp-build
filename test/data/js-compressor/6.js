@@ -14,15 +14,16 @@
  * @description 
  *  
  **/
-FLAGS_boolean = 456;
-DEBUG = true;
-kURL = 'http://cq01-rdqa-pool017.cq01.baidu.com:8300';
+// var FLAGS_boolean = 456;
+// var DEBUG = true;
+// var kURL = 'http://cq01-rdqa-pool017.cq01.baidu.com:8300';
 
 console.log( kURL );
 function log( msg ) {
     if ( DEBUG ) {
         console.log( msg );
     }
+    console.log(FLAGS_boolean);
 }
 
 

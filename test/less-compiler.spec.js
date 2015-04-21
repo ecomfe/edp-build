@@ -83,6 +83,29 @@ describe('less-compiler', function(){
                 'margin:0 auto}body{color:#444;background:url("../img/white-sand.png")}' );
         });
     });
+
+
+    it('additional data', function () {
+        var processor = new LessCompiler({
+            less: require( '../node_modules/less' ),
+            entryExtnames: pageEntries,
+            compileOptions: {
+                compress: true,
+                modifyVars: {
+                    x: '2px'
+                }
+            }
+        });
+
+        var fileData = base.getFileInfo('data/css-compressor/with-var.less', __dirname);
+        var processContext = {
+            baseDir: __dirname,
+            addFileLink: function(){}
+        };
+        processor.process(fileData, processContext, function() {
+            expect( fileData.data ).toBe( 'div{width:2px}');
+        });
+    })
 });
 
 

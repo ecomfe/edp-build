@@ -14,23 +14,55 @@
  * @description
  *
  **/
-var edp = require( 'edp-core' );
+var edp = require('edp-core');
 
 var fs = require('fs');
 var path = require('path');
 
-var compileModule = require('../lib/util/compile-module.js');
-
+var base = require('./base');
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
 var ConfigFile = path.resolve(Project, 'module.conf');
+var ProcessContext = require('../lib/process-context');
+var Module = require('../lib/module');
+var Reader = require('../lib/reader');
+var CompilerContext = require('../lib/compiler-context');
 
 describe('compile-module', function() {
+    var processContext;
+    var reader;
+
+    beforeEach(function () {
+        processContext = new ProcessContext({
+            baseDir: Project,
+            exclude: [],
+            outputDir: 'output',
+            fileEncodings: {}
+        });
+        reader = new Reader(processContext, ConfigFile);
+
+        base.traverseDir(Project, processContext);
+        base.traverseDir(path.join(Project, '..', 'base'), processContext);
+    });
+
+    function compileModule (code, moduleId, moduleConfig, combine, excludeModules) {
+        var bundleConfigs = {};
+        bundleConfigs[moduleId] = combine;
+
+        var compilerContext = new CompilerContext(processContext,
+                moduleConfig, reader, bundleConfigs);
+        var module = new Module(moduleId, compilerContext);
+        return module.toBundle();
+    }
+
+
     it('default `combine` is false', function() {
         var moduleCode = compileModule(
             fs.readFileSync(path.resolve(Project, 'src', 'foo.js'), 'utf-8'),
             'foo',
             ConfigFile,
-            false
+            false,
+            null,
+            processContext
         );
         var expectedCode =
         'define(\'foo\', [\n' +
@@ -52,7 +84,9 @@ describe('compile-module', function() {
             fs.readFileSync(path.resolve(Project, 'src', 'bar.js'), 'utf-8'),
             'bar',
             ConfigFile,
-            true
+            true,
+            null,
+            processContext
         );
 
         var expectedCode =
@@ -66,7 +100,7 @@ describe('compile-module', function() {
         '    var view = require(\'./View\');\n' +
         '    return \'er\';\n' +
         '});\n\n' +
-        'define(\'er\', [\'er/main\'], function ( main ) { return main; });\n\n' +
+        'define(\'er\', [\'er/main\'], function (main) { return main; });\n\n' +
         'define(\'bar\', [\n    \'require\',\n    \'er\'\n], function (require) {\n' +
         '    var er = require(\'er\');\n' +
         '    return er;\n' +
@@ -79,7 +113,9 @@ describe('compile-module', function() {
             fs.readFileSync(path.resolve(Project, 'dep', 'er', '3.0.2', 'src', 'main.js'), 'utf-8'),
             'er',
             ConfigFile,
-            true
+            true,
+            null,
+            processContext
         );
 
         var expectedCode =
@@ -93,7 +129,7 @@ describe('compile-module', function() {
         '    var view = require(\'./View\');\n' +
         '    return \'er\';\n' +
         '});\n\n' +
-        'define(\'er\', [\'er/main\'], function ( main ) { return main; });';
+        'define(\'er\', [\'er/main\'], function (main) { return main; });';
         expect(moduleCode).toEqual(expectedCode);
     });
 
@@ -114,7 +150,7 @@ describe('compile-module', function() {
         '    var view = require(\'./View\');\n' +
         '    return \'er\';\n' +
         '});\n\n' +
-        'define(\'er\', [\'er/main\'], function ( main ) { return main; });';
+        'define(\'er\', [\'er/main\'], function (main) { return main; });';
         expect(moduleCode).toEqual(expectedCode);
     });
 
@@ -125,7 +161,9 @@ describe('compile-module', function() {
             ConfigFile,
             {
                 exclude: ['er/*']
-            }
+            },
+            null,
+            processContext
         );
 
         var expectedCode =
@@ -133,7 +171,7 @@ describe('compile-module', function() {
         '    var view = require(\'./View\');\n' +
         '    return \'er\';\n' +
         '});\n\n' +
-        'define(\'er\', [\'er/main\'], function ( main ) { return main; });';
+        'define(\'er\', [\'er/main\'], function (main) { return main; });';
         expect(moduleCode).toEqual(expectedCode);
     });
 
@@ -144,7 +182,9 @@ describe('compile-module', function() {
             ConfigFile,
             {
                 exclude: [ [ [ 'er/*' ] ] ]
-            }
+            },
+            null,
+            processContext
         );
 
         var expectedCode =
@@ -152,7 +192,7 @@ describe('compile-module', function() {
         '    var view = require(\'./View\');\n' +
         '    return \'er\';\n' +
         '});\n\n' +
-        'define(\'er\', [\'er/main\'], function ( main ) { return main; });';
+        'define(\'er\', [\'er/main\'], function (main) { return main; });';
         expect(moduleCode).toEqual(expectedCode);
     });
 
@@ -161,7 +201,9 @@ describe('compile-module', function() {
             fs.readFileSync(path.resolve(Project, 'src', 'foo.js'), 'utf-8'),
             'foo',
             ConfigFile,
-            true
+            true,
+            null,
+            processContext
         );
 
         var expectedCode =
@@ -190,13 +232,15 @@ describe('compile-module', function() {
             fs.readFileSync(path.resolve(Project, 'src', 'case138.js'), 'utf-8'),
             'case138',
             ConfigFile,
-            true
+            true,
+            null,
+            processContext
         );
 
         var ast = edp.amd.getAst( moduleCode );
         // 期待进行合并操作后只有一个define调用语句
         // 即没有合并解析失败的模块
-        expect(ast.body.length).toBe(1);
+        expect(ast.body.length).toBe(3);
     });
 });
 

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>[Please input title]</title>
+    <script src="http://s1.bdstatic.com/r/www/cache/ecom/esl/2-0-6/esl.source.js"></script>
+    <script>
+    require.config({
+        "baseUrl": "src",
+        "paths": {
+            "cl": "common/css"
+        },
+        "packages": [
+            {
+                "name": "lib",
+                "location": "common",
+                "main": "lib-pc"
+            },
+            {
+                "name": "etpl",
+                "location": "../dep/etpl/0.0.0/src",
+                "main": "main"
+            }
+        ],
+        "map": {
+            "lang": {
+                "foo": "foo2",
+                "bar": "bar2"
+            }
+        }
+    });
+    </script>
+</head>
+
+<body>
+<script>
+require(['lang', 'lang/zh']);
+</script>
+</body>
+</html>

@@ -1,38 +1,43 @@
 /**
+ * @file test/using-ztpl.spec.js
  * @author leeight(liyubei@baidu.com)
  */
 
-// var fs = require('fs');
 var path = require('path');
 
 var base = require('./base');
 var ModuleCompiler = require('../lib/processor/module-compiler.js');
+var ProcessContext = require('../lib/process-context.js');
 
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
-// var ConfigFile = path.resolve(Project, 'module.conf');
 
-var moduleEntries = 'html,htm,phtml,tpl,vm,js';
-// var pageEntries = 'html,htm,phtml,tpl,vm';
+describe('using-ztpl', function () {
+    var processContext;
 
-describe('using-ztpl', function(){
-    // 需要测试的是如果define不是global call，看看是否combine的代码是否正常
-    it('default', function(){
-        var processor = new ModuleCompiler({
+    beforeEach(function () {
+        processContext = new ProcessContext({
+            baseDir: Project,
             exclude: [],
-            configFile: 'module.conf',
-            entryExtnames: moduleEntries,
-            getCombineConfig: function() {
+            outputDir: 'output',
+            fileEncodings: {}
+        });
+
+        base.traverseDir(Project, processContext);
+        base.traverseDir(path.join(Project, '..', 'base'), processContext);
+    });
+
+    // 需要测试的是如果define不是global call，看看是否combine的代码是否正常
+    it('default', function () {
+        var processor = new ModuleCompiler({
+            getCombineConfig: function () {
                 return {
                     'using-ztpl': true
                 };
             }
         });
 
-        var filePath = path.join(Project, 'src', 'using-ztpl.js');
-        var fileData = base.getFileInfo(filePath);
-
-        var processContext = { baseDir: Project };
-        processor.process(fileData, processContext, function(){
+        base.launchProcessors([processor], processContext, function () {
+            var fileData = processContext.getFileByPath('src/using-ztpl.js');
             var expected =
                 '(function (root) {\n' +
                 '    var ztpl = \'ztpl\';\n' +
@@ -54,7 +59,7 @@ describe('using-ztpl', function(){
                 '    var ztpl = require(\'./common/ztpl\');\n' +
                 '    console.log(ztpl);\n' +
                 '});';
-            expect( fileData.data ).toBe( expected );
+            expect(fileData.data).toBe(expected);
         });
     });
 });
