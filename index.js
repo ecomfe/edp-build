@@ -116,7 +116,8 @@ function injectProcessor(conf) {
             StringReplace       : require('./lib/processor/string-replace'),
             BcsUploader         : require('./lib/processor/bcs-uploader'),
             OutputCleaner       : require('./lib/processor/output-cleaner'),
-            CssSpriter          : require('./lib/processor/css-spriter')
+            CssSpriter          : require('./lib/processor/css-spriter'),
+            BabelProcessor      : require('./lib/processor/babel-processor')
         });
     }
 }

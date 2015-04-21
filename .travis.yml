@@ -7,3 +7,4 @@ before_script:
   - "npm i css-spriter"
   - "npm i edpx-bcs"
   - "npm i html-minifier"
+  - "npm i babel"
