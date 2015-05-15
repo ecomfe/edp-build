@@ -1,47 +1,47 @@
 /***************************************************************************
- * 
+ *$
  * Copyright (c) 2014 Baidu.com, Inc. All Rights Reserved
- * $Id$ 
- * 
+ * $Id$$
+ *
  **************************************************************************/
- 
- 
- 
+
+
+
 /**
  * variable-substitution.spec.js ~ 2014/05/26 16:48:26
  * @author leeight(liyubei@baidu.com)
- * @version $Revision$ 
- * @description 
- *  
+ * @version $Revision$
+ * @description
+ *
  **/
 var path = require('path');
 
 var base = require('./base');
-var VariableSubstitution = require( '../lib/processor/variable-substitution.js' );
-var ProcessContext = require( '../lib/process-context' );
+var VariableSubstitution = require('../lib/processor/variable-substitution.js');
+var ProcessContext = require('../lib/process-context');
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
 
-describe( 'variable-substitution', function(){
-    it( 'default', function(){
+describe('variable-substitution', function () {
+    it('default', function (done) {
         var processor = new VariableSubstitution({
             variables: {
                 version: '1.0.1'
             }
         });
 
-        var fileData = base.getFileInfo( 'issue-259.html', Project );
-
-        var processContext = new ProcessContext( {
+        var processContext = new ProcessContext({
             baseDir: Project,
             exclude: [],
             outputDir: 'output',
             fileEncodings: {}
         });
-        processContext.addFile( fileData );
+        base.traverseDir(Project, processContext);
 
-        base.launchProcessors( [ processor ], processContext, function(){
+        base.launchProcessors([processor], processContext, function () {
+            var fileData = processContext.getFileByPath('issue-259.html');
             var expected = '<link rel="stylesheet" href="main.css?1.0.1">\n<link rel="stylesheet" href="main.css?1.0.1">';
-            expect( fileData.data.trim() ).toEqual( expected );
+            expect(fileData.data.trim()).toEqual(expected);
+            done();
         });
     });
 });

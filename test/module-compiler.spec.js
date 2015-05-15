@@ -3,7 +3,7 @@
  * @file 测试一下ModuleCompiler的功能是否正常
  */
 
-var edp = require( 'edp-core' );
+var edp = require('edp-core');
 
 var path = require('path');
 
@@ -200,6 +200,43 @@ describe('module-compiler', function(){
                 '    return \'dynamic-module/foo\' + require(\'./list.tpl\');\n' +
                 '});';
             expect(actual).toBe(expected);
+            done();
+        });
+    });
+
+    it('issue-92', function (done) {
+        var Project = path.resolve(__dirname, 'data', 'dummy-project-2');
+        var processContext = new ProcessContext({
+            baseDir: Project,
+            exclude: [],
+            outputDir: 'output',
+            fileEncodings: {}
+        });
+        base.traverseDir(Project, processContext);
+
+        spyOn(edp.log, 'warn').and.callThrough();
+
+        var p2 = new ModuleCompiler({
+            getCombineConfig: function (config) {
+                config['issue-92'] = true;
+            }
+        });
+
+        base.launchProcessors([p2], processContext, function () {
+            var code = processContext.getFileByPath('src/issue-92.js');
+            expect(edp.log.warn).not.toHaveBeenCalled();
+            var expected =
+                '\n\n\n\n\n\ndefine(\'issue-92\', [\n' +
+                '    \'require\',\n' +
+                '    \'hello/mod1\',\n' +
+                '    \'world/mod1\',\n' +
+                '    \'wtf/mod1/mod2\'\n' +
+                '], function (require) {\n' +
+                '    require(\'hello/mod1\');\n' +
+                '    require(\'world/mod1\');\n' +
+                '    require(\'wtf/mod1/mod2\');\n' +
+                '});'
+            expect(code.data).toEqual(expected);
             done();
         });
     });
