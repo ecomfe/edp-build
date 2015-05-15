@@ -1,19 +1,7 @@
-/***************************************************************************
- *
- * Copyright (c) 2013 Baidu.com, Inc. All Rights Reserved
- * $Id$
- *
- **************************************************************************/
-
-
-
 /**
- * compile-module.spec.js ~ 2013/09/28 22:27:51
+ * @file compile-module.spec.js ~ 2013/09/28 22:27:51
  * @author leeight(liyubei@baidu.com)
- * @version $Revision$
- * @description
- *
- **/
+ */
 var edp = require('edp-core');
 
 var fs = require('fs');
@@ -27,7 +15,7 @@ var Module = require('../lib/module');
 var Reader = require('../lib/reader');
 var CompilerContext = require('../lib/compiler-context');
 
-describe('compile-module', function() {
+describe('compile-module', function () {
     var processContext;
     var reader;
 
@@ -44,7 +32,7 @@ describe('compile-module', function() {
         base.traverseDir(path.join(Project, '..', 'base'), processContext);
     });
 
-    function compileModule (code, moduleId, moduleConfig, combine, excludeModules) {
+    function compileModule(code, moduleId, moduleConfig, combine, excludeModules) {
         var bundleConfigs = {};
         bundleConfigs[moduleId] = combine;
 
@@ -55,7 +43,7 @@ describe('compile-module', function() {
     }
 
 
-    it('default `combine` is false', function() {
+    it('default `combine` is false', function () {
         var moduleCode = compileModule(
             fs.readFileSync(path.resolve(Project, 'src', 'foo.js'), 'utf-8'),
             'foo',
@@ -79,7 +67,7 @@ describe('compile-module', function() {
         expect(moduleCode).toEqual(expectedCode);
     });
 
-    it('dep\'s main module', function() {
+    it('dep\'s main module', function () {
         var moduleCode = compileModule(
             fs.readFileSync(path.resolve(Project, 'src', 'bar.js'), 'utf-8'),
             'bar',
@@ -108,7 +96,7 @@ describe('compile-module', function() {
         expect(moduleCode).toEqual(expectedCode);
     });
 
-    it('main module', function() {
+    it('main module', function () {
         var moduleCode = compileModule(
             fs.readFileSync(path.resolve(Project, 'dep', 'er', '3.0.2', 'src', 'main.js'), 'utf-8'),
             'er',
@@ -133,14 +121,14 @@ describe('compile-module', function() {
         expect(moduleCode).toEqual(expectedCode);
     });
 
-    it('exclude module', function() {
+    it('exclude module', function () {
         var moduleCode = compileModule(
             fs.readFileSync(path.resolve(Project, 'dep', 'er', '3.0.2', 'src', 'main.js'), 'utf-8'),
             'er',
             ConfigFile,
             {
-                exclude: [ 'er/*' ],
-                include: [ [ [ [ 'er/View' ] ] ] ]
+                exclude: ['er/*'],
+                include: [[[['er/View']]]]
             }
         );
 
@@ -154,7 +142,7 @@ describe('compile-module', function() {
         expect(moduleCode).toEqual(expectedCode);
     });
 
-    it('exclude module 2', function() {
+    it('exclude module 2', function () {
         var moduleCode = compileModule(
             fs.readFileSync(path.resolve(Project, 'dep', 'er', '3.0.2', 'src', 'main.js'), 'utf-8'),
             'er',
@@ -175,13 +163,13 @@ describe('compile-module', function() {
         expect(moduleCode).toEqual(expectedCode);
     });
 
-    it('exclude module 3', function() {
+    it('exclude module 3', function () {
         var moduleCode = compileModule(
             fs.readFileSync(path.resolve(Project, 'dep', 'er', '3.0.2', 'src', 'main.js'), 'utf-8'),
             'er',
             ConfigFile,
             {
-                exclude: [ [ [ 'er/*' ] ] ]
+                exclude: [[['er/*']]]
             },
             null,
             processContext
@@ -196,7 +184,7 @@ describe('compile-module', function() {
         expect(moduleCode).toEqual(expectedCode);
     });
 
-    it('default `combine` is true', function() {
+    it('default `combine` is true', function () {
         var moduleCode = compileModule(
             fs.readFileSync(path.resolve(Project, 'src', 'foo.js'), 'utf-8'),
             'foo',
@@ -237,7 +225,9 @@ describe('compile-module', function() {
             processContext
         );
 
-        var ast = edp.amd.getAst( moduleCode );
+        var ast = edp.amd.getAst(moduleCode);
+        expect(moduleCode).toEqual('');
+
         // 期待进行合并操作后只有一个define调用语句
         // 即没有合并解析失败的模块
         expect(ast.body.length).toBe(3);
