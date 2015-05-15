@@ -1,3 +1,11 @@
 .logo {
   background: url('../common/logo.gif#100-100');
 }
+
+div {
+  background: url(    ../common/logo.gif    );
+}
+
+a {
+  background: url(    ../common/logo.gif#100-100    );
+}
