@@ -47,8 +47,8 @@ describe('js-compressor', function() {
         var processor = new JsCompressor();
         base.launchProcessors([processor], processContext, function () {
             var fileData = processContext.getFileByPath('default.js');
-            expect(fileData.data).toBe('function main(){var require=0,exports=1,module=2,o=3;' +
-                'return require+exports+module+o}');
+            expect(fileData.data).toBe('function main(){var require=0,exports=1,module=2,n=3;' +
+                'return require+exports+module+n}');
             done();
         });
     });
@@ -61,8 +61,8 @@ describe('js-compressor', function() {
         });
         base.launchProcessors([processor], processContext, function () {
             var fileData = processContext.getFileByPath('5.js');
-            expect(fileData.data).toBe('function main(){function callSuper(){}var require=0,n=1,o=2,foobar=3;' +
-                'return callSuper(require+n+o+foobar)}');
+            expect(fileData.data).toBe('function main(){function callSuper(){}var require=0,n=1,e=2,foobar=3;' +
+                'return callSuper(require+n+e+foobar)}');
             done();
         });
     });

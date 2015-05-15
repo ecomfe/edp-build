@@ -44,7 +44,15 @@ describe('babel-processor', function () {
 
     it('default', function (done) {
         var p0 = new BabelProcessor({
-            files: ['*.es6']
+            files: ['*.es6'],
+            compileOptions: {
+                loose: 'all',
+                modules: 'amd',
+                compact: false,
+                ast: false,
+                optional: ['runtime'],
+                blacklist: ['strict']
+            }
         });
         var p1 = new JsCompressor({
             files: ['*.es6']
@@ -52,7 +60,7 @@ describe('babel-processor', function () {
 
         base.launchProcessors([p0, p1], processContext, function () {
             var fi = processContext.getFileByPath('src/hello.es6');
-            expect(fi.data).toEqual('define(["exports"],function(exports){{var o=Function.prototype.bind,n=function(o,n){if(!(o instanceof n))throw new TypeError("Cannot call a class as a function")},t=function(o,n){if("function"!=typeof n&&null!==n)throw new TypeError("Super expression must either be null or a function, not "+typeof n);if(o.prototype=Object.create(n&&n.prototype,{constructor:{value:o,enumerable:!1,writable:!0,configurable:!0}}),n)o.__proto__=n};!function(r){function e(){if(n(this,e),null!=r){var t=new(o.apply(r,[null].concat(arguments)));return t.__proto__=e.prototype,t}return t}return t(e,r),e.prototype.toString=function(){console.log("HelloWorld")},e}(Array)}});');
+            expect(fi.data).toEqual('define(["exports","babel-runtime/helpers/inherits","babel-runtime/helpers/class-call-check"],function(exports,e,t){(function(l){function n(){if(t["default"](this,n),null!=l)l.apply(this,arguments)}return e["default"](n,l),n.prototype.toString=function(){console.log("HelloWorld")},n})(Array)});');
             done();
         });
     });
