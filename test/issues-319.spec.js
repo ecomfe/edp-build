@@ -65,7 +65,7 @@ describe('issue-319', function () {
         base.launchProcessors([p1, p2], processContext, function () {
             var fs = require('fs');
             var actual = processContext.getFileByPath('src/319.js').data;
-            var expected = fs.readFileSync('data/expected/issues-319.expected.txt', 'utf-8');
+            var expected = fs.readFileSync(path.join(__dirname, 'data/expected/issues-319.expected.txt'), 'utf-8');
             expect(actual).toBe(expected);
             done();
         });

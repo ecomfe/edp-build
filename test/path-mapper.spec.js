@@ -37,13 +37,11 @@ function list2Map(packages) {
 }
 
 describe('path-mapper', function() {
-    it('default', function(){
+    it('default', function(done){
         var processor = new PathMapper({
             from: 'src',
             to: 'asset'
         });
-
-        var fileData = base.getFileInfo('issue-222.html', Project);
 
         var processContext = new ProcessContext( {
             baseDir: Project,
@@ -51,19 +49,21 @@ describe('path-mapper', function() {
             outputDir: 'output',
             fileEncodings: {}
         });
-        processContext.addFile(fileData);
+        base.traverseDir(Project, processContext);
 
         base.launchProcessors([processor], processContext, function(){
+            var fileData = processContext.getFileByPath('issue-222.html');
             expect(fileData.data.indexOf('href="asset/test/main.less"')).toBeGreaterThan(0);
             expect(fileData.data.indexOf('src="asset/img/logo.png"')).toBeGreaterThan(0);
             expect(fileData.data.indexOf('href="asset/test.html"')).toBeGreaterThan(0);
             expect(fileData.data.indexOf('<param name="movie" value="asset/img/flash.swf">')).toBeGreaterThan(0);
             expect(fileData.data.indexOf('embed src="asset/img/flash.swf"')).toBeGreaterThan(0);
             expect(fileData.data.indexOf('<param name="test" value="src/img/flash.swf">')).toBeGreaterThan(0);
+            done();
         });
     });
 
-    it('module-config', function(){
+    it('module-config', function(done){
         var processor = new PathMapper({
             replacements: [
                 { extnames: moduleEntries, replacer: 'module-config' }
@@ -72,21 +72,19 @@ describe('path-mapper', function() {
             to: 'asset'
         });
 
-        var fileData = base.getFileInfo('index.html', Project);
-
-        // issue-76.html 未配置baseUrl，期望在 build 产物中不插入 baseUrl
-        var fileNoBaseurlData = base.getFileInfo('issue-76.html', Project);
-
         var processContext = new ProcessContext( {
             baseDir: Project,
             exclude: [],
             outputDir: 'output',
             fileEncodings: {}
         });
-        processContext.addFile(fileData);
-        processContext.addFile(fileNoBaseurlData);
+        base.traverseDir(Project, processContext);
 
         base.launchProcessors([processor], processContext, function(){
+            var fileData = processContext.getFileByPath('index.html');
+            // issue-76.html 未配置baseUrl，期望在 build 产物中不插入 baseUrl
+            var fileNoBaseurlData = processContext.getFileByPath('issue-76.html');
+
             var readLoaderConfig = require( '../lib/util/read-loader-config' );
             var confInfo = readLoaderConfig( fileData.data );
             expect(confInfo).not.toBe(null);
@@ -105,16 +103,15 @@ describe('path-mapper', function() {
             expect(config).not.toBe(null);
             expect(config.baseUrl).toBe(undefined);
             expect(config.urlArgs).not.toBe(null);
+            done();
        });
     });
 
-    it('inline-css', function(){
+    it('inline-css', function(done){
         var processor = new PathMapper({
             from: 'src',
             to: 'asset'
         });
-
-        var fileData = base.getFileInfo('issue-281.html', Project);
 
         var processContext = new ProcessContext( {
             baseDir: Project,
@@ -122,15 +119,17 @@ describe('path-mapper', function() {
             outputDir: 'output',
             fileEncodings: {}
         });
-        processContext.addFile(fileData);
+        base.traverseDir(Project, processContext);
 
         base.launchProcessors([processor], processContext, function(){
+            var fileData = processContext.getFileByPath('issue-281.html');
             expect(fileData.data.trim()).toBe(
                 base.getFileInfo('issue-281.expected.html', Project).data.trim());
+            done();
         });
     });
 
-    it('css', function(){
+    it('css', function(done){
         var processor = new PathMapper({
             replacements: [
                 { extnames: 'css', replacer: 'css' }
@@ -138,7 +137,7 @@ describe('path-mapper', function() {
             from: 'src',
             to: 'asset'
         });
-        var fileData = base.getFileInfo('src/css/path-mapper.css',Project);
+        var p2 = new CssCompressor();
 
         var processContext = new ProcessContext( {
             baseDir: Project,
@@ -146,16 +145,15 @@ describe('path-mapper', function() {
             outputDir: 'output',
             fileEncodings: {}
         });
-        processContext.addFile(fileData);
+        base.traverseDir(Project, processContext);
 
-        base.launchProcessors([processor], processContext, function(){
-            var processor = new CssCompressor();
-            processor.process(fileData, {baseDir:__dirname}, function() {
-                var expected = 'div{' +
-                    'background:url(../../img/logo.gif)' +
-                '}';
-                expect(fileData.data).toBe(expected);
-            });
+        base.launchProcessors([processor, p2], processContext, function(){
+            var fileData = processContext.getFileByPath('src/css/path-mapper.css');
+            var expected = 'div{' +
+                'background:url(../../img/logo.gif)' +
+            '}';
+            expect(fileData.data).toBe(expected);
+            done();
         });
     });
 });

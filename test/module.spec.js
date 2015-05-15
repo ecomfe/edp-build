@@ -136,7 +136,7 @@ describe('module', function () {
 
         var fs = require('fs');
         var actual = module.toBundle();
-        var expected = fs.readFileSync('data/expected/module-etpl-tpl.expected.txt', 'utf-8');
+        var expected = fs.readFileSync(path.join(__dirname, 'data/expected/module-etpl-tpl.expected.txt'), 'utf-8');
         expect(actual).toBe(expected);
     });
 });

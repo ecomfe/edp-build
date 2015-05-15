@@ -39,10 +39,10 @@ describe('css-spriter', function() {
 
         base.launchProcessors([processor], processContext, function() {
             var cssData = processContext.getFileByPath('src/default.css').data;
-            var compareCssData = fs.readFileSync('data/css-spriter/default.compare.css', 'utf-8');
-            
+            var compareCssData = fs.readFileSync(path.join(__dirname, 'data/css-spriter/default.compare.css'), 'utf-8');
+
             var imgData = processContext.getFileByPath('src/sprite-default.png').data;
-            var compareImgData = fs.readFileSync('data/css-spriter/sprite-default.png');
+            var compareImgData = fs.readFileSync(path.join(__dirname, 'data/css-spriter/sprite-default.png'));
 
             // 去掉版本号比较
             expect(cssData.replace(/\?ver=\d*/g, '')).toBe(compareCssData);
