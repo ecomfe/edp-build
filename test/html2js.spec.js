@@ -75,6 +75,53 @@ describe('html2js-compiler', function() {
         expect(processContext.getFilesByPatterns(['*.html']).length).toBe(1);
     });
 
+    describe('without keepSource', function () {
+        processor2 = new Html2JsCompiler({
+            extnames: ['html']
+        });
+
+        processContext2 = new ProcessContext(
+            {
+                baseDir: projectDir,
+                exclude: [],
+                outputDir: 'output',
+                fileEncodings: {}
+            }
+        );
+
+        processContext2.addFile(file);
+        processContext2.addFile(otherFile);
+
+        it('have xxx.html', function(done) {
+            processor2.start(processContext2, function() {
+                jsFile = processContext2.getFilesByPatterns(['*.html'])[0];
+                expect(jsFile).not.toBe(undefined);
+                done();
+            });
+        });
+
+        it('link xxx.html.js', function () {
+            var file = processContext2.getFileByPath(jsFile.path + '.js');
+            expect(file).toBe(jsFile);
+        });
+
+        it('files filter', function() {
+            expect(processor2.processFiles.length).toBe(1);
+        });
+
+        it('extname should be js', function() {
+            expect(jsFile.extname).toBe('js');
+        });
+
+        it('wrap define', function() {
+            expect(/^define/.test(jsFile.data)).toBe(true);
+        });
+
+        it('match html', function() {
+            expect(/<!-- target:MAIN_PAGE_foo_123/.test(jsFile.data)).toBe(true);
+        });
+
+    });
 
 });
 
