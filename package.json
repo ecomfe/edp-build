@@ -42,7 +42,13 @@
   },
   "main": "index.js",
   "repository": "git://github.com/ecomfe/edp-build",
-  "devDependencies": {},
+  "devDependencies": {
+    "babel": "^5.4.3",
+    "css-spriter": "0.0.22",
+    "edpx-bcs": "^1.0.6",
+    "html-minifier": "^0.7.2",
+    "jasmine-node": "^2.0.0"
+  },
   "scripts": {
     "test": "make -C test",
     "coverage": "node_modules/.bin/istanbul cover node_modules/.bin/jasmine-node --verbose --growl --captureExceptions test"

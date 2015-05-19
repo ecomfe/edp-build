@@ -2,9 +2,3 @@ language: node_js
 node_js:
   - "0.11"
   - "0.10"
-before_script:
-  - "npm i jasmine-node@beta"
-  - "npm i css-spriter"
-  - "npm i edpx-bcs"
-  - "npm i html-minifier"
-  - "npm i babel"
