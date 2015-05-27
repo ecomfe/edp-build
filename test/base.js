@@ -70,7 +70,7 @@ exports.launchProcessors = function( processors, processContext, done ) {
 
         var processor = processors[ processorIndex++ ];
         processor.start( processContext, function () {
-            processor.afterAll(processContext);
+            // processor.afterAll(processContext);
             nextProcessor();
         });
     }

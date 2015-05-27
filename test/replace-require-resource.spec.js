@@ -1,30 +1,19 @@
-/***************************************************************************
- *
- * Copyright (c) 2014 Baidu.com, Inc. All Rights Reserved
- * $Id$
- *
- **************************************************************************/
-
-
-
 /**
- * replace-require-resource.spec.js ~ 2014/02/25 11:39:29
+ * @file replace-require-resource.spec.js ~ 2014/02/25 11:39:29
  * @author leeight(liyubei@baidu.com)
- * @version $Revision$
- * @description
- *
- **/
+ */
+
 var fs = require('fs');
 var path = require('path');
 
 var replaceRequireResource = require('../lib/util/replace-require-resource.js');
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
 
-describe('replace-require-resource', function(){
-    it('default', function(){
+describe('replace-require-resource', function () {
+    it('default', function () {
         var file = path.resolve(Project, 'src', 'case1.js');
         var code = fs.readFileSync(file, 'utf-8');
-        var z = replaceRequireResource(code, 'tpl', function(resourceId){
+        var z = replaceRequireResource(code, 'tpl', function (resourceId) {
             return resourceId + '-replaced';
         });
         var expected =
@@ -44,13 +33,13 @@ describe('replace-require-resource', function(){
         '    return \'case1\';\n' +
         '});';
 
-        expect( z ).toBe( expected );
+        expect(z).toBe(expected);
     });
 
-    it('multiple pluginIds', function(){
+    it('multiple pluginIds', function () {
         var file = path.resolve(Project, 'src', 'case1.js');
         var code = fs.readFileSync(file, 'utf-8');
-        var z = replaceRequireResource(code, ['tpl', 'no-such-plugin'], function(resourceId){
+        var z = replaceRequireResource(code, ['tpl', 'no-such-plugin'], function (resourceId) {
             return resourceId + '-replaced';
         });
         var expected =
@@ -70,17 +59,28 @@ describe('replace-require-resource', function(){
         '    return \'case1\';\n' +
         '});';
 
-        expect( z ).toBe( expected );
+        expect(z).toBe(expected);
     });
 
-    it('issue-186', function(){
+    it('issue-186', function () {
         // var file = '/Users/leeight/public_html/case/baike/output/asset/common/main.js';
-        var file = path.join( __dirname, 'data', 'issue-186.data.js' );
-        var code = fs.readFileSync( file, 'utf-8' );
-        var z =replaceRequireResource( code, [ 'tpl' ], function( resourceId ){
+        var file = path.join(__dirname, 'data', 'issue-186.data.js');
+        var code = fs.readFileSync(file, 'utf-8');
+        var z = replaceRequireResource(code, ['tpl'], function (resourceId) {
             return '[' + resourceId + ']';
         });
-        expect( z ).not.toBe( null );
+        expect(z).not.toBe(null);
+    });
+
+    it('issue-94', function () {
+        var code = 'define(["exports", "bat-ria/tpl!./a.tpl", "bat-ria/tpl!./b.tpl", "er/View"], function (exports, a, b, c) {});';
+        var z = replaceRequireResource(code, ['bat-ria/tpl'], function (resourceId) {
+            return 'bat-ria/tpl!template';
+        });
+        var z = replaceRequireResource(z, ['bat-ria/tpl'], function (resourceId) {
+            return 'bat-ria/tpl!template';
+        });
+        expect(z).toBe("define([\n    'exports',\n    'bat-ria/tpl!template',\n    'bat-ria/tpl!template',\n    'er/View'\n], function (exports, a, b, c) {\n});");
     });
 });
 

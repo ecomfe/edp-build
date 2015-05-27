@@ -47,8 +47,8 @@ describe('js-compressor', function() {
         var processor = new JsCompressor();
         base.launchProcessors([processor], processContext, function () {
             var fileData = processContext.getFileByPath('default.js');
-            expect(fileData.data).toBe('function main(){var require=0,exports=1,module=2,n=3;' +
-                'return require+exports+module+n}');
+            expect(fileData.data).toBe('function main(){var require=0,exports=1,module=2,t=3;' +
+                'return require+exports+module+t}');
             done();
         });
     });
@@ -61,8 +61,8 @@ describe('js-compressor', function() {
         });
         base.launchProcessors([processor], processContext, function () {
             var fileData = processContext.getFileByPath('5.js');
-            expect(fileData.data).toBe('function main(){function callSuper(){}var require=0,n=1,e=2,foobar=3;' +
-                'return callSuper(require+n+e+foobar)}');
+            expect(fileData.data).toBe('function main(){function callSuper(){}var require=0,n=1,t=2,foobar=3;' +
+                'return callSuper(require+n+t+foobar)}');
             done();
         });
     });
@@ -75,8 +75,8 @@ describe('js-compressor', function() {
         });
         base.launchProcessors([processor], processContext, function () {
             var fileData = processContext.getFileByPath('5.js');
-            expect(fileData.data).toBe('function main(){function n(){}var require=0,exports=1,module=2,o=3;' +
-                'return n(require+exports+module+o)}\n//# sourceMappingURL=source_map/5.js.map');
+            expect(fileData.data).toBe('function main(){function n(){}var require=0,exports=1,module=2,e=3;' +
+                'return n(require+exports+module+e)}\n//# sourceMappingURL=source_map/5.js.map');
             expect(processContext.getFileByPath('source_map/5.js.map')).not.toBe(null);
             expect(processContext.getFileByPath('source_map/5.js')).not.toBe(null);
             done();
@@ -92,8 +92,8 @@ describe('js-compressor', function() {
         });
         base.launchProcessors([processor], processContext, function () {
             var fileData = processContext.getFileByPath('5.js');
-            expect(fileData.data).toBe('function main(){function n(){}var require=0,exports=1,module=2,o=3;' +
-                'return n(require+exports+module+o)}\n//# sourceMappingURL=this/is/the/fucking/sourcemap/directory/5.js.map');
+            expect(fileData.data).toBe('function main(){function n(){}var require=0,exports=1,module=2,e=3;' +
+                'return n(require+exports+module+e)}\n//# sourceMappingURL=this/is/the/fucking/sourcemap/directory/5.js.map');
             expect(processContext.getFileByPath('this/is/the/fucking/sourcemap/directory/5.js.map')).not.toBe(null);
             expect(processContext.getFileByPath('this/is/the/fucking/sourcemap/directory/5.js')).not.toBe(null);
             done();
