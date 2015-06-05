@@ -150,6 +150,12 @@ describe('path-mapper', function() {
         base.launchProcessors([processor, p2], processContext, function(){
             var fileData = processContext.getFileByPath('src/css/path-mapper.css');
             var expected = 'div{' +
+                'background:url(../../asset/img/logo.gif);' +
+                'background:url(//www.baidu.com/src/img/logo.gif);' +
+                'background:url(//www.baidu.com/src/img/logo.gif);' +
+                'background:url(http://www.baidu.com/src/img/logo.gif);' +
+                'background:url(http://www.baidu.com/src/img/logo.gif);' +
+                'background:url(https://www.baidu.com/src/img/logo.gif);' +
                 'background:url(../../img/logo.gif)' +
             '}';
             expect(fileData.data).toBe(expected);

@@ -37,9 +37,9 @@ describe('css-spriter', function () {
 
             // 去掉版本号比较
             var expected =
-                'div{color:red;background:url(sprite-default.png#300*200)}\n' +
-                'a{text-decoration:none;background:url(./b.png#nocombine)no-repeat}\n' +
-                'span{background:url(sprite-default.png#271*134)-300px 0 no-repeat}';
+                'div{color:red;background:url(sprite-default.png#300*200) 0 0}\n' +
+                'a{text-decoration:none;background:url(./b.png#nocombine) no-repeat}\n' +
+                'span{background:url(sprite-default.png#271*134) -300px 0 no-repeat}';
             expect(cssData.data.replace(/\?ver=\d*/g, '')).toBe(expected);
             expect(imgData).toEqual(compareImgData);
 
