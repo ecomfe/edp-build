@@ -241,6 +241,27 @@ describe('module-compiler', function(){
         });
     });
 
+    it('webuploader.js', function (done) {
+        // webuploader.js
+        var Project = path.resolve(__dirname, 'data', 'dummy-project-2');
+        var processContext = new ProcessContext({
+            baseDir: Project,
+            exclude: [],
+            outputDir: 'output',
+            fileEncodings: {}
+        });
+        base.traverseDir(Project, processContext);
+
+        var p2 = new ModuleCompiler();
+
+        base.launchProcessors([p2], processContext, function () {
+            var webuploader = processContext.getFileByPath('src/webuploader.js');
+            expect(webuploader.data.indexOf('define(\'webuploader/webuploader\', [\'jquery\'], makeExport);')).not.toBe(-1);
+            expect(webuploader.data.indexOf('define(\'webuploader\', [\'webuploader/webuploader\'], function (main) { return main; });')).not.toBe(-1);
+            done();
+        });
+    });
+
     it('paths & package alias', function (done) {
         var Project = path.resolve(__dirname, 'data', 'dummy-project-2');
         var processContext = new ProcessContext({
