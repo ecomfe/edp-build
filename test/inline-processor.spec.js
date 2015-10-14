@@ -91,8 +91,7 @@ describe('inline-processor', function() {
                         return {path: newPath, dir: '.'};
                     }
                     return path;
-                },
-                output: 'output'
+                }
             }
         });
 
