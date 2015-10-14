@@ -1,0 +1,1 @@
+define(function(require,exports,module){function n(){return r()+e()}var r=require("./hello"),e=require("./world");return n});

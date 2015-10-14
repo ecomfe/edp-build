@@ -1,0 +1,14 @@
+{
+    "src/world.js": {
+        "md5": "dcdd737f285a302452968e59ec5d0e9b",
+        "out": "src/world.js"
+    },
+    "src/hello.js": {
+        "md5": "098d99ff8afb184b7490de20359f1864",
+        "out": "src/hello.js"
+    },
+    "src/app.js": {
+        "md5": "3622b13d8d7a83ae7a42664b1b33fe5c",
+        "out": "src/app.js"
+    }
+}

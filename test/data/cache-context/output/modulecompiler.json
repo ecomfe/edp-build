@@ -1,0 +1,18 @@
+{
+    "src/common/util.js": {
+        "md5": "b042dde91f71f14ee968d3545d7017c1",
+        "out": "src/common/util.js"
+    },
+    "src/common/print.js": {
+        "md5": "6f6883992414530d49c14aa3ed9af3d8",
+        "out": "src/common/print.js"
+    },
+    "src/biz.js": {
+        "md5": "6f106b738757f1cffa885daa5b571066",
+        "deps": [
+            "src/common/util.js,b042dde91f71f14ee968d3545d7017c1",
+            "src/common/print.js,6f6883992414530d49c14aa3ed9af3d8"
+        ],
+        "out": "src/biz.js"
+    }
+}
