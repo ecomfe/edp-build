@@ -43,14 +43,23 @@ describe('html-minifier', function() {
                 removeComments: true
             }
         });
+
         var fileData = base.getFileInfo('data/dummy-project/issue-71.html', __dirname);
         processor.process(fileData, null, function() {
-
             expect(/target\: hello/.test(fileData.data)).toBe(true);
             expect(/block\: header/.test(fileData.data)).toBe(true);
             expect(/block\: content/.test(fileData.data)).toBe(true);
-
         });
+    });
+
+    it('#108', function () {
+        var processor = new HtmlMinifier();
+
+        var fileData = base.getFileInfo('data/dummy-project/issue-108.html', __dirname);
+        processor.process(fileData, null, function() {
+            expect(fileData.data).toBe('<header class="ui-bar main-header<!-- if: !${pageTitle} --> default<!-- /if --><!-- if:${className} --> ${className}<!-- /if -->" data-ui="" data-viewport-bar="header" data-name="koubei"></header>');
+        });
+
     });
 
 });
