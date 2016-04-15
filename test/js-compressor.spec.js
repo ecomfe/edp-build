@@ -47,8 +47,8 @@ describe('js-compressor', function() {
         var processor = new JsCompressor();
         base.launchProcessors([processor], processContext, function () {
             var fileData = processContext.getFileByPath('default.js');
-            expect(fileData.data).toBe('function main(){var require=0,exports=1,module=2,t=3;' +
-                'return require+exports+module+t}');
+            expect(fileData.data).toBe('function main(){var require=0,exports=1,module=2,n=3;' +
+                'return require+exports+module+n}');
             done();
         });
     });
@@ -61,8 +61,8 @@ describe('js-compressor', function() {
         });
         base.launchProcessors([processor], processContext, function () {
             var fileData = processContext.getFileByPath('5.js');
-            expect(fileData.data).toBe('function main(){function callSuper(){}var require=0,n=1,t=2,foobar=3;' +
-                'return callSuper(require+n+t+foobar)}');
+            expect(fileData.data).toBe('function main(){function callSuper(){}var require=0,n=1,i=2,foobar=3;' +
+                'return callSuper(require+n+i+foobar)}');
             done();
         });
     });
@@ -75,8 +75,8 @@ describe('js-compressor', function() {
         });
         base.launchProcessors([processor], processContext, function () {
             var fileData = processContext.getFileByPath('5.js');
-            expect(fileData.data).toBe('function main(){function n(){}var require=0,exports=1,module=2,e=3;' +
-                'return n(require+exports+module+e)}\n//# sourceMappingURL=source_map/5.js.map');
+            expect(fileData.data).toBe('function main(){function n(){}var require=0,exports=1,module=2,i=3;' + 
+                'return n(require+exports+module+i)}\n//# sourceMappingURL=source_map/5.js.map');
             expect(processContext.getFileByPath('source_map/5.js.map')).not.toBe(null);
             expect(processContext.getFileByPath('source_map/5.js')).not.toBe(null);
             done();
@@ -92,8 +92,8 @@ describe('js-compressor', function() {
         });
         base.launchProcessors([processor], processContext, function () {
             var fileData = processContext.getFileByPath('5.js');
-            expect(fileData.data).toBe('function main(){function n(){}var require=0,exports=1,module=2,e=3;' +
-                'return n(require+exports+module+e)}\n//# sourceMappingURL=this/is/the/fucking/sourcemap/directory/5.js.map');
+            expect(fileData.data).toBe('function main(){function n(){}var require=0,exports=1,module=2,i=3;' +
+                'return n(require+exports+module+i)}\n//# sourceMappingURL=this/is/the/fucking/sourcemap/directory/5.js.map');
             expect(processContext.getFileByPath('this/is/the/fucking/sourcemap/directory/5.js.map')).not.toBe(null);
             expect(processContext.getFileByPath('this/is/the/fucking/sourcemap/directory/5.js')).not.toBe(null);
             done();
@@ -110,8 +110,8 @@ describe('js-compressor', function() {
         });
         base.launchProcessors([processor], processContext, function () {
             var fileData = processContext.getFileByPath('5.js');
-            expect(fileData.data).toBe('function main(){function n(){}var require=0,exports=1,module=2,o=3;' +
-                'return n(require+exports+module+o)}\n//# sourceMappingURL=http://fe.baidu.com/version/8964/this/is/the/fucking/sourcemap/directory/5.js.map');
+            expect(fileData.data).toBe('function main(){function n(){}var require=0,exports=1,module=2,i=3;' +
+                'return n(require+exports+module+i)}\n//# sourceMappingURL=http://fe.baidu.com/version/8964/this/is/the/fucking/sourcemap/directory/5.js.map');
             expect(processContext.getFileByPath('this/is/the/fucking/sourcemap/directory/5.js.map')).not.toBe(null);
             expect(processContext.getFileByPath('this/is/the/fucking/sourcemap/directory/5.js')).not.toBe(null);
 
@@ -144,7 +144,7 @@ describe('js-compressor', function() {
         base.launchProcessors([p1], c1, function () {
             var fd = c1.getFileByPath('6.js');
             // conditionals: false
-            expect(fd.data).toBe('function log(n){if(!1)console.log(n);console.log(123)}console.log("http://www.baidu.com");');
+            expect(fd.data).toBe('function log(o){if(!1)console.log(o);console.log(123)}console.log("http://www.baidu.com");');
             done();
         });
     });
@@ -165,7 +165,7 @@ describe('js-compressor', function() {
         base.launchProcessors([p1], c1, function () {
             var fd = c1.getFileByPath('6.js');
             // conditionals: true
-            expect(fd.data).toBe('function log(n){console.log(123)}console.log("http://www.baidu.com");');
+            expect(fd.data).toBe('function log(o){console.log(123)}console.log("http://www.baidu.com");');
             done();
         });
     });
