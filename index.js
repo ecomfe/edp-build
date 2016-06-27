@@ -106,6 +106,7 @@ function injectProcessor(conf) {
             JsCompressor        : require('./lib/processor/js-compressor'),
             CssCompressor       : require('./lib/processor/css-compressor'),
             LessCompiler        : require('./lib/processor/less-compiler'),
+            PostCSSProcessor    : require('./lib/processor/postcss-processor'),
             PathMapper          : require('./lib/processor/path-mapper'),
             ModuleCompiler      : require('./lib/processor/module-compiler'),
             VariableSubstitution: require('./lib/processor/variable-substitution'),
