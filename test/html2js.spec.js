@@ -15,10 +15,13 @@
  *
  **/
 
+var path = require('path');
+
+var expect = require('expect.js');
+
 var ProcessContext = require('../lib/process-context');
 var Html2JsCompiler = require('../lib/processor/html2js-compiler.js');
 var base = require('./base');
-var path = require('path');
 
 describe('html2js-compiler', function() {
 
@@ -50,29 +53,29 @@ describe('html2js-compiler', function() {
     it('have xxx.html.js', function(done) {
         processor.start(processContext, function() {
             jsFile = processContext.getFilesByPatterns(['*.html.js'])[0];
-            expect(jsFile).not.toBe(undefined);
+            expect(jsFile).not.to.be(undefined);
             done();
         });
     });
 
     it('files filter', function() {
-        expect(processor.processFiles.length).toBe(1);
+        expect(processor.processFiles.length).to.be(1);
     });
 
     it('extname should be js', function() {
-        expect(jsFile.extname).toBe('js');
+        expect(jsFile.extname).to.be('js');
     });
 
     it('wrap define', function() {
-        expect(/^define/.test(jsFile.data)).toBe(true);
+        expect(/^define/.test(jsFile.data)).to.be(true);
     });
 
     it('match html', function() {
-        expect(/<!-- target:MAIN_PAGE_foo_123/.test(jsFile.data)).toBe(true);
+        expect(/<!-- target:MAIN_PAGE_foo_123/.test(jsFile.data)).to.be(true);
     });
 
     it('keep source file', function() {
-        expect(processContext.getFilesByPatterns(['*.html']).length).toBe(1);
+        expect(processContext.getFilesByPatterns(['*.html']).length).to.be(1);
     });
 
     describe('without keepSource', function () {
@@ -95,30 +98,30 @@ describe('html2js-compiler', function() {
         it('have xxx.html', function(done) {
             processor2.start(processContext2, function() {
                 jsFile = processContext2.getFilesByPatterns(['*.html'])[0];
-                expect(jsFile).not.toBe(undefined);
+                expect(jsFile).not.to.be(undefined);
                 done();
             });
         });
 
         it('link xxx.html.js', function () {
             var file = processContext2.getFileByPath(jsFile.path + '.js');
-            expect(file).toBe(jsFile);
+            expect(file).to.be(jsFile);
         });
 
         it('files filter', function() {
-            expect(processor2.processFiles.length).toBe(1);
+            expect(processor2.processFiles.length).to.be(1);
         });
 
         it('extname should be js', function() {
-            expect(jsFile.extname).toBe('js');
+            expect(jsFile.extname).to.be('js');
         });
 
         it('wrap define', function() {
-            expect(/^define/.test(jsFile.data)).toBe(true);
+            expect(/^define/.test(jsFile.data)).to.be(true);
         });
 
         it('match html', function() {
-            expect(/<!-- target:MAIN_PAGE_foo_123/.test(jsFile.data)).toBe(true);
+            expect(/<!-- target:MAIN_PAGE_foo_123/.test(jsFile.data)).to.be(true);
         });
 
     });

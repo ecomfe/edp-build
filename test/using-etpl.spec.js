@@ -4,6 +4,7 @@
  */
 
 var path = require('path');
+var expect = require('expect.js');
 
 var base = require('./base');
 var ModuleCompiler = require('../lib/processor/module-compiler.js');
@@ -27,7 +28,7 @@ describe('using-etpl', function () {
     });
 
     // 需要测试的是如果combine的时候有package的代码需要合并，最后处理的是否正常.
-    it('default', function () {
+    it('default', function (done) {
         var processor = new ModuleCompiler({
             getCombineConfig: function () {
                 return {
@@ -75,7 +76,8 @@ describe('using-etpl', function () {
                 '    var z = require(\'etpl/main\');\n' +
                 '    console.log(template + z);\n' +
                 '});';
-            expect(fileData.data).toBe(expected);
+            expect(fileData.data).to.be(expected);
+            done();
         });
     });
 });

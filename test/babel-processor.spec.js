@@ -13,6 +13,8 @@
 
 var path = require('path');
 
+var expect = require('expect.js');
+
 var base = require('./base');
 var Module = require('../lib/module');
 var Reader = require('../lib/reader');
@@ -60,7 +62,7 @@ describe('babel-processor', function () {
 
         base.launchProcessors([p0, p1], processContext, function () {
             var fi = processContext.getFileByPath('src/hello.es6');
-            expect(fi.data).toEqual('define(["exports","babel-runtime/helpers/inherits","babel-runtime/helpers/class-call-check"],function(exports,e,t){(function(l){function n(){if(t["default"](this,n),null!=l)l.apply(this,arguments)}return e["default"](n,l),n.prototype.toString=function(){console.log("HelloWorld")},n})(Array)});');
+            expect(fi.data).to.eql('define(["exports","babel-runtime/helpers/inherits","babel-runtime/helpers/class-call-check"],function(exports,e,t){(function(l){function n(){if(t["default"](this,n),null!=l)l.apply(this,arguments)}return e["default"](n,l),n.prototype.toString=function(){console.log("HelloWorld")},n})(Array)});');
             done();
         });
     });

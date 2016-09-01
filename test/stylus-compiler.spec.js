@@ -15,6 +15,7 @@
  *
  **/
 var path = require('path');
+var expect = require('expect.js');
 
 var StylusCompiler = require('../lib/processor/stylus-compiler.js');
 var ProcessContext = require( '../lib/process-context' );
@@ -27,7 +28,7 @@ function compact( str ) {
 }
 
 describe('stylus-compiler', function(){
-    it('default', function(){
+    it('default', function(done){
         var processor = new StylusCompiler({
             entryExtnames: pageEntries,
             compileOptions: {
@@ -51,12 +52,13 @@ describe('stylus-compiler', function(){
                 'body{font:12px Helvetica,Arial,sans-serif}' +
                 'a.button{-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px}';
 
-            expect( compact( fileData.data ) ).toBe( expected );
-            expect( htmlFileData.data ).toBe( '<head><link rel="stylesheet" href="1.css"></head>' );
+            expect( compact( fileData.data ) ).to.be( expected );
+            expect( htmlFileData.data ).to.be( '<head><link rel="stylesheet" href="1.css"></head>' );
+            done();
         });
     });
 
-    it('custom stylus module', function(){
+    it('custom stylus module', function(done){
         var processor = new StylusCompiler({
             stylus: require( '../node_modules/stylus' ),
             entryExtnames: pageEntries,
@@ -75,7 +77,8 @@ describe('stylus-compiler', function(){
                 'body{font:12px Helvetica,Arial,sans-serif}' +
                 'a.button{-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px}';
 
-            expect( compact( fileData.data ) ).toBe( expected );
+            expect( compact( fileData.data ) ).to.be( expected );
+            done();
         });
     });
 });

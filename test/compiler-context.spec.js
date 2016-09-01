@@ -12,6 +12,8 @@
  */
 var path = require('path');
 
+var expect = require('expect.js');
+
 var CompilerContext = require('../lib/compiler-context');
 var ProcessContext = require('../lib/process-context');
 var Reader = require('../lib/reader');
@@ -55,23 +57,23 @@ describe('compiler-context', function () {
             configFile, reader, moduleCombineConfigs, moduleMapConfigs);
 
         var d1 = context.getModuleDefinition('er');
-        expect(d1.ast).not.toBeUndefined();
-        expect(d1.ast.type).toEqual('Program');
-        expect(d1.modDefs[0]).not.toBeUndefined();
-        expect(d1.modDefs[0].id).toEqual('er/main');
-        expect(d1.modDefs[0].dependencies).toBeUndefined();
-        expect(d1.pkgDef).not.toBeUndefined();
-        expect(d1.pkgDef.name).toEqual('er');
-        expect(d1.pkgDef.main).toEqual('main');
-        expect(d1.pkgDef.module).toEqual('er/main');
+        expect(d1.ast).not.to.be(undefined);
+        expect(d1.ast.type).to.eql('Program');
+        expect(d1.modDefs[0]).not.to.be(undefined);
+        expect(d1.modDefs[0].id).to.eql('er/main');
+        expect(d1.modDefs[0].dependencies).to.be(undefined);
+        expect(d1.pkgDef).not.to.be(undefined);
+        expect(d1.pkgDef.name).to.eql('er');
+        expect(d1.pkgDef.main).to.eql('main');
+        expect(d1.pkgDef.module).to.eql('er/main');
 
         var d2 = context.getModuleDefinition('er/main');
-        expect(d2.ast).not.toBeUndefined();
-        expect(d2.ast.type).toEqual('Program');
-        expect(d2.modDefs[0]).not.toBeUndefined();
-        expect(d2.modDefs[0].id).toEqual('er/main');
-        expect(d2.modDefs[0].dependencies).toBeUndefined();
-        expect(d2.pkgDef).toBeNull();
+        expect(d2.ast).not.to.be(undefined);
+        expect(d2.ast.type).to.eql('Program');
+        expect(d2.modDefs[0]).not.to.be(undefined);
+        expect(d2.modDefs[0].id).to.eql('er/main');
+        expect(d2.modDefs[0].dependencies).to.be(undefined);
+        expect(d2.pkgDef).to.be(null);
     });
 
     it('getXXX', function () {
@@ -90,13 +92,13 @@ describe('compiler-context', function () {
         };
         var context = new CompilerContext(processContext,
             configFile, reader, moduleCombineConfigs, moduleMapConfigs);
-        expect(context.getXXX('lang', 'foo')).toEqual('foo2');
-        expect(context.getXXX('lang', 'foo/bar')).toEqual('bar3');
-        expect(context.getXXX('lang', 'bar')).toEqual('bar2');
-        expect(context.getXXX('x', 'foo')).toEqual('foo4');
-        expect(context.getXXX('y', 'foo/bar')).toEqual('bar5');
-        expect(context.getXXX('z', 'bar')).toEqual('bar5');
-        expect(context.getXXX('lang', 'barN')).toEqual('barN');
+        expect(context.getXXX('lang', 'foo')).to.eql('foo2');
+        expect(context.getXXX('lang', 'foo/bar')).to.eql('bar3');
+        expect(context.getXXX('lang', 'bar')).to.eql('bar2');
+        expect(context.getXXX('x', 'foo')).to.eql('foo4');
+        expect(context.getXXX('y', 'foo/bar')).to.eql('bar5');
+        expect(context.getXXX('z', 'bar')).to.eql('bar5');
+        expect(context.getXXX('lang', 'barN')).to.eql('barN');
     });
 });
 

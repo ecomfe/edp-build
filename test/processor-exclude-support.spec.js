@@ -8,6 +8,8 @@
 var path = require('path');
 var fs = require('fs');
 
+var expect = require('expect.js');
+
 var base = require('./base');
 
 var ctors = [];
@@ -31,8 +33,8 @@ describe('processor-exclude-support', function () {
                 exclude: ['*'],
                 include: ['default.css']
             });
-            expect(instance.isExclude(fileData)).toBe(true);
-            expect(instance.isInclude(fileData)).toBe(true);
+            expect(instance.isExclude(fileData)).to.be(true);
+            expect(instance.isInclude(fileData)).to.be(true);
         });
     });
 });

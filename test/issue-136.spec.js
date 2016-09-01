@@ -16,9 +16,11 @@
  * define('etpl/main', etpl);
  * 的情况
  **/
-var edp = require( 'edp-core' );
 var fs = require('fs');
 var path = require('path');
+
+var edp = require('edp-core');
+var expect = require('expect.js');
 
 var base = require('./base');
 var ModuleCompiler = require('../lib/processor/module-compiler.js');

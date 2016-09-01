@@ -4,6 +4,7 @@
  */
 
 var path = require('path');
+var expect = require('expect.js');
 
 var base = require('./base');
 var ModuleCompiler = require('../lib/processor/module-compiler.js');
@@ -27,7 +28,7 @@ describe('using-ztpl', function () {
     });
 
     // 需要测试的是如果define不是global call，看看是否combine的代码是否正常
-    it('default', function () {
+    it('default', function (done) {
         var processor = new ModuleCompiler({
             getCombineConfig: function () {
                 return {
@@ -59,7 +60,8 @@ describe('using-ztpl', function () {
                 '    var ztpl = require(\'./common/ztpl\');\n' +
                 '    console.log(ztpl);\n' +
                 '});';
-            expect(fileData.data).toBe(expected);
+            expect(fileData.data).to.be(expected);
+            done();
         });
     });
 });

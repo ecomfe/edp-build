@@ -15,6 +15,7 @@
  *
  **/
 var path = require('path');
+var expect = require('expect.js');
 
 var base = require('./base');
 var VariableSubstitution = require('../lib/processor/variable-substitution.js');
@@ -40,7 +41,7 @@ describe('variable-substitution', function () {
         base.launchProcessors([processor], processContext, function () {
             var fileData = processContext.getFileByPath('issue-259.html');
             var expected = '<link rel="stylesheet" href="main.css?1.0.1">\n<link rel="stylesheet" href="main.css?1.0.1">';
-            expect(fileData.data.trim()).toEqual(expected);
+            expect(fileData.data.trim()).to.eql(expected);
             done();
         });
     });

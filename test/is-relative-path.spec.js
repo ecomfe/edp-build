@@ -14,16 +14,18 @@
  * @description
  *
  **/
+var expect = require('expect.js');
+
 var isRelativePath = require('../node_modules/edp-core').path.isRelativePath;
 
 describe('is-relative-path', function() {
     it('default', function() {
-        expect(isRelativePath('a.jpg')).toBe(true);
-        expect(isRelativePath('./a.jpg')).toBe(true);
-        expect(isRelativePath('../a.jpg')).toBe(true);
-        expect(isRelativePath('//www.google.com/a.jpg')).toBe(false);
-        expect(isRelativePath('http://www.google.com/a.jpg')).toBe(false);
-        expect(isRelativePath('https://www.google.com/a.jpg')).toBe(false);
+        expect(isRelativePath('a.jpg')).to.be(true);
+        expect(isRelativePath('./a.jpg')).to.be(true);
+        expect(isRelativePath('../a.jpg')).to.be(true);
+        expect(isRelativePath('//www.google.com/a.jpg')).to.be(false);
+        expect(isRelativePath('http://www.google.com/a.jpg')).to.be(false);
+        expect(isRelativePath('https://www.google.com/a.jpg')).to.be(false);
     });
 });
 

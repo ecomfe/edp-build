@@ -3,9 +3,11 @@
  * @file 测试一下ModuleCompiler的功能是否正常
  */
 
-var edp = require('edp-core');
-
 var path = require('path');
+
+var edp = require('edp-core');
+var expect = require('expect.js');
+var sinon = require('sinon');
 
 var base = require('./base');
 var AbstractProcessor = require('../lib/processor/abstract.js');
@@ -46,7 +48,7 @@ describe('module-compiler', function(){
                 '    var erView = require(\'er/View\');\n' +
                 '    return \'foo\';\n' +
                 '});';
-            expect(fileData.data).toBe(expected);
+            expect(fileData.data).to.be(expected);
             done();
         });
     });
@@ -64,12 +66,12 @@ describe('module-compiler', function(){
 
             var ast = edp.amd.getAst(fileData.data);
             var moduleInfo = edp.amd.analyseModule(ast);
-            expect(moduleInfo).not.toBe(null);
-            expect(moduleInfo.length).toBe(4);
-            expect(moduleInfo[0].id).toBe('io/File');
-            expect(moduleInfo[1].id).toBe('net/Http');
-            expect(moduleInfo[2].id).toBe('er/View');
-            expect(moduleInfo[3].id).toBe('foo');
+            expect(moduleInfo).not.to.be(null);
+            expect(moduleInfo.length).to.be(4);
+            expect(moduleInfo[0].id).to.be('io/File');
+            expect(moduleInfo[1].id).to.be('net/Http');
+            expect(moduleInfo[2].id).to.be('er/View');
+            expect(moduleInfo[3].id).to.be('foo');
 
             done();
         });
@@ -113,7 +115,7 @@ describe('module-compiler', function(){
                 '    console.log(xtpl);\n' +
                 '    console.log(ztpl);\n' +
                 '});';
-            expect(fileData.data).toBe(expected);
+            expect(fileData.data).to.be(expected);
             done();
         });
     });
@@ -153,7 +155,7 @@ describe('module-compiler', function(){
                 '    console.log(xtpl);\n' +
                 '    console.log(ztpl);\n' +
                 '});';
-            expect(fileData.data).toBe(expected);
+            expect(fileData.data).to.be(expected);
             done();
         });
     });
@@ -199,7 +201,7 @@ describe('module-compiler', function(){
                 '], function (require) {\n' +
                 '    return \'dynamic-module/foo\' + require(\'./list.tpl\');\n' +
                 '});';
-            expect(actual).toBe(expected);
+            expect(actual).to.be(expected);
             done();
         });
     });
@@ -214,7 +216,7 @@ describe('module-compiler', function(){
         });
         base.traverseDir(Project, processContext);
 
-        spyOn(edp.log, 'warn').and.callThrough();
+        sinon.spy(edp.log, 'warn');
 
         var p2 = new ModuleCompiler({
             getCombineConfig: function (config) {
@@ -224,7 +226,6 @@ describe('module-compiler', function(){
 
         base.launchProcessors([p2], processContext, function () {
             var code = processContext.getFileByPath('src/issue-92.js');
-            expect(edp.log.warn).not.toHaveBeenCalled();
             var expected =
                 '\n\n\n\n\n\ndefine(\'issue-92\', [\n' +
                 '    \'require\',\n' +
@@ -236,7 +237,10 @@ describe('module-compiler', function(){
                 '    require(\'world/mod1\');\n' +
                 '    require(\'wtf/mod1/mod2\');\n' +
                 '});'
-            expect(code.data).toEqual(expected);
+            expect(code.data).to.eql(expected);
+            expect(edp.log.warn.calledOnce).to.be(false);
+            edp.log.warn.restore();
+
             done();
         });
     });
@@ -256,8 +260,8 @@ describe('module-compiler', function(){
 
         base.launchProcessors([p2], processContext, function () {
             var webuploader = processContext.getFileByPath('src/webuploader.js');
-            expect(webuploader.data.indexOf('define(\'webuploader/webuploader\', [\'jquery\'], makeExport);')).not.toBe(-1);
-            expect(webuploader.data.indexOf('define(\'webuploader\', [\'webuploader/webuploader\'], function (main) { return main; });')).not.toBe(-1);
+            expect(webuploader.data.indexOf('define(\'webuploader/webuploader\', [\'jquery\'], makeExport);')).not.to.be(-1);
+            expect(webuploader.data.indexOf('define(\'webuploader\', [\'webuploader/webuploader\'], function (main) { return main; });')).not.to.be(-1);
             done();
         });
     });
@@ -280,11 +284,11 @@ describe('module-compiler', function(){
             var why = processContext.getFileByPath('src/why.js');
             var lang = processContext.getFileByPath('src/lang.js');
             var langZh = processContext.getFileByPath('src/lang/zh.js');
-            expect(base.getModuleIds(why.data)).toEqual([ 'cl', 'common/css', 'etpl', 'etpl/main', 'lib/css', 'why' ]);
-            expect(base.getModuleIds(foo.data)).toEqual([ 'cl', 'common/css', 'foo', 'lib/css' ]);
-            expect(base.getModuleIds(bar.data)).toEqual([ 'bar', 'cl', 'common/css', 'lib/css' ]);
-            expect(base.getModuleIds(lang.data)).toEqual([ 'bar2', 'foo2', 'lang' ]);
-            expect(base.getModuleIds(langZh.data)).toEqual([ 'bar2', 'foo3', 'lang/zh' ]);
+            expect(base.getModuleIds(why.data)).to.eql([ 'cl', 'common/css', 'etpl', 'etpl/main', 'lib/css', 'why' ]);
+            expect(base.getModuleIds(foo.data)).to.eql([ 'cl', 'common/css', 'foo', 'lib/css' ]);
+            expect(base.getModuleIds(bar.data)).to.eql([ 'bar', 'cl', 'common/css', 'lib/css' ]);
+            expect(base.getModuleIds(lang.data)).to.eql([ 'bar2', 'foo2', 'lang' ]);
+            expect(base.getModuleIds(langZh.data)).to.eql([ 'bar2', 'foo3', 'lang/zh' ]);
             done();
         });
     });
@@ -312,10 +316,10 @@ describe('module-compiler', function(){
 
         base.launchProcessors([p2], processContext, function () {
             var bar = processContext.getFileByPath('src/ssp/bar.js');
-            expect(base.getModuleIds(bar.data)).toEqual(['ssp/bar', 'ssp/promise']);
+            expect(base.getModuleIds(bar.data)).to.eql(['ssp/bar', 'ssp/promise']);
 
             var foo = processContext.getFileByPath('src/ssp/foo.js');
-            expect(base.getModuleIds(foo.data)).toEqual(['ssp/bar', 'ssp/foo']);
+            expect(base.getModuleIds(foo.data)).to.eql(['ssp/bar', 'ssp/foo']);
             done();
         });
     });

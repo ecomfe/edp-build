@@ -13,6 +13,8 @@
 
 var path = require('path');
 
+var expect = require('expect.js');
+
 var base = require('./base');
 var Module = require('../lib/module');
 var Reader = require('../lib/reader');
@@ -53,7 +55,7 @@ describe('module', function () {
             'define(\'module/foo\', [\'require\'], function (require) {\n' +
             '    return \'module/foo\';\n' +
             '});';
-        expect(module.toBundle()).toBe(expected);
+        expect(module.toBundle()).to.be(expected);
     });
 
     it('匿名模块和具名模块', function () {
@@ -86,7 +88,7 @@ describe('module', function () {
             '});';
         var actual = module.toBundle();
 
-        expect(actual).toBe(expected);
+        expect(actual).to.be(expected);
     });
 
     it('issues/51', function () {
@@ -121,7 +123,7 @@ describe('module', function () {
             '\n' +
             'define(\'er\', [\'er/main\'], function (main) { return main; });';
         var actual = module.toBundle();
-        expect(actual).toBe(expected);
+        expect(actual).to.be(expected);
     });
 
     it('etpl/tpl', function () {
@@ -137,7 +139,7 @@ describe('module', function () {
         var fs = require('fs');
         var actual = module.toBundle();
         var expected = fs.readFileSync(path.join(__dirname, 'data/expected/module-etpl-tpl.expected.txt'), 'utf-8');
-        expect(actual).toBe(expected);
+        expect(actual).to.be(expected);
     });
 });
 

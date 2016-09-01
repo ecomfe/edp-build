@@ -6,6 +6,8 @@
 // var edp = require('edp-core');
 var path = require('path');
 
+var expect = require('expect.js');
+
 var base = require('./base');
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
 var MD5Renamer = require('../lib/processor/md5-renamer');
@@ -34,7 +36,7 @@ describe('md5-renamer', function () {
 
         base.launchProcessors(processors, processContext, function () {
             var f = processContext.getFileByPath('index.html');
-            expect(f).not.toBeUndefined();
+            expect(f).not.to.be(undefined);
             done();
         });
     });
@@ -63,7 +65,7 @@ describe('md5-renamer', function () {
 
         base.launchProcessors(processors, processContext, function () {
             var f = processContext.getFileByPath('index.html');
-            expect(f).not.toBeUndefined();
+            expect(f).not.to.be(undefined);
             done();
         });
     });
@@ -102,40 +104,40 @@ describe('md5-renamer', function () {
             var f2 = processContext.getFileByPath('src/common/main.css');
             var f3 = processContext.getFileByPath('src/common/main.js');
             var k1 = processContext.getFileByPath('src/biz/foo.css');
-            expect(f1.outputPaths).toEqual((['src/common/logo-ba001c53c2b.gif']));
-            expect(f2.outputPaths).toEqual((['src/common/main-5de4eeb0d4f.css']));
-            expect(f3.outputPaths).toEqual((['src/common/main-d299e81d71c.js']));
-            expect(k1.outputPaths).toEqual((['src/biz/foo-7506118fea0.css']));
+            expect(f1.outputPaths).to.eql((['src/common/logo-ba001c53c2b.gif']));
+            expect(f2.outputPaths).to.eql((['src/common/main-5de4eeb0d4f.css']));
+            expect(f3.outputPaths).to.eql((['src/common/main-d299e81d71c.js']));
+            expect(k1.outputPaths).to.eql((['src/biz/foo-7506118fea0.css']));
 
             var f4 = processContext.getFileByPath('issue-235.html');
-            expect(f4.data.indexOf('src/common/main-d299e81d71c.js?foo=bar#hello=world')).not.toBe(-1);
-            expect(f4.data.indexOf('src/common/main-5de4eeb0d4f.css')).not.toBe(-1);
-            expect(f4.data.indexOf('src/common/logo-ba001c53c2b.gif')).not.toBe(-1);
-            expect(f4.data.indexOf('<script src="http://www.baidu.com/a.js?x=1"></script>')).not.toBe(-1);
-            expect(f4.data.indexOf('<script src="//www.baidu.com/foo/bar.js?y=2"></script>')).not.toBe(-1);
-            expect(f4.data.indexOf('<script src="https://www.google.com/ssl.js#a=b"></script>')).not.toBe(-1);
-            expect(f4.data.indexOf('<embed src=\'src/common/logo-ba001c53c2b.gif\' widht=100 height=200 />')).not.toBe(-1);
-            expect(f4.data.indexOf('<param value=\'src/common/logo-ba001c53c2b.gif\' name="movie" />')).not.toBe(-1);
-            expect(f4.data.indexOf('<param value="src/common/logo.gif" />')).not.toBe(-1);
+            expect(f4.data.indexOf('src/common/main-d299e81d71c.js?foo=bar#hello=world')).not.to.be(-1);
+            expect(f4.data.indexOf('src/common/main-5de4eeb0d4f.css')).not.to.be(-1);
+            expect(f4.data.indexOf('src/common/logo-ba001c53c2b.gif')).not.to.be(-1);
+            expect(f4.data.indexOf('<script src="http://www.baidu.com/a.js?x=1"></script>')).not.to.be(-1);
+            expect(f4.data.indexOf('<script src="//www.baidu.com/foo/bar.js?y=2"></script>')).not.to.be(-1);
+            expect(f4.data.indexOf('<script src="https://www.google.com/ssl.js#a=b"></script>')).not.to.be(-1);
+            expect(f4.data.indexOf('<embed src=\'src/common/logo-ba001c53c2b.gif\' widht=100 height=200 />')).not.to.be(-1);
+            expect(f4.data.indexOf('<param value=\'src/common/logo-ba001c53c2b.gif\' name="movie" />')).not.to.be(-1);
+            expect(f4.data.indexOf('<param value="src/common/logo.gif" />')).not.to.be(-1);
 
 
             var f5 = processContext.getFileByPath('src/common/main.css');
-            expect(f5.data.indexOf('logo-ba001c53c2b.gif')).not.toBe(-1);
+            expect(f5.data.indexOf('logo-ba001c53c2b.gif')).not.to.be(-1);
             var f6 = processContext.getFileByPath('src/biz/foo.css');
-            expect(f6.data.indexOf('../common/logo-ba001c53c2b.gif')).not.toBe(-1);
-            expect(f6.data.indexOf('background: url(../common/logo-ba001c53c2b.gif)  ;')).not.toBe(-1);
-            expect(f6.data.indexOf('background: url("../common/logo-ba001c53c2b.gif");')).not.toBe(-1);
+            expect(f6.data.indexOf('../common/logo-ba001c53c2b.gif')).not.to.be(-1);
+            expect(f6.data.indexOf('background: url(../common/logo-ba001c53c2b.gif)  ;')).not.to.be(-1);
+            expect(f6.data.indexOf('background: url("../common/logo-ba001c53c2b.gif");')).not.to.be(-1);
 
             var f7 = processContext.getFileByPath('issue-261.html');
-            expect(f7.data.indexOf('{%$tplData.feRoot%}/src/common/main-d299e81d71c.js?foo=bar#hello=world')).not.toBe(-1);
-            expect(f7.data.indexOf('{%$tplData.feRoot%}/src/common/main-5de4eeb0d4f.css')).not.toBe(-1);
-            expect(f7.data.indexOf('{%$tplData.feRoot%}/src/common/logo-ba001c53c2b.gif')).not.toBe(-1);
-            expect(f7.data.indexOf('<script src="http://www.baidu.com/a.js?x=1"></script>')).not.toBe(-1);
-            expect(f7.data.indexOf('<script src="//www.baidu.com/foo/bar.js?y=2"></script>')).not.toBe(-1);
-            expect(f7.data.indexOf('<script src="https://www.google.com/ssl.js#a=b"></script>')).not.toBe(-1);
-            expect(f7.data.indexOf('<embed src=\'{%$tplData.feRoot%}/src/common/logo-ba001c53c2b.gif\' widht=100 height=200 />')).not.toBe(-1);
-            expect(f7.data.indexOf('<param value=\'{%$tplData.feRoot%}/src/common/logo-ba001c53c2b.gif\' name="movie" />')).not.toBe(-1);
-            expect(f7.data.indexOf('<param value="{%$tplData.feRoot%}/src/common/logo.gif" />')).not.toBe(-1);
+            expect(f7.data.indexOf('{%$tplData.feRoot%}/src/common/main-d299e81d71c.js?foo=bar#hello=world')).not.to.be(-1);
+            expect(f7.data.indexOf('{%$tplData.feRoot%}/src/common/main-5de4eeb0d4f.css')).not.to.be(-1);
+            expect(f7.data.indexOf('{%$tplData.feRoot%}/src/common/logo-ba001c53c2b.gif')).not.to.be(-1);
+            expect(f7.data.indexOf('<script src="http://www.baidu.com/a.js?x=1"></script>')).not.to.be(-1);
+            expect(f7.data.indexOf('<script src="//www.baidu.com/foo/bar.js?y=2"></script>')).not.to.be(-1);
+            expect(f7.data.indexOf('<script src="https://www.google.com/ssl.js#a=b"></script>')).not.to.be(-1);
+            expect(f7.data.indexOf('<embed src=\'{%$tplData.feRoot%}/src/common/logo-ba001c53c2b.gif\' widht=100 height=200 />')).not.to.be(-1);
+            expect(f7.data.indexOf('<param value=\'{%$tplData.feRoot%}/src/common/logo-ba001c53c2b.gif\' name="movie" />')).not.to.be(-1);
+            expect(f7.data.indexOf('<param value="{%$tplData.feRoot%}/src/common/logo.gif" />')).not.to.be(-1);
 
             done();
         });
@@ -173,29 +175,29 @@ describe('md5-renamer', function () {
             var f2 = processContext.getFileByPath('src/common/main.css');
             var f3 = processContext.getFileByPath('src/common/main.js');
             var k1 = processContext.getFileByPath('src/biz/foo.css');
-            expect(f1.outputPaths).toEqual((['src/common/logo-ba001c53c2b.gif']));
-            expect(f2.outputPaths).toEqual(([]));
-            expect(f3.outputPaths).toEqual(([]));
-            expect(k1.outputPaths).toEqual(([]));
+            expect(f1.outputPaths).to.eql((['src/common/logo-ba001c53c2b.gif']));
+            expect(f2.outputPaths).to.eql(([]));
+            expect(f3.outputPaths).to.eql(([]));
+            expect(k1.outputPaths).to.eql(([]));
 
             var f4 = processContext.getFileByPath('issue-235.html');
-            expect(f4.data.indexOf('src/common/main.js?foo=bar#hello=world')).not.toBe(-1);
-            expect(f4.data.indexOf('src/common/main.css')).not.toBe(-1);
-            expect(f4.data.indexOf('src/common/logo-ba001c53c2b.gif')).not.toBe(-1);
-            expect(f4.data.indexOf('<script src="http://www.baidu.com/a.js?x=1"></script>')).not.toBe(-1);
-            expect(f4.data.indexOf('<script src="//www.baidu.com/foo/bar.js?y=2"></script>')).not.toBe(-1);
-            expect(f4.data.indexOf('<script src="https://www.google.com/ssl.js#a=b"></script>')).not.toBe(-1);
-            expect(f4.data.indexOf('<embed src=\'src/common/logo.gif\' widht=100 height=200 />')).not.toBe(-1);
-            expect(f4.data.indexOf('<param value=\'src/common/logo.gif\' name="movie" />')).not.toBe(-1);
-            expect(f4.data.indexOf('<param value="src/common/logo.gif" />')).not.toBe(-1);
+            expect(f4.data.indexOf('src/common/main.js?foo=bar#hello=world')).not.to.be(-1);
+            expect(f4.data.indexOf('src/common/main.css')).not.to.be(-1);
+            expect(f4.data.indexOf('src/common/logo-ba001c53c2b.gif')).not.to.be(-1);
+            expect(f4.data.indexOf('<script src="http://www.baidu.com/a.js?x=1"></script>')).not.to.be(-1);
+            expect(f4.data.indexOf('<script src="//www.baidu.com/foo/bar.js?y=2"></script>')).not.to.be(-1);
+            expect(f4.data.indexOf('<script src="https://www.google.com/ssl.js#a=b"></script>')).not.to.be(-1);
+            expect(f4.data.indexOf('<embed src=\'src/common/logo.gif\' widht=100 height=200 />')).not.to.be(-1);
+            expect(f4.data.indexOf('<param value=\'src/common/logo.gif\' name="movie" />')).not.to.be(-1);
+            expect(f4.data.indexOf('<param value="src/common/logo.gif" />')).not.to.be(-1);
 
 
             var f5 = processContext.getFileByPath('src/common/main.css');
-            expect(f5.data.indexOf('logo.gif')).not.toBe(-1);
+            expect(f5.data.indexOf('logo.gif')).not.to.be(-1);
             var f6 = processContext.getFileByPath('src/biz/foo.css');
-            expect(f6.data.indexOf('../common/logo.gif')).not.toBe(-1);
-            expect(f6.data.indexOf('background: url  (../common/logo.gif)  ;')).not.toBe(-1);
-            expect(f6.data.indexOf('background: url("../common/logo.gif");')).not.toBe(-1);
+            expect(f6.data.indexOf('../common/logo.gif')).not.to.be(-1);
+            expect(f6.data.indexOf('background: url  (../common/logo.gif)  ;')).not.to.be(-1);
+            expect(f6.data.indexOf('background: url("../common/logo.gif");')).not.to.be(-1);
 
             done();
         });
@@ -225,16 +227,16 @@ describe('md5-renamer', function () {
 
         base.launchProcessors([p1, p2], processContext, function () {
             var logo = processContext.getFileByPath('src/common/logo.gif');
-            expect(logo.outputPaths).toEqual((['src/common/logo-ba001c53c2b.gif']));
+            expect(logo.outputPaths).to.eql((['src/common/logo-ba001c53c2b.gif']));
             var html = processContext.getFileByPath('issue-293.html');
-            expect(html.data.indexOf('src/common/logo-ba001c53c2b.gif#100-100')).not.toBe(-1);
+            expect(html.data.indexOf('src/common/logo-ba001c53c2b.gif#100-100')).not.to.be(-1);
             var css = processContext.getFileByPath('src/css/issue-293.css');
-            expect(css.data.indexOf('../common/logo-ba001c53c2b.gif#100-100')).not.toBe(-1);
+            expect(css.data.indexOf('../common/logo-ba001c53c2b.gif#100-100')).not.to.be(-1);
             var expected =
                 '.logo{background:url(../common/logo-ba001c53c2b.gif#100-100)}\n' +
                 'div{background:url(../common/logo-ba001c53c2b.gif)}\n' +
                 'a{background:url(../common/logo-ba001c53c2b.gif#100-100)}';
-            expect(css.data).toEqual(expected);
+            expect(css.data).to.eql(expected);
             done();
         });
     });

@@ -6,6 +6,7 @@ var fs = require('fs');
 var path = require('path');
 
 var edp = require('edp-core');
+var expect = require('expect.js');
 
 var builder = require('../index');
 
@@ -31,8 +32,8 @@ describe('custom-processor', function () {
         };
 
         builder(conf, function () {
-            expect(fs.existsSync(path.resolve(outputDir, '1.less'))).toBeFalsy();
-            expect(fs.existsSync(path.resolve(outputDir, '1.less.html'))).toBeTruthy();
+            expect(fs.existsSync(path.resolve(outputDir, '1.less'))).to.be(false);
+            expect(fs.existsSync(path.resolve(outputDir, '1.less.html'))).to.be(true);
             edp.util.rmdir(outputDir);
             done();
         });
@@ -43,8 +44,8 @@ describe('custom-processor', function () {
         var outputDir = conf.output;
 
         builder(conf, function () {
-            expect(fs.existsSync(path.resolve(outputDir, 'default.js'))).toBeFalsy();
-            expect(fs.existsSync(path.resolve(outputDir, '5.js'))).toBeTruthy();
+            expect(fs.existsSync(path.resolve(outputDir, 'default.js'))).to.be(false);
+            expect(fs.existsSync(path.resolve(outputDir, '5.js'))).to.be(true);
             edp.util.rmdir(outputDir);
             done();
         });

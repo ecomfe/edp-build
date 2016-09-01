@@ -4,6 +4,7 @@
  */
 
 var path = require('path');
+var expect = require('expect.js');
 
 var base = require('./base');
 var ModuleCompiler = require('../lib/processor/module-compiler.js');
@@ -26,7 +27,7 @@ describe('using-xtpl', function () {
         base.traverseDir(path.join(Project, '..', 'base'), processContext);
     });
 
-    it('default', function () {
+    it('default', function (done) {
         var processor = new ModuleCompiler({
             getCombineConfig: function () {
                 return {
@@ -65,7 +66,8 @@ describe('using-xtpl', function () {
                 '    var c = require(\'common/xtpl\');\n' +
                 '    return a + b + c;\n' +
                 '});';
-            expect(fileData.data).toBe(expected);
+            expect(fileData.data).to.be(expected);
+            done();
         });
     });
 });

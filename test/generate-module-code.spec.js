@@ -5,7 +5,10 @@
 
 var fs = require('fs');
 var path = require('path');
+
 var edp = require( 'edp-core' );
+var expect = require('expect.js');
+
 var generateModuleCode = require('../lib/util/generate-module-code');
 var baseDir = path.resolve(__dirname, 'data', 'generate-module-code');
 
@@ -31,7 +34,7 @@ describe('generate-module-code', function () {
 
         var code = generateModuleCode(moduleInfo);
 
-        expect(normalCode(code)).toBe(normalCode(getFile('std.js')));
+        expect(normalCode(code)).to.be(normalCode(getFile('std.js')));
     });
 
     it('single module has id should pass', function () {
@@ -42,7 +45,7 @@ describe('generate-module-code', function () {
 
         var code = generateModuleCode(moduleInfo);
 
-        expect(normalCode(code)).toBe(normalCode(getFile('hasId.js')));
+        expect(normalCode(code)).to.be(normalCode(getFile('hasId.js')));
     });
 
     it('single module has dependencies should pass', function () {
@@ -54,7 +57,7 @@ describe('generate-module-code', function () {
 
         var code = generateModuleCode(moduleInfo);
 
-        expect(normalCode(code)).toBe(normalCode(getFile('hasDeps.js')));
+        expect(normalCode(code)).to.be(normalCode(getFile('hasDeps.js')));
     });
 
     it('single module has all arguments should pass', function () {
@@ -67,7 +70,7 @@ describe('generate-module-code', function () {
 
         var code = generateModuleCode(moduleInfo);
 
-        expect(normalCode(code)).toBe(normalCode(getFile('singleModule.js')));
+        expect(normalCode(code)).to.be(normalCode(getFile('singleModule.js')));
     });
 
     it('multi module should pass', function () {
@@ -85,7 +88,7 @@ describe('generate-module-code', function () {
             ];
 
         var code = generateModuleCode(moduleInfo);
-        expect(normalCode(code)).toBe(normalCode(getFile('multiModule.js')));
+        expect(normalCode(code)).to.be(normalCode(getFile('multiModule.js')));
     });
 
     it('wrapper should pass', function () {
@@ -106,6 +109,6 @@ describe('generate-module-code', function () {
         var ast = edp.amd.getAst( wrapperFile );
 
         var code = generateModuleCode(moduleInfo, ast);
-        expect(normalCode(code)).toBe(normalCode(getFile('wrapper-compiled.js')));
+        expect(normalCode(code)).to.be(normalCode(getFile('wrapper-compiled.js')));
     });
 });

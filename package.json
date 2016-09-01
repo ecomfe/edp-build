@@ -1,7 +1,7 @@
 {
   "name": "edp-build",
   "description": "Package for edp build",
-  "version": "1.1.7",
+  "version": "1.2.0",
   "contributors": [
     {
       "name": "errorrik",
@@ -38,13 +38,13 @@
     "estraverse": "~3.1.0",
     "html2js": "~0.2.0",
     "iconv-lite": "~0.2.11",
-    "less": "~1.7.0",
+    "less": "^2.7.1",
     "mkdirp": "~0.5.0",
+    "postcss": "^5.0.21",
     "q": "^1.2.0",
     "stylus": "~0.44.0",
     "uglify-js": "~2.4.12",
-    "underscore": "~1.8.3",
-    "postcss": "^5.0.21"
+    "underscore": "~1.8.3"
   },
   "main": "index.js",
   "repository": "git://github.com/ecomfe/edp-build",
@@ -52,11 +52,13 @@
     "babel": "5.x",
     "css-spriter": "0.0.22",
     "edpx-bcs": "^1.0.6",
+    "expect.js": "^0.3.1",
     "html-minifier": "^0.7.2",
-    "jasmine-node": "^2.0.0"
+    "mocha": "^3.0.2",
+    "sinon": "^1.17.5"
   },
   "scripts": {
-    "test": "make -C test",
+    "test": "env EDP_LOG_SILENT=1 mocha --timeout 10000",
     "coverage": "node_modules/.bin/istanbul cover node_modules/.bin/jasmine-node --verbose --growl --captureExceptions test"
   }
 }

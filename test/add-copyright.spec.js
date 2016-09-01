@@ -15,6 +15,7 @@
  * 测试一下ModuleCompiler的功能是否正常
  **/
 var path = require('path');
+var expect = require('expect.js');
 
 var base = require('./base');
 var AddCopyright = require('../lib/processor/add-copyright.js');
@@ -29,7 +30,7 @@ describe('add-copyright', function(){
 
         var processContext = { baseDir: Project };
         processor.process(fileData, processContext, function(){
-            expect(fileData.data.indexOf('there is only copyleft left.\n')).toBe(0);
+            expect(fileData.data.indexOf('there is only copyleft left.\n')).to.be(0);
         });
     });
 });

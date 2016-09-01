@@ -5,6 +5,8 @@
 var fs = require('fs');
 var path = require('path');
 
+var expect = require('expect.js');
+
 var base = require('./base');
 var ProcessContext = require('../lib/process-context');
 var CssSpriter = require('../lib/processor/css-spriter.js');
@@ -30,7 +32,7 @@ describe('css-spriter', function () {
 
         base.launchProcessors([processor, p2], processContext, function () {
             var cssData = processContext.getFileByPath('src/default.css');
-            expect(cssData).not.toBeNull();
+            expect(cssData).not.to.be(null);
 
             var imgData = processContext.getFileByPath('src/sprite-default.png').data;
             var compareImgData = fs.readFileSync(path.join(__dirname, 'data/css-spriter/sprite-default.png'));
@@ -40,8 +42,8 @@ describe('css-spriter', function () {
                 'div{color:red;background:url(sprite-default.png#300*200) 0 0}\n' +
                 'a{text-decoration:none;background:url(./b.png#nocombine) no-repeat}\n' +
                 'span{background:url(sprite-default.png#271*134) -300px 0 no-repeat}';
-            expect(cssData.data.replace(/\?ver=\d*/g, '')).toBe(expected);
-            expect(imgData).toEqual(compareImgData);
+            expect(cssData.data.replace(/\?ver=\d*/g, '')).to.be(expected);
+            expect(imgData).to.eql(compareImgData);
 
             done();
         });

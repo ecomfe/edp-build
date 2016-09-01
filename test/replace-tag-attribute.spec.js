@@ -3,6 +3,8 @@
  * @author Firede(firede@firede.us)
  */
 
+var expect = require('expect.js');
+
 var replaceTagAttribute = require('../lib/util/replace-tag-attribute');
 
 describe('replace-tag-attribute', function () {
@@ -19,7 +21,7 @@ describe('replace-tag-attribute', function () {
             }
         );
 
-        expect(value).toBe(expectValue);
+        expect(value).to.be(expectValue);
     });
 
     it('attribute value include `<`', function () {
@@ -31,8 +33,7 @@ describe('replace-tag-attribute', function () {
                 return val.replace('<$root>', '/root');
             }
         );
-        
-        expect(value).toBe(expectValue);
+        expect(value).to.be(expectValue);
     });
 
     xit('script-x should not matched', function () {
@@ -49,7 +50,7 @@ describe('replace-tag-attribute', function () {
             }
         );
         console.log(value);
-        expect(value).toBe(textScriptX);
+        expect(value).to.be(textScriptX);
     });
 
 });

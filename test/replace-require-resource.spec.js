@@ -6,6 +6,8 @@
 var fs = require('fs');
 var path = require('path');
 
+var expect = require('expect.js');
+
 var replaceRequireResource = require('../lib/util/replace-require-resource.js');
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
 
@@ -33,7 +35,7 @@ describe('replace-require-resource', function () {
         '    return \'case1\';\n' +
         '});';
 
-        expect(z).toBe(expected);
+        expect(z).to.be(expected);
     });
 
     it('multiple pluginIds', function () {
@@ -59,7 +61,7 @@ describe('replace-require-resource', function () {
         '    return \'case1\';\n' +
         '});';
 
-        expect(z).toBe(expected);
+        expect(z).to.be(expected);
     });
 
     it('issue-186', function () {
@@ -69,7 +71,7 @@ describe('replace-require-resource', function () {
         var z = replaceRequireResource(code, ['tpl'], function (resourceId) {
             return '[' + resourceId + ']';
         });
-        expect(z).not.toBe(null);
+        expect(z).not.to.be(null);
     });
 
     it('issue-94', function () {
@@ -80,7 +82,7 @@ describe('replace-require-resource', function () {
         var z = replaceRequireResource(z, ['bat-ria/tpl'], function (resourceId) {
             return 'bat-ria/tpl!template';
         });
-        expect(z).toBe("define([\n    'exports',\n    'bat-ria/tpl!template',\n    'bat-ria/tpl!template',\n    'er/View'\n], function (exports, a, b, c) {\n});");
+        expect(z).to.be("define([\n    'exports',\n    'bat-ria/tpl!template',\n    'bat-ria/tpl!template',\n    'er/View'\n], function (exports, a, b, c) {\n});");
     });
 });
 

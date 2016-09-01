@@ -17,6 +17,8 @@
 // https://github.com/ecomfe/edp/issues/319
 var path = require('path');
 
+var expect = require('expect.js');
+
 var base = require('./base');
 var ModuleCompiler = require('../lib/processor/module-compiler.js');
 var TplMerge = require('../lib/processor/tpl-merge.js');
@@ -66,7 +68,7 @@ describe('issue-319', function () {
             var fs = require('fs');
             var actual = processContext.getFileByPath('src/319.js').data;
             var expected = fs.readFileSync(path.join(__dirname, 'data/expected/issues-319.expected.txt'), 'utf-8');
-            expect(actual).toBe(expected);
+            expect(actual).to.be(expected);
             done();
         });
     });

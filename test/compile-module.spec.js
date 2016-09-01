@@ -6,6 +6,7 @@ var edp = require('edp-core');
 
 var fs = require('fs');
 var path = require('path');
+var expect = require('expect.js');
 
 var base = require('./base');
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
@@ -64,7 +65,7 @@ describe('compile-module', function () {
         '    var erView = require(\'er/View\');\n' +
         '    return \'foo\';\n' +
         '});';
-        expect(moduleCode).toEqual(expectedCode);
+        expect(moduleCode).to.eql(expectedCode);
     });
 
     it('dep\'s main module', function () {
@@ -93,7 +94,7 @@ describe('compile-module', function () {
         '    var er = require(\'er\');\n' +
         '    return er;\n' +
         '});';
-        expect(moduleCode).toEqual(expectedCode);
+        expect(moduleCode).to.eql(expectedCode);
     });
 
     it('main module', function () {
@@ -118,7 +119,7 @@ describe('compile-module', function () {
         '    return \'er\';\n' +
         '});\n\n' +
         'define(\'er\', [\'er/main\'], function (main) { return main; });';
-        expect(moduleCode).toEqual(expectedCode);
+        expect(moduleCode).to.eql(expectedCode);
     });
 
     it('exclude module', function () {
@@ -139,7 +140,7 @@ describe('compile-module', function () {
         '    return \'er\';\n' +
         '});\n\n' +
         'define(\'er\', [\'er/main\'], function (main) { return main; });';
-        expect(moduleCode).toEqual(expectedCode);
+        expect(moduleCode).to.eql(expectedCode);
     });
 
     it('exclude module 2', function () {
@@ -160,7 +161,7 @@ describe('compile-module', function () {
         '    return \'er\';\n' +
         '});\n\n' +
         'define(\'er\', [\'er/main\'], function (main) { return main; });';
-        expect(moduleCode).toEqual(expectedCode);
+        expect(moduleCode).to.eql(expectedCode);
     });
 
     it('exclude module 3', function () {
@@ -181,7 +182,7 @@ describe('compile-module', function () {
         '    return \'er\';\n' +
         '});\n\n' +
         'define(\'er\', [\'er/main\'], function (main) { return main; });';
-        expect(moduleCode).toEqual(expectedCode);
+        expect(moduleCode).to.eql(expectedCode);
     });
 
     it('default `combine` is true', function () {
@@ -212,7 +213,7 @@ describe('compile-module', function () {
         '    var erView = require(\'er/View\');\n' +
         '    return \'foo\';\n' +
         '});';
-        expect(moduleCode).toEqual(expectedCode);
+        expect(moduleCode).to.eql(expectedCode);
     });
 
     it('combine shuould ignore wrong module', function () {
@@ -229,7 +230,7 @@ describe('compile-module', function () {
 
         // 期待进行合并操作后只有一个define调用语句
         // 即没有合并解析失败的模块
-        expect(ast.body.length).toBe(3);
+        expect(ast.body.length).to.be(3);
     });
 });
 

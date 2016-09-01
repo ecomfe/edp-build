@@ -15,6 +15,7 @@
  * 测试一下ModuleCompiler的功能是否正常
  **/
 var path = require('path');
+var expect = require('expect.js');
 
 var base = require('./base');
 var StringReplace = require('../lib/processor/string-replace.js');
@@ -28,7 +29,7 @@ var Project = path.resolve(__dirname, 'data', 'dummy-project');
 
 
 describe('string-replace-processor', function(){
-    it('default', function(){
+    it('default', function(done){
         var processor = new StringReplace({
             replacements: [
                 { 'from': 'io/File', 'to': 'io/File2' },
@@ -43,15 +44,16 @@ describe('string-replace-processor', function(){
         processor.process(fileData, processContext, function(){
             var js = new JsCompressor();
             js.process(fileData, processContext, function(){
-                expect(fileData.data).toBe('define(function(require){' +
+                expect(fileData.data).to.be('define(function(require){' +
                     'require("io/File2"),' +
                     'require("net/Http2"),' +
                     'require("er/View2");return"foo"});');
+                done();
             });
         });
     });
 
-    it('regexp', function(){
+    it('regexp', function(done){
         var processor = new StringReplace({
             replacements: [
                 { 'from': /(['"])([^'"]+)\1/g, 'to': '\'hello world\'' }
@@ -64,15 +66,16 @@ describe('string-replace-processor', function(){
         processor.process(fileData, processContext, function(){
             var js = new JsCompressor();
             js.process(fileData, processContext, function(){
-                expect(fileData.data).toBe('define(function(require){' +
+                expect(fileData.data).to.be('define(function(require){' +
                     'require("hello world"),' +
                     'require("hello world"),' +
                     'require("hello world");return"hello world"});');
+                done();
             });
         });
     });
 
-    it('regexp and callback', function(){
+    it('regexp and callback', function(done){
         var processor = new StringReplace({
             replacements: [
                 { 'from': /(['"])([^'"]+)\1/g, 'to': function(match, $1, $2){ return $1 + 'z' + $2 + $1; } },
@@ -86,10 +89,11 @@ describe('string-replace-processor', function(){
         processor.process(fileData, processContext, function(){
             var js = new JsCompressor();
             js.process(fileData, processContext, function(){
-                expect(fileData.data).toBe('define(function(require){' +
+                expect(fileData.data).to.be('define(function(require){' +
                     'require("zio/File"),' +
                     'require("znet/Http2"),' +
                     'require("zer/View");return"zfoo"});');
+                done();
             });
         });
     });

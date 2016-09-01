@@ -5,6 +5,7 @@
 var edp = require('edp-core');
 var fs = require('fs');
 var path = require('path');
+var expect = require('expect.js');
 
 var base = require('./base');
 var Project = path.resolve(__dirname, 'data', 'dummy-project');
@@ -66,7 +67,7 @@ describe('compile-module-2', function () {
             return info.id || '<anonymous>';
         });
         moduleIds.sort();
-        expect(moduleIds).toEqual(['common/dummy', 'er', 'er/View', 'er/main', 'net/Http']);
+        expect(moduleIds).to.eql(['common/dummy', 'er', 'er/View', 'er/main', 'net/Http']);
     });
 
     it('default 2', function () {
@@ -94,10 +95,10 @@ describe('compile-module-2', function () {
                 return info.id || '<anonymous>';
             });
             moduleIds.sort();
-            expect(moduleIds).toEqual(['common/dummy']);
+            expect(moduleIds).to.eql(['common/dummy']);
         }
         else {
-            expect(moduleCode).toEqual('define(\'common/dummy\', {});');
+            expect(moduleCode).to.eql('define(\'common/dummy\', {});');
         }
     });
 
@@ -125,10 +126,10 @@ describe('compile-module-2', function () {
                 return info.id || '<anonymous>';
             });
             moduleIds.sort();
-            expect(moduleIds).toEqual(['common/dummy', 'er', 'er/View', 'er/main']);
+            expect(moduleIds).to.eql(['common/dummy', 'er', 'er/View', 'er/main']);
         }
         else {
-            expect(moduleCode).toEqual('define(\'common/dummy\', {});');
+            expect(moduleCode).to.eql('define(\'common/dummy\', {});');
         }
     });
 
@@ -156,10 +157,10 @@ describe('compile-module-2', function () {
                 return info.id || '<anonymous>';
             });
             moduleIds.sort();
-            expect(moduleIds).toEqual(['common/dummy', 'er', 'er/View', 'er/main']);
+            expect(moduleIds).to.eql(['common/dummy', 'er', 'er/View', 'er/main']);
         }
         else {
-            expect(moduleCode).toEqual('define(\'common/dummy\', {});');
+            expect(moduleCode).to.eql('define(\'common/dummy\', {});');
         }
     });
 
@@ -185,7 +186,7 @@ describe('compile-module-2', function () {
         moduleIds.sort();
 
         // 忽略了所有er的模块之后，就不存在net了，但是我们手工指定了
-        expect(moduleIds).toEqual(['common/dummy', 'net/Http']);
+        expect(moduleIds).to.eql(['common/dummy', 'net/Http']);
     });
 });
 

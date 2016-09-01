@@ -16,6 +16,8 @@
  **/
 var path = require('path');
 
+var expect = require('expect.js');
+
 var base = require('./base');
 var ReplaceDebug = require('../lib/processor/replace-debug.js');
 
@@ -27,14 +29,15 @@ var Project = path.resolve(__dirname, 'data', 'dummy-project');
 
 
 describe('replace-debug', function(){
-    it('default', function(){
+    it('default', function(done){
         var processor = new ReplaceDebug();
         var filePath = path.join(Project, 'index.html');
         var fileData = base.getFileInfo(filePath);
 
         var processContext = { baseDir: Project };
         processor.process(fileData, processContext, function(){
-            expect(fileData.data.indexOf('window.DEBUG=false;')).not.toBe(-1);
+            expect(fileData.data.indexOf('window.DEBUG=false;')).not.to.be(-1);
+            done();
         });
     });
 });

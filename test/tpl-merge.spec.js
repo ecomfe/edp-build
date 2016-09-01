@@ -4,6 +4,8 @@
  */
 var path = require('path');
 
+var expect = require('expect.js');
+
 var base = require('./base');
 var TplMerge = require('../lib/processor/tpl-merge');
 var ProcessContext = require('../lib/process-context');
@@ -49,8 +51,8 @@ describe('tpl-merge', function () {
                 '    var z = require(\'jquery\');\n' +
                 '    return \'case1\';\n' +
                 '});';
-            expect(fileData.data).toBe(expected);
-            expect(processContext.getFileByPath('dep/er/3.0.2/src/tpl/hello.tpl.html')).not.toBe(null);
+            expect(fileData.data).to.be(expected);
+            expect(processContext.getFileByPath('dep/er/3.0.2/src/tpl/hello.tpl.html')).not.to.be(null);
             done();
         });
     });
@@ -73,6 +75,7 @@ describe('tpl-merge', function () {
         var processors = [
             p1, p2, p3
         ];
+
         base.launchProcessors(processors, processContext, function () {
             var f1 = processContext.getFileByPath('src/require-tpl-31.js');
             var f2 = processContext.getFileByPath('src/issue31.js');
@@ -81,9 +84,9 @@ describe('tpl-merge', function () {
                 'define("issue31",["require","./require-tpl-31"],function(require){return require("./require-tpl-31"),"issue31"});';
             var f1Expected = 'define("require-tpl-31",["require","jstpl!200a006c.tpl"],function(require){require("jstpl!200a006c.tpl")});';
 
-            expect(f2.data).toBe(f2Expected);
-            expect(f1.data).toBe(f1Expected);
-            expect(processContext.getFileByPath('src/200a006c.tpl.js')).not.toBe(null);
+            expect(f2.data).to.be(f2Expected);
+            expect(f1.data).to.be(f1Expected);
+            expect(processContext.getFileByPath('src/200a006c.tpl.js')).not.to.be(null);
             done();
         });
     });
@@ -112,10 +115,10 @@ describe('tpl-merge', function () {
                 'define("issue31",["require","./require-tpl-31"],function(require){return require("./require-tpl-31"),"issue31"});';
             var f1Expected = 'define("require-tpl-31",["require","er/tpl!d0d179ca.tpl.html"],function(require){require("er/tpl!d0d179ca.tpl.html")});';
 
-            expect(f2.data).toBe(f2Expected);
-            expect(f1.data).toBe(f1Expected);
-            expect(processContext.getFileByPath('src/d0d179ca.tpl.html')).not.toBe(null);
-            expect(processContext.getFileByPath('src/tpl/list.tpl.html')).not.toBe(null);
+            expect(f2.data).to.be(f2Expected);
+            expect(f1.data).to.be(f1Expected);
+            expect(processContext.getFileByPath('src/d0d179ca.tpl.html')).not.to.be(null);
+            expect(processContext.getFileByPath('src/tpl/list.tpl.html')).not.to.be(null);
             done();
         });
     });
@@ -144,9 +147,9 @@ describe('tpl-merge', function () {
                 'define("issue31",["require","./require-tpl-31"],function(require){return require("./require-tpl-31"),"issue31"});';
             var f1Expected = 'define("require-tpl-31",["require","er/tpl!foo/bar/tpl.html"],function(require){require("er/tpl!foo/bar/tpl.html")});';
 
-            expect(f2.data).toBe(f2Expected);
-            expect(f1.data).toBe(f1Expected);
-            expect(processContext.getFileByPath('src/foo/bar/tpl.html')).not.toBe(null);
+            expect(f2.data).to.be(f2Expected);
+            expect(f1.data).to.be(f1Expected);
+            expect(processContext.getFileByPath('src/foo/bar/tpl.html')).not.to.be(null);
             done();
         });
     });
@@ -178,9 +181,9 @@ describe('tpl-merge', function () {
                 'define("issue31",["require","./require-tpl-31"],function(require){return require("./require-tpl-31"),"issue31"});';
             var f1Expected = 'define("require-tpl-31",["require","jstpl!foo/bar/tpl"],function(require){require("jstpl!foo/bar/tpl")});';
 
-            expect(f2.data).toBe(f2Expected);
-            expect(f1.data).toBe(f1Expected);
-            expect(processContext.getFileByPath('src/foo/bar/tpl.js')).not.toBe(null);
+            expect(f2.data).to.be(f2Expected);
+            expect(f1.data).to.be(f1Expected);
+            expect(processContext.getFileByPath('src/foo/bar/tpl.js')).not.to.be(null);
             done();
         });
     });
@@ -212,35 +215,13 @@ describe('tpl-merge', function () {
                 'define("issue31",["require","./require-tpl-31"],function(require){return require("./require-tpl-31"),"issue31"});';
             var f1Expected = 'define("require-tpl-31",["require","jstpl!foo/bar/tpl2"],function(require){require("jstpl!foo/bar/tpl2")});';
 
-            expect(f2.data).toBe(f2Expected);
-            expect(f1.data).toBe(f1Expected);
+            expect(f2.data).to.be(f2Expected);
+            expect(f1.data).to.be(f1Expected);
             var f = processContext.getFileByPath('src/foo/bar/tpl2.js');
-            expect(f).not.toBe(null);
-            expect(f.data.indexOf('define("foo/bar/tpl2"')).toBe(0);
+            expect(f).not.to.be(null);
+            expect(f.data.indexOf('define("foo/bar/tpl2"')).to.be(0);
             done();
         });
     });
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* vim: set ts=4 sw=4 sts=4 tw=100: */
