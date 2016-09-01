@@ -1,7 +1,7 @@
 {
   "name": "edp-build",
   "description": "Package for edp build",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "contributors": [
     {
       "name": "errorrik",
@@ -43,7 +43,7 @@
     "postcss": "^5.0.21",
     "q": "^1.2.0",
     "stylus": "~0.44.0",
-    "uglify-js": "~2.4.12",
+    "uglify-js": "^2.7.3",
     "underscore": "~1.8.3"
   },
   "main": "index.js",
