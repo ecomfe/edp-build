@@ -62,7 +62,7 @@ describe('babel-processor', function () {
 
         base.launchProcessors([p0, p1], processContext, function () {
             var fi = processContext.getFileByPath('src/hello.es6');
-            expect(fi.data).to.eql('define(["exports","babel-runtime/helpers/inherits","babel-runtime/helpers/class-call-check"],function(exports,e,t){(function(l){function n(){if(t["default"](this,n),null!=l)l.apply(this,arguments)}return e["default"](n,l),n.prototype.toString=function(){console.log("HelloWorld")},n})(Array)});');
+            expect(fi.data).to.eql('define(["exports","babel-runtime/helpers/inherits","babel-runtime/helpers/class-call-check"],function(exports,e,t){(function(n){function l(){t["default"](this,l),n.apply(this,arguments)}return e["default"](l,n),l.prototype.toString=function(){console.log("HelloWorld")},l})(Array)});');
             done();
         });
     });

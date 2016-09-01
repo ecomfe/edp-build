@@ -135,7 +135,11 @@ describe('less-compiler', function(){
         });
         processContext.addFile(fileData);
         base.launchProcessors([processor], processContext, function() {
-            expect(fileData.data).to.be('div{width:2px}/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9sZWVpZ2h0L2xvY2FsL2xlZWlnaHQuZ2l0aHViLmNvbS9lZHAtY2xpL2VkcC1idWlsZC90ZXN0L2RhdGEvY3NzLWNvbXByZXNzb3Ivd2l0aC12YXIubGVzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFDQSxJQUNJIiwic291cmNlc0NvbnRlbnQiOlsiQHg6IDFweDtcbmRpdiB7XG4gICAgd2lkdGg6IEB4O1xufVxuXG5AeDogMnB4OyJdfQ== */');
+            expect(fileData.data.indexOf('div{width:2px}/*# sourceMappingURL=data:application/json;base64,')).to.be(0);
+            var sourceMapping = JSON.parse(new Buffer(fileData.data.substr(64).replace(' */', ''), 'base64').toString('utf-8'));
+            var sources = sourceMapping.sources;
+            expect(sources.length).to.eql(1);
+            expect(path.relative(__dirname, sources[0])).to.eql('data/css-compressor/with-var.less');
             done();
         });
     });

@@ -84,7 +84,7 @@ describe('issue-94', function () {
 
         base.launchProcessors([p0, p1, p1], processContext, function () {
             var fi = processContext.getFileByPath('src/issue-94.js');
-            expect(fi.data).to.eql("define([\n    'exports',\n    'bat-ria/tpl!startup/template',\n    'bat-ria/tpl!startup/template',\n    'er/View',\n    'babel-runtime/helpers/interop-require-default',\n    'no-such-plugin!./tpl/123.html'\n], function (exports, _batRiaTplTplListTplHtml, _batRiaTplTpl123Html, _erView, _babelRuntimeHelpersInteropRequireDefault, _noSuchPluginTpl123Html) {\n    var _View = (0, _babelRuntimeHelpersInteropRequireDefault['default'])(_erView);\n});");
+            expect(fi.data).to.eql("define([\n    'exports',\n    'bat-ria/tpl!startup/template',\n    'bat-ria/tpl!startup/template',\n    'er/View',\n    'babel-runtime/helpers/interop-require-default',\n    'no-such-plugin!./tpl/123.html'\n], function (exports, _batRiaTplTplListTplHtml, _batRiaTplTpl123Html, _erView, _babelRuntimeHelpersInteropRequireDefault, _noSuchPluginTpl123Html) {\n    var _View = _babelRuntimeHelpersInteropRequireDefault['default'](_erView);\n});");
             done();
         });
     });
