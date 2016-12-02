@@ -140,7 +140,7 @@ cli.main = function (args, opts) {
     // 如果output目录处于baseDir下，自动将output目录添加到exclude
     var outputRelative = path.relative(inputDir, outputDir);
     if (!/^\.\./.test(outputRelative)) {
-        exclude.push(outputRelative);
+        exclude.push(outputRelative + '/**');
     }
 
     // Processors的组合
