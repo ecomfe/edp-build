@@ -1,0 +1,9 @@
+{
+    "src/main.styl": {
+        "md5": "4bbbde6841a2325bb801c0c3b90ae014",
+        "deps": [
+            "src/base.styl,56072e23893aa6e4653f77d75a2abf45"
+        ],
+        "out": "src/main.css"
+    }
+}

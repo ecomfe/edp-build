@@ -1,0 +1,1 @@
+define(function(require,exports,module){function n(){return"world1"}return n});

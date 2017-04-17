@@ -1,0 +1,9 @@
+{
+    "src/index.less": {
+        "md5": "aa2f38f577dc3fb33e799da66ebbd76f",
+        "deps": [
+            "src/dep.less,d03081a8955a78d074ff9798b9964dfb"
+        ],
+        "out": "src/index.css"
+    }
+}
