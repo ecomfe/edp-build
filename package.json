@@ -1,7 +1,7 @@
 {
   "name": "edp-build",
   "description": "Package for edp build",
-  "version": "1.0.15-beta.25",
+  "version": "1.1.1",
   "contributors": [
     {
       "name": "errorrik",
@@ -33,6 +33,7 @@
     "estraverse": "~3.1.0",
     "html2js": "~0.2.0",
     "iconv-lite": "~0.2.11",
+    "inline-resource": "^0.1.0",
     "less": "~1.7.0",
     "mkdirp": "~0.5.0",
     "q": "^1.2.0",
