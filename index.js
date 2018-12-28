@@ -77,7 +77,7 @@ function traverseDir(dir, processContext) {
             }
 
             var fileData = new FileInfo({
-                data: fs.readFileSync(file),
+                // data: fs.readFileSync(file),
                 extname: edp.path.extname(file).slice(1),
                 path: relativePath,
                 fullPath: file,
